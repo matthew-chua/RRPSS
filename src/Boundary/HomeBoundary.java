@@ -18,6 +18,7 @@ public class HomeBoundary extends Boundary {
         int numberOfChoices = 5;
         boolean isRecurring = true;
         getUserChoices(numberOfChoices, callback, isRecurring);
+        // Get User Choices is defined in parent class, Boundary.
     }
 
 
