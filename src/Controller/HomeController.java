@@ -2,50 +2,51 @@ package controller;
 import Boundary.*;
 
 public class HomeController {
+    
+    // UI
     private HomeBoundary view;
 
+    // Constructor
     public HomeController(){
         this.view = new HomeBoundary();
         this.start();
     }
 
-    public enum Choice{
-        MENU,
-        ORDERS,
-        RESERVATIONS,
-        SALES,
-    }
-
 
     private void start(){
-        view.showHomeMenu();
+
+        // pass in the anonymous callback function
+        view.getUserManagerChoice(choice -> {
+            switch (choice){
+                case 0:
+                System.out.println("quitted");
+                return;
+
+                case 1:
+                System.out.println("Hello");
+                break;
+
+                case 2:
+                System.out.println("Manage Orders");
+                break;
+
+                case 3: 
+                System.out.println("Manage Reservation");
+                break;
+
+                case 4:
+                System.out.println("Manage Sales");
+                break;
+
+                case 5:
+                System.out.println("Manage Staff");
+                break;
+
+                default:
+                break;
+                }
+            }
+        );
+
     }
-
-    public void navigateTo(Choice choice){
-
-        switch (choice){
-        // case 
-        case MENU:
-        // MenuController.start();
-        System.out.println("Hello 1231231");
-        
-        break;
-
-        case ORDERS:
-
-        break;
-
-        case RESERVATIONS:
-
-        break;
-
-        case SALES:
-
-        break;
-
-        }
-    }   
-
-
-
 }
