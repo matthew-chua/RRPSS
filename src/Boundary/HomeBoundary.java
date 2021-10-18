@@ -9,7 +9,7 @@ public class HomeBoundary extends Boundary {
         resetUI();
         System.out.println("Hi bobberino tan ah gua, what would you like to do today?\n1. Manage Menu\n2. Manage Orders\n3. Manage Reservations\n4. Manage Sales\n5. Change Staff\n");
         int numberOfChoices = 5;
-        switch (getIntInput(numberOfChoices)){
+        switch (getUserChoices(numberOfChoices)){
             case 0:
             System.out.println("quitted");
             return;

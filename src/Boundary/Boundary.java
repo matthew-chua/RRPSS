@@ -16,20 +16,19 @@ public class Boundary {
         return sc.next();
     }
 
-    /** Gets an integer input from user **/
+    /** Gets a choice input from user in the form of an int **/
     
-    public int getIntInput(int numberOfChoices){
-        
+    public int getUserChoices(int numberOfChoices){
         int choice;
-
         choice = sc.nextInt();
         while (choice > numberOfChoices || choice < 0){
             System.out.println("Oops, please enter a valid number");
             choice = sc.nextInt();
         }
-        
         return choice;
     }
+
+
 
 
 }
