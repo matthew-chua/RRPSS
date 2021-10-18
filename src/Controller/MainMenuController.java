@@ -2,6 +2,8 @@ package Controller;
 
 public class MainMenuController {
 
+    
+
     public enum Choice{
         MENU,
         ORDERS,
@@ -14,7 +16,8 @@ public class MainMenuController {
         switch (choice){
         // case 
         case MENU:
-        MenuController.start();
+        // MenuController.start();
+        
         break;
 
         case ORDERS:
