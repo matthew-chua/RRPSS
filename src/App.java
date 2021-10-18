@@ -1,10 +1,14 @@
-import Controller.MainMenuController;
+import controller.*;
+// import controller.MainMenuController.Choice;
+
 
 public class App {
     public static void main(String[] args) throws Exception {
-        System.out.println("Hello, World!");
 
-        MainMenuController controller = MainMenuController();
+        // On init, Home Controller runs its feature.
+        
+        HomeController controller = new HomeController();
+
         
 
         
