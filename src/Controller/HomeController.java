@@ -1,4 +1,4 @@
-package controller;
+package Controller;
 import Boundary.*;
 
 public class HomeController {
@@ -28,6 +28,7 @@ public class HomeController {
 
                 case 2:
                 System.out.println("Manage Orders");
+                OrderController orderController = new OrderController();
                 break;
 
                 case 3: 
