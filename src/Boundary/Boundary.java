@@ -22,9 +22,16 @@ public class Boundary {
 
             resetUI();
             System.out.println(stringToPrint);
+            System.out.println("Press 0 to go back\n");
+
             userInput = sc.next();
+            if (userInput == "0") break;
             callback.userDidEnterString(userInput);
         }while (userInput != "0" && isRecurring);
+    }
+
+    public String getStringInput(){
+        return sc.next();
     }
 
     /** 
@@ -33,6 +40,7 @@ public class Boundary {
      * @param callback is a function that takes in an int which corresponds to the user's choice
      * @param isRecurring is a bool that toggles whether to end the loop on first successful retrieval of user's choice
     **/
+    
     public void getUserChoices(int numberOfChoices, ChoiceObserver callback, boolean isRecurring, String stringToPrint){
         int choice = -1;
         boolean invalidChoice = false;
@@ -50,6 +58,8 @@ public class Boundary {
                     System.out.println("Hey, that's not a number... Please try again!");
                     nonNumber = false;
                 }
+                
+                System.out.println("Press 0 to go back\n");
 
                 choice = Integer.parseInt(sc.next());
                 if (choice == 0) break;

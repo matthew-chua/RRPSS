@@ -1,5 +1,7 @@
 package Boundary;
 import Helpers.*;
+import Entity.ReservationEntity;
+import java.util.ArrayList;
 
 public class ReservationBoundary extends Boundary {
     public ReservationBoundary() {}
@@ -39,5 +41,34 @@ public class ReservationBoundary extends Boundary {
         getStringInput(callback, false, stringToPrint);
     }
 
+    public void printReservations(ArrayList<ReservationEntity> tempList, String name){
+        if (tempList.size() == 0) {
+            System.out.printf("%s currently has no reservations\n", name);
+        } else {
+            System.out.printf("Our records show that %s has reservation(s) on\n", name);
+            int index = 1;
+            for (ReservationEntity j : tempList) {
+                System.out.printf("%d. %s at %s", index, j.getDate(), j.getTime());
+                index++;
+            }
+        }
+    }
 
+    public String getUserDateTime(String title){
+        System.out.println(separators + " " + title + " " + separators);
+
+        System.out.println("Enter date of reservation (DD/MM/YYYY):");
+        // String date = sc.nextLine();
+        String date = getStringInput();
+        // chee bai how to validate like that
+
+        System.out.println();
+        System.out.println("Enter time of reservation (HHMM 24hr):");
+        // String time = sc.nextLine();
+        String time = getStringInput();
+
+        // getStringInput(callback, isRecurring, stringToPrint);
+        return date + " " + time;
+    }
 }
+

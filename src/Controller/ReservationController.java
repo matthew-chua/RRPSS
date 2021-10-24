@@ -1,4 +1,5 @@
 package Controller;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Scanner;
 import Boundary.ReservationBoundary;
@@ -52,10 +53,10 @@ public class ReservationController {
         // System.out.println("=============== Find Reservations ===============");
         // System.out.println("Enter the name of reserver:");
         // String name = sc.nextLine();
-
         view.getUserReservationName(reservationName -> {
             /* Get list of reservations */
             getReservationsByName(reservationName);
+
             System.out.println("1. Cancel reservation");
             System.out.println("0. Return");
 
@@ -73,8 +74,9 @@ public class ReservationController {
                 break;
             }
         });
-
     }
+
+
 
     /* Print reservations made by specific customer */
     public void getReservationsByName(String name) {
@@ -85,29 +87,18 @@ public class ReservationController {
             }
         }
 
-        if (tempList.size() == 0) {
-            System.out.printf("%s currently has no reservations\n", name);
-        } else {
-            System.out.printf("Our records show that %s has reservation(s) on\n", name);
-            int index = 1;
-            for (ReservationEntity j : tempList) {
-                System.out.printf("%d. %s at %s", index, j.getDate(), j.getTime());
-                index++;
-            }
-        }
+        view.printReservations(tempList, name);
     }
 
     /* Remove one reservation by specific customer */
     public void removeReservation(String name) {
-        System.out.println("Enter date of reservation to cancel (DD/MM/YYYY):");
-        String date = sc.nextLine();
 
-        System.out.println();
-        System.out.println("Enter time of reservation to cancel (HHMM 24hr):");
-        String time = sc.nextLine();
-
+        String dateTime = view.getUserDateTime("Remove Reservation");
+        // not optimal but ok
+        String[] dateTimeList = dateTime.split(" ");
+        
         for (ReservationEntity i : reservationList) {
-            if (i.getName() == name && i.getDate() == date && i.getTime() == time) {
+            if (i.getName() == name && i.getDate() == dateTimeList[0] && i.getTime() == dateTimeList[1]) {
                 i.printReservation();
                 reservationList.remove(i);
                 System.out.println("Reservation succesfully removed");
@@ -119,14 +110,19 @@ public class ReservationController {
 
     /* Takes in input based on whether customer wants to simply check availability or directly make reservation */
     public void checkTableAvailability(int makeReservation) {
-        System.out.println("Enter the date (DD/MM/YYYY):");
-        String date = sc.nextLine();
+        
+        String dateTime = view.getUserDateTime("Remove Reservation");
+        String[] dateTimeList = dateTime.split(" ");
+        String date = dateTimeList[0];
+        String time = dateTimeList[1];
+        // System.out.println("Enter the date (DD/MM/YYYY):");
+        // String date = sc.nextLine();
 
-        System.out.println();
-        System.out.println("Enter the time (HHMM 24hr):");
-        String time = sc.nextLine();
+        // System.out.println();
+        // System.out.println("Enter the time (HHMM 24hr):");
+        // String time = sc.nextLine();
 
-        System.out.println();
+        // System.out.println();
         System.out.println("Enter the number of people:");
         System.out.println("Max: 10, Min: 2");
         int pax = sc.nextInt();
