@@ -8,7 +8,10 @@ public class HomeController {
 
     // Constructor
     public HomeController(){
+        // Instantiate view
         this.view = new HomeBoundary();
+        
+        // Run start function
         this.start();
     }
 
@@ -38,6 +41,7 @@ public class HomeController {
 
                 case 4:
                 System.out.println("Manage Sales");
+                // SalesController sale
                 break;
 
                 case 5:

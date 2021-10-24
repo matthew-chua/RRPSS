@@ -9,7 +9,7 @@ public class HomeBoundary extends Boundary {
     private static String getUserManagerChoiceString = "Hi bobberino tan ah gua, what would you like to do today?\n1. Manage Menu\n2. Manage Orders\n3. Manage Reservations\n4. Manage Sales\n5. Change Staff\n";
 
     // Get User's Choice for which manager they would like
-    public void getUserManagerChoice(Callback callback){
+    public void getUserManagerChoice(ChoiceObserver callback){
         // resetUI();
         // Print the instructions
         // System.out.println(getUserManagerChoiceString);
@@ -20,7 +20,5 @@ public class HomeBoundary extends Boundary {
         getUserChoices(numberOfChoices, callback, isRecurring, getUserManagerChoiceString);
         // Get User Choices is defined in parent class, Boundary.
     }
-
-
 
 }

@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import Boundary.ReservationBoundary;
 import Entity.ReservationEntity;
+import Helpers.*;
 
 public class ReservationController {
 
@@ -14,7 +15,9 @@ public class ReservationController {
 
     public ReservationController() {
         this.view = new ReservationBoundary();
+
         this.reservationList = new ArrayList<ReservationEntity>();
+
         this.start();
     }
 
@@ -25,22 +28,23 @@ public class ReservationController {
         // int choice;
         
         // choice = sc.nextInt();
-        // view.getUserReservationChoice(choice -> {
-        //     switch (choice) {
-        //         case 1: /* remove reservation */
-        //             findReservation();
-        //             break;
-        //         case 2: /* show list of available tables */
-        //             checkTableAvailability(0);
-        //             break;
-        //         case 3: /* create reservation */
-        //             checkTableAvailability(1);
-        //             break;
-        //         case 0: /* Back to main menu */
-        //             break;
-        //         }
-        // });
+        view.getUserReservationChoice(choice -> {
+            switch (choice) {
+                case 1: /* remove reservation */
+                    findReservation();
+                    break;
+                case 2: /* show list of available tables */
+                    checkTableAvailability(0);
+                    break;
+                case 3: /* create reservation */
+                    checkTableAvailability(1);
+                    break;
+                case 0: /* Back to main menu */
+                    break;
+                }
+        });
 
+        // findReservation();
     }
 
     /* Find then remove reservation */
@@ -49,29 +53,26 @@ public class ReservationController {
         // System.out.println("Enter the name of reserver:");
         // String name = sc.nextLine();
 
-        // view.getUserReservationName(reservationName -> {
-        //     /* Get list of reservations */
-        //     getReservationsByName(name);
-        //     System.out.println("1. Cancel reservation");
-        //     System.out.println("0. Return");
+        view.getUserReservationName(reservationName -> {
+            /* Get list of reservations */
+            getReservationsByName(reservationName);
+            System.out.println("1. Cancel reservation");
+            System.out.println("0. Return");
 
-        //     int choice;
-        //     System.out.print("Enter your choice: ");
-        //     choice = sc.nextInt();
-        //     switch (choice) {
-        //     case 1:
-        //         /* remove reservation of current customer */
-        //         removeReservation(name);
-        //         break;
-        //     case 0:
-        //         break;
-        //     default:
-        //         break;
-        //     }
-        // });
-
-        
-
+            int choice;
+            System.out.print("Enter your choice: ");
+            choice = sc.nextInt();
+            switch (choice) {
+            case 1:
+                /* remove reservation of current customer */
+                removeReservation(reservationName);
+                break;
+            case 0:
+                break;
+            default:
+                break;
+            }
+        });
 
     }
 

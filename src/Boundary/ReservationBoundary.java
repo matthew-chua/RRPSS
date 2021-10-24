@@ -1,5 +1,4 @@
 package Boundary;
-
 import Helpers.*;
 
 public class ReservationBoundary extends Boundary {
@@ -10,7 +9,7 @@ public class ReservationBoundary extends Boundary {
 
     
     // Get User's Choice for which manager they would like
-    public void getUserReservationChoice(Callback callback){
+    public void getUserReservationChoice(ChoiceObserver callback){
         /* =========== User's Reservation choices =========== */
         String choice1String = "1. Find / Remove reservation booking\n";
         String choice2String = "2. Check table availability for reservations\n";
@@ -31,14 +30,13 @@ public class ReservationBoundary extends Boundary {
     }
 
     /* =========== Find Reservation =========== */
-    public void getUserReservationName(Callback callback){
+    public void getUserReservationName(StringObserver callback){
 
         String findReservationTitle = "=============== Find Reservations ===============\n";
         String getReservationName = "Enter the name of reserver:\n";
-        String stringToPrint = findReservationTitle;
+        String stringToPrint = findReservationTitle + getReservationName;
 
-        getStringInput(callback, true, stringToPrint);
-
+        getStringInput(callback, false, stringToPrint);
     }
 
 

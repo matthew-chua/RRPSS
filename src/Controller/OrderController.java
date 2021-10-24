@@ -12,6 +12,7 @@ public class OrderController {
 
     // ui
     private OrderBoundary view;
+    
     private OrderEntity order;
     Scanner sc = new Scanner(System.in);
 
