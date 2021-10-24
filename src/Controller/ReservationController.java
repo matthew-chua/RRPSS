@@ -1,3 +1,4 @@
+package Controller;
 import java.util.ArrayList;
 import java.util.Scanner;
 import Boundary.ReservationBoundary;
@@ -18,61 +19,65 @@ public class ReservationController {
     }
 
     private void start() {
-        /* Selections */
-        System.out.println("1. Find / Remove reservation booking");
-        System.out.println("2. Check table availability for reservations");
-        System.out.println("3. Create a reservation");
-        System.out.println("0. Back to main menu");
+        
 
         /* Selection Prompt */
-        int choice;
-        System.out.print("Enter your choice: ");
-        choice = sc.nextInt();
-        switch (choice) {
-        case 1: /* remove reservation */
-            findReservation();
-            break;
-        case 2: /* show list of available tables */
-            checkTableAvailability(0);
-            break;
-        case 3: /* create reservation */
-            checkTableAvailability(1);
-            break;
-        case 0: /* Back to main menu */
-            break;
-        }
+        // int choice;
+        
+        // choice = sc.nextInt();
+        // view.getUserReservationChoice(choice -> {
+        //     switch (choice) {
+        //         case 1: /* remove reservation */
+        //             findReservation();
+        //             break;
+        //         case 2: /* show list of available tables */
+        //             checkTableAvailability(0);
+        //             break;
+        //         case 3: /* create reservation */
+        //             checkTableAvailability(1);
+        //             break;
+        //         case 0: /* Back to main menu */
+        //             break;
+        //         }
+        // });
+
     }
 
     /* Find then remove reservation */
     public void findReservation() {
-        System.out.println("=============== Find Reservations ===============");
+        // System.out.println("=============== Find Reservations ===============");
+        // System.out.println("Enter the name of reserver:");
+        // String name = sc.nextLine();
 
-        System.out.println("Enter the name of reserver:");
-        String name = sc.nextLine();
+        // view.getUserReservationName(reservationName -> {
+        //     /* Get list of reservations */
+        //     getReservationsByName(name);
+        //     System.out.println("1. Cancel reservation");
+        //     System.out.println("0. Return");
 
-        /* Get list of reservations */
-        getReservationsByName(name);
-        System.out.println("1. Cancel reservation");
-        System.out.println("0. Return");
+        //     int choice;
+        //     System.out.print("Enter your choice: ");
+        //     choice = sc.nextInt();
+        //     switch (choice) {
+        //     case 1:
+        //         /* remove reservation of current customer */
+        //         removeReservation(name);
+        //         break;
+        //     case 0:
+        //         break;
+        //     default:
+        //         break;
+        //     }
+        // });
 
-        int choice;
-        System.out.print("Enter your choice: ");
-        choice = sc.nextInt();
-        switch (choice) {
-        case 1:
-            /* remove reservation of current customer */
-            removeReservation(name);
-            break;
-        case 0:
-            break;
-        default:
-            break;
-        }
+        
+
+
     }
 
     /* Print reservations made by specific customer */
     public void getReservationsByName(String name) {
-        ArrayList<ReservationEntity> tempList;
+        ArrayList<ReservationEntity> tempList = new ArrayList<ReservationEntity>();
         for (ReservationEntity i : reservationList) {
             if (i.getName() == name) {
                 tempList.add(i);
@@ -126,7 +131,7 @@ public class ReservationController {
         int pax = sc.nextInt();
 
         /* Check if for that date and time, whether all tables are used up */
-        int reservationCount;
+        int reservationCount = 0;
         for (ReservationEntity i : reservationList) {
             if (i.getDate() == date && i.getTime() == time && i.getPax() == pax) {
                 reservationCount++;

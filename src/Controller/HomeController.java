@@ -12,7 +12,7 @@ public class HomeController {
         this.start();
     }
 
-
+    // Load up controller
     private void start(){
 
         // pass in the anonymous callback function
@@ -33,6 +33,7 @@ public class HomeController {
 
                 case 3: 
                 System.out.println("Manage Reservation");
+                ReservationController reservationController = new ReservationController();
                 break;
 
                 case 4:

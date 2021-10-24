@@ -10,14 +10,14 @@ public class HomeBoundary extends Boundary {
 
     // Get User's Choice for which manager they would like
     public void getUserManagerChoice(Callback callback){
-        resetUI();
+        // resetUI();
         // Print the instructions
-        System.out.println(getUserManagerChoiceString);
+        // System.out.println(getUserManagerChoiceString);
 
         // Get the user's choice
         int numberOfChoices = 5;
         boolean isRecurring = true;
-        getUserChoices(numberOfChoices, callback, isRecurring);
+        getUserChoices(numberOfChoices, callback, isRecurring, getUserManagerChoiceString);
         // Get User Choices is defined in parent class, Boundary.
     }
 
