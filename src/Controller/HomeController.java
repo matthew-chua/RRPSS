@@ -42,6 +42,7 @@ public class HomeController {
                 case 4:
                 System.out.println("Manage Sales");
                 // SalesController sale
+                SalesReportController salesReportController = new SalesReportController;
                 break;
 
                 case 5:

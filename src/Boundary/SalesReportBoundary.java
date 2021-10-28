@@ -15,7 +15,7 @@ public class SalesReportBoundary extends Boundary {
         // System.out.println(getUserManagerChoiceString);
 
         // Get the user's choice
-        int numberOfChoices = 2; // is 0 considered a choice
+        int numberOfChoices = 2;
         boolean isRecurring = true;
         getUserChoices(numberOfChoices, callback, isRecurring, salesReportChoiceString);
         // Get User Choices is defined in parent class, Boundary.

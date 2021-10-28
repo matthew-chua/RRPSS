@@ -15,6 +15,12 @@ public class SalesReportController {
         this.start();
     }
 
+    public void printByDay() {
+
+    }
+
+    public void printByMonth();
+
     // Load up controller
     private void start(){
 
@@ -27,12 +33,14 @@ public class SalesReportController {
 
                 case 1:
                 System.out.println("Print sale revenue by day");
-                SalesReportController salesReportController = new SalesReportController;
+                // some function
+                printByDay();
                 break;
 
                 case 2:
                 System.out.println("Print sale revenue by month");
-                SalesReportController salesReportController = new SalesReportController;
+                // some function
+                printByMonth();
                 break;
 
                 default:
