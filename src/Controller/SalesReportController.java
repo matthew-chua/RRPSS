@@ -15,12 +15,24 @@ public class SalesReportController {
         this.start();
     }
 
+    public ArrayList<InvoiceEntity> getReportbyDay(LocalDateTime date) {
+        // some function to get all invoices from selected date
+    }
+
+    public ArrayList<InvoiceEntity> getReportbyMonth(LocalDateTime month) {
+        // some function to get all invoices from selected month
+    }
+    
     public void printByDay() {
 
     }
 
     public void printByMonth() {
-        
+
+    }
+
+    public int sumOfRevenue(Invoice[] invoice) {
+
     }
 
     // Load up controller
