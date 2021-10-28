@@ -19,7 +19,9 @@ public class SalesReportController {
 
     }
 
-    public void printByMonth();
+    public void printByMonth() {
+        
+    }
 
     // Load up controller
     private void start(){
