@@ -5,14 +5,14 @@ import java.util.Scanner;
 import Boundary.OrderBoundary;
 import Entity.OrderEntity;
 import Entity.Special;
-import Entity.Staff;
+import Entity.StaffEntity;
 import Entity.MenuItem;
 
 public class OrderController {
 
     // ui
     private OrderBoundary view;
-    
+
     private OrderEntity order;
     Scanner sc = new Scanner(System.in);
 
@@ -22,8 +22,8 @@ public class OrderController {
         this.start();
     }
 
-    public void createOrder(Staff servingStaff) {
-        this.order = new OrderEntity(servingStaff);
+    public void createOrder(StaffEntity servingStaffEntity) {
+        this.order = new OrderEntity(servingStaffEntity);
     }
 
     public void viewOrder() {
@@ -70,17 +70,17 @@ public class OrderController {
         int input = sc.nextInt();
 
         switch (input) {
-            case 1:
-                addItem();
-                break;
-            case 2:
-                removeItem();
-                break;
+        case 1:
+            addItem();
+            break;
+        case 2:
+            removeItem();
+            break;
 
-            case 0:
-                break;
-            default:
-                break;
+        case 0:
+            break;
+        default:
+            break;
 
         }
 
@@ -136,37 +136,37 @@ public class OrderController {
 
     private void start() {
 
-        // get rid of this next time and pull the staff from somewhere else
+        // get rid of this next time and pull the StaffEntity from somewhere else
         System.out.println("Hello");
-        Staff servingStaff = new Staff();
+        StaffEntity servingStaffEntity = new StaffEntity();
         view.getManagerChoice(choice -> {
             switch (choice) {
-                case 0:
-                    System.out.println("quitted");
-                    return;
+            case 0:
+                System.out.println("quitted");
+                return;
 
-                case 1:
-                    System.out.println("Create Order");
-                    createOrder(servingStaff);
-                    break;
+            case 1:
+                System.out.println("Create Order");
+                createOrder(servingStaffEntity);
+                break;
 
-                case 2:
-                    System.out.println("View Order");
-                    viewOrder();
-                    break;
+            case 2:
+                System.out.println("View Order");
+                viewOrder();
+                break;
 
-                case 3:
-                    System.out.println("Update Order");
-                    updateOrder();
-                    break;
+            case 3:
+                System.out.println("Update Order");
+                updateOrder();
+                break;
 
-                case 4:
-                    System.out.println("Print Order Invoice");
-                    printInvoice();
-                    break;
+            case 4:
+                System.out.println("Print Order Invoice");
+                printInvoice();
+                break;
 
-                default:
-                    break;
+            default:
+                break;
             }
         });
     }

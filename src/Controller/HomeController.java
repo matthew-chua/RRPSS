@@ -1,22 +1,26 @@
 package Controller;
+
 import Boundary.*;
+import Entity.RestaurantEntity;
 
 public class HomeController {
-    
+
     // UI
     private HomeBoundary view;
 
     // Constructor
-    public HomeController(){
+    public HomeController() {
         // Instantiate view
         this.view = new HomeBoundary();
-        
+
         // Run start function
         this.start();
     }
 
     // Load up controller
     private void start(){
+
+        RestaurantEntity res = RestaurantEntity.shared.tables
 
         // pass in the anonymous callback function
         view.getUserManagerChoice(choice -> {
@@ -46,7 +50,7 @@ public class HomeController {
                 break;
 
                 case 5:
-                System.out.println("Manage Staff");
+                System.out.println("Manage StaffEntity");
                 break;
 
                 default:

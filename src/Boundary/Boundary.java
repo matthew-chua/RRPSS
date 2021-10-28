@@ -1,6 +1,6 @@
 package Boundary;
-import java.util.*;
 
+import java.util.*;
 import Helpers.ChoiceObserver;
 import Helpers.StringObserver;
 
@@ -36,7 +36,7 @@ public class Boundary {
 
     /** 
      * Gets a choice input from user in the form of an int 
-     * @param numberOfChoices is the maximum value of the int to look for
+     * @param numberOfChoices is the maximum value of the int to look for ... don't include 0
      * @param callback is a function that takes in an int which corresponds to the user's choice
      * @param isRecurring is a bool that toggles whether to end the loop on first successful retrieval of user's choice
     **/
