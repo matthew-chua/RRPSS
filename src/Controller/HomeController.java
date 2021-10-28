@@ -1,4 +1,4 @@
-package controller;
+package Controller;
 import Boundary.*;
 
 public class HomeController {
