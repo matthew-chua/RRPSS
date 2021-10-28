@@ -1,7 +1,6 @@
 package Helpers;
 
-public interface Callback {
+public interface ChoiceObserver {
 
     void userDidSelectChoice(int choice);
-
 }

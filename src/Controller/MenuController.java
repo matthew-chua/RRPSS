@@ -118,6 +118,16 @@ public class MenuController {
         System.out.println("\nEnter menu item name: ");
         acItem.setName(scan.nextLine());
 
+import java.lang.reflect.Constructor;
+
+public class MenuController {
+    
+    
+
+    public MenuController(){
+
+    }
+
         // set desc
         System.out.println("\nEnter menu item description: ");
         acItem.setDesc(scan.nextLine());

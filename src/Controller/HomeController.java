@@ -1,19 +1,25 @@
 package Controller;
 import Boundary.*;
+import Entity.RestaurantEntity;
 
 public class HomeController {
-    
+
     // UI
     private HomeBoundary view;
 
     // Constructor
-    public HomeController(){
+    public HomeController() {
+        // Instantiate view
         this.view = new HomeBoundary();
+
+        // Run start function
         this.start();
     }
 
-
+    // Load up controller
     private void start(){
+
+        RestaurantEntity res = RestaurantEntity.shared.tables
 
         // pass in the anonymous callback function
         view.getUserManagerChoice(choice -> {
@@ -28,18 +34,22 @@ public class HomeController {
 
                 case 2:
                 System.out.println("Manage Orders");
+                OrderController orderController = new OrderController();
                 break;
 
                 case 3: 
                 System.out.println("Manage Reservation");
+                ReservationController reservationController = new ReservationController();
                 break;
 
                 case 4:
                 System.out.println("Manage Sales");
+                // SalesController sale
+                SalesReportController salesReportController = new SalesReportController;
                 break;
 
                 case 5:
-                System.out.println("Manage Staff");
+                System.out.println("Manage StaffEntity");
                 break;
 
                 default:
