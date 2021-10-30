@@ -1,7 +1,9 @@
 package Entity;
 
+import java.io.Serializable;
+
 // this is a single alacarte object
-public class AlaCarteEntity {
+public class AlaCarteEntity implements Serializable {
     public enum Type{
         APPETISER(1),
         MAINCOURSE(2),

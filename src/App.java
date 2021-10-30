@@ -10,9 +10,9 @@ public class App {
 
 
         RestaurantEntity resEntity = RestaurantEntity.getInstance();
-        
+        resEntity.printReservations();
 
-        // HomeController controller = new HomeController();
+        HomeController controller = new HomeController();
 
     }
 }

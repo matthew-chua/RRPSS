@@ -1,6 +1,8 @@
 package Entity;
 
-public class ReservationEntity {
+import java.io.Serializable;
+
+public class ReservationEntity implements Serializable {
     private String date;
     private String time;
     private int pax;

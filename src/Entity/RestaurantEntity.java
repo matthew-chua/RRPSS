@@ -1,7 +1,10 @@
 package Entity;
+import Helpers.*;
 
 import java.io.BufferedReader;
+import java.util.ArrayList;
 import java.util.Scanner;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileInputStream;
@@ -16,26 +19,36 @@ import java.io.ObjectOutputStream;
 //     TABLE, STAFF, ORDER, INVOICE, RESERVATION
 // }
 
-public class RestaurantEntity {
+public class RestaurantEntity extends PersistenceManager {
 
-    static RestaurantEntity shared = null;
 
-    public RestaurantEntity(){
-        // this.shared = new RestaurantEntity();
+    // Attributes
+    private static RestaurantEntity shared = null;
 
-        // read from file
-        // try{
-            // loadAllData();
-            loadAllData2();
-        // }catch (FileNotFoundException err){
-        //     System.out.println("Error");
-        // }
-    }
-
-    private Table[] tables;
-    private StaffEntity[] staff;
-    private OrderEntity[] orders;
+    private ArrayList<Table> tables;
+    private ArrayList<StaffEntity> staff;
+    private ArrayList<OrderEntity> orders;
+    private ArrayList<ReservationEntity> reservations;
+    private MenuEntity menu;
     // private InvoiceEntity[] invoices;
+
+    // Constructor
+    public RestaurantEntity(){
+       
+        // init data
+        instantiateData();
+        
+        // this.reservations.add(newRes);
+        // this.reservations.add(newRes2);
+        // saveReservationData();
+        loadAllData();
+    }    
+
+    // Constants
+    private static String reservationsFile = "Reservations.txt";
+    private static String tablesFile = "Tables.txt";
+    private static String staffFile= "Staff.txt";
+    private static String ordersFile = "Orders.txt";
 
     public static RestaurantEntity getInstance(){
         if (shared == null){
@@ -44,62 +57,129 @@ public class RestaurantEntity {
         return shared;
     }
 
+    private void instantiateData(){
+        this.tables = new ArrayList<Table>();
+        this.staff = new ArrayList<StaffEntity>();
+        this.orders = new ArrayList<OrderEntity>();
+        this.reservations = new ArrayList<ReservationEntity>();
+        this.menu = new MenuEntity();
+        // this.invoices = new ArrayList<InvoiceEntity>();
+    }
     
 
-    private void loadAllData() throws FileNotFoundException{
-        
-        System.out.println("Loading all data");
-        // try{
-        File file = new File("Reservations.txt");
-        Scanner sc = new Scanner(file);
-        while (sc.hasNextLine()){
-            System.out.println(sc.nextLine());
+    public void printReservations(){
+        this.reservations.forEach(item -> System.out.println(item.getName()));
+    }
+
+
+    public ArrayList getList(RestaurantDataType type){
+        switch (type){
+            case ORDER:
+                return orders;
+            case STAFF:
+                return staff;
+            case RESERVATION:
+                return reservations;
+            case TABLE:
+                return tables;
+            case INVOICE:
+            // haven't done up yet
+                // return;
+            case MENU:
+                // break;
+                // return;
+                // return menu;
+            default:
+                return new ArrayList<>();
         }
-
     }
 
-    private void loadAllData2(){
-        File file = new File("Reservations.txt");
-        StaffEntity staff = new StaffEntity();
-        // ReservationEntity reservation = new ReservationEntity("name", "something", 10, "again", "yet again");
-
-        try{
-            FileOutputStream f = new FileOutputStream(file);
-			ObjectOutputStream o = new ObjectOutputStream(f);
-
-            o.writeObject(staff);
-            // o.writeObject(reservation);
-
-            FileInputStream fi = new FileInputStream(file);
-			ObjectInputStream oi = new ObjectInputStream(fi);
-
-			// Read objects
-			StaffEntity pr1 = (StaffEntity) oi.readObject();
-			// ReservationEntity pr2 = (ReservationEntity) oi.readObject();
-
-			System.out.println(pr1.getName());
-            System.out.println(pr1.getGender());
-
-        } catch (FileNotFoundException e) {
-			System.out.println("File not found");
-		} catch (IOException e) {
-			System.out.println("Error initializing stream");
-		} 
-        catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    }
-
-    // Load Data
-    private void loadData(String fileName, Object o){
-
-
-
+    public MenuEntity getMenu(){
+        return this.menu;
     }
 
 
-    
+    public <T> void addDataToList(RestaurantDataType type, T data){
 
-    
+        switch (type){
+            case ORDER:
+                orders.add((OrderEntity) data);
+                saveData(ordersFile, orders);
+                break;
+            case STAFF:
+                staff.add((StaffEntity) data);
+                saveData(staffFile, staff);
+                break;
+                // return staff;
+            case RESERVATION:
+                reservations.add((ReservationEntity) data);
+                saveData(reservationsFile, reservations);
+                // return reservations;
+                break;
+            case TABLE:
+                tables.add((Table) data);
+                saveData(tablesFile, tables);
+                break;
+                // return tables;
+            case INVOICE:
+            // haven't done up yet
+                break;
+                // return;
+            case MENU:
+            // can't add    
+                System.out.println("Error, cannot add to menu list. Add to Alacarte items instead");
+                break;
+        }
+    }
+
+    public void removeDataFromList(RestaurantDataType type, int index){
+        switch (type){
+            case ORDER:
+                orders.remove(index);
+                saveData(ordersFile, orders);
+                break;
+            case STAFF:
+                staff.remove(index);
+                saveData(staffFile, staff);
+                break;
+                // return staff;
+            case RESERVATION:
+                reservations.remove(index);
+                saveData(reservationsFile, reservations);
+                // return reservations;
+                break;
+            case TABLE:
+                tables.remove(index);
+                saveData(tablesFile, tables);
+                break;
+                // return tables;
+            case INVOICE:
+            // haven't done up yet
+                break;
+                // return;
+            case MENU:
+            // can't add    
+                System.out.println("Error, cannot add to menu list. Add to Alacarte items instead");
+                break;
+        }
+    }
+
+
+
+    private void loadAllData(){
+        loadData(reservationsFile, reservations);
+        loadData(tablesFile, tables);
+        loadData(ordersFile, orders);
+        loadData(staffFile, staff);
+    }
+
+    private void saveAllData(){
+        saveData(ordersFile, orders);
+        saveData(tablesFile, tables);
+        saveData(staffFile, staff);
+        saveData(reservationsFile, reservations);
+    }
+
+
+
 }

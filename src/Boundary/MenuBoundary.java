@@ -72,7 +72,7 @@ public class MenuBoundary extends Boundary {
 
         // // print desserts
         // System.out.println("\n- Desserts: ");
-        toPrint += " - Drinks:\n";
+        toPrint += " - Desserts:\n";
         for(AlaCarteEntity item : items){
             if (item.getType() == Type.DESSERT){
                 // System.out.printf("\n    - %s          $%.2f", item.getName(), item.getPrice());

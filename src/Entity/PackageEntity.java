@@ -1,8 +1,9 @@
 package Entity;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 // this is a single package object that contains multiple alacarte objects in an arraylist
-public class PackageEntity {
+public class PackageEntity implements Serializable {
 
     //instantiate attributes
     private String name;

@@ -4,7 +4,11 @@ import java.util.Scanner;
 import Boundary.MenuBoundary;
 import Entity.AlaCarteEntity;
 import Entity.PackageEntity;
+import Entity.RestaurantEntity;
+import Entity.StaffEntity;
+import Entity.Table;
 import Entity.MenuEntity;
+import Entity.OrderEntity;
 import Entity.AlaCarteEntity.Type;
 import Helpers.*;
 
@@ -13,12 +17,19 @@ public class MenuController {
     private MenuBoundary view;
     private MenuEntity menu;
     Scanner sc = new Scanner(System.in);
-
+    private RestaurantEntity res;
     // private boolean shouldEnd = false;
 
     public MenuController() {
         this.view = new MenuBoundary();
-        this.menu = new MenuEntity();
+
+        this.res = RestaurantEntity.getInstance();
+        this.menu = res.getMenu();
+
+
+        this.res.addDataToList(RestaurantDataType.STAFF , new StaffEntity());
+        
+
         this.start();
     }
 
