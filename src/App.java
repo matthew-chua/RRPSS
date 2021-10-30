@@ -1,4 +1,5 @@
 import Controller.*;
+import Entity.*;
 // import controller.MainMenuController.Choice;
 
 
@@ -7,7 +8,11 @@ public class App {
 
         // On init, Home Controller runs its feature.
 
-        HomeController controller = new HomeController();
+
+        RestaurantEntity resEntity = RestaurantEntity.getInstance();
+        
+
+        // HomeController controller = new HomeController();
 
     }
 }

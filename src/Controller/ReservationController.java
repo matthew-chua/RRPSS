@@ -55,7 +55,14 @@ public class ReservationController {
         // String name = sc.nextLine();
         view.getUserReservationName(reservationName -> {
             /* Get list of reservations */
-            getReservationsByName(reservationName);
+            ArrayList<ReservationEntity> reservationList = getReservationsByName(reservationName);
+            view.printReservations(reservationList, reservationName);
+            
+            // break flow if no reservations found
+            if (reservationList.size() == 0) return;
+
+            // reservation found, ask them what they wanna do with it
+            
 
             System.out.println("1. Cancel reservation");
             System.out.println("0. Return");
@@ -79,7 +86,7 @@ public class ReservationController {
 
 
     /* Print reservations made by specific customer */
-    public void getReservationsByName(String name) {
+    public ArrayList<ReservationEntity> getReservationsByName(String name) {
         ArrayList<ReservationEntity> tempList = new ArrayList<ReservationEntity>();
         for (ReservationEntity i : reservationList) {
             if (i.getName() == name) {
@@ -87,7 +94,7 @@ public class ReservationController {
             }
         }
 
-        view.printReservations(tempList, name);
+        return tempList;
     }
 
     /* Remove one reservation by specific customer */

@@ -14,59 +14,89 @@ public class MenuController {
     private MenuEntity menu;
     Scanner sc = new Scanner(System.in);
 
+    // private boolean shouldEnd = false;
+
     public MenuController() {
         this.view = new MenuBoundary();
         this.menu = new MenuEntity();
         this.start();
     }
 
+    // public void setShouldEnd(){
+    //     shouldEnd = true;
+    // }
+
     private void start() {
         /* Selection Prompt */
         // int choice;
         // choice = sc.nextInt();
-        view.printMenu(menu.getAlaCarteItems(), menu.getPackages());
+        // view.printMenu(menu.getAlaCarteItems(), menu.getPackages());
 
-        view.getUserMenuChoice(choice -> {
-            view.printTitle(choice);
+
+        
+
+        view.getUserMenuChoice(menu.getAlaCarteItems(), menu.getPackages(), choice -> {
+            // view.printTitle(choice);
             switch (choice) {
                 case 1: /* add new alacarte item */
                     addAlaCarteFlow();
+                    start();
                     break;
 
                 case 2: /* update alacarte item */
                     updateAlaCarteFlow();
+                    start();
                     break;
 
                 case 3: /* remove alacarte item */
                     removeAlaCarteFlow();
+                    start();
                     break;
                 
                 case 4: /* add new package */
                     addPackageFlow();
+                    start();
                     break;
                 
                 case 5: /* update package */
                     updatePackageFlow();
+                    start();
                     break;
                 
                 case 6: /* remove package */
                     removePackageFlow();
+                    start();
                     break;
 
                 case 0: /* Back to main menu */
+                    // System.out.println("help");
+                    // shouldEnd = true;
+                    // setShouldEnd();
                     break;
                 }
         });
+
+        // start();
     }
 
     // create alacarte object according to type
     public void addAlaCarteFlow(){
         boolean isPackage = false;
+        view.resetUI();
+        view.printTitle(1);
         String name = view.getName(isPackage);
-        String desc = view.getDesc(isPackage);
-        double price = view.getPrice(isPackage);
+        view.resetUI();
 
-        view.getAlaCarteTypeChoice(type -> {
+        view.printTitle(1);
+        String desc = view.getDesc(isPackage);
+        view.resetUI();
+
+        view.printTitle(1);
+        double price = view.getPrice(isPackage);
+        view.resetUI();
+
+
+        view.getAlaCarteTypeChoice(1, type -> {
             switch (type) {
                 
                 // appetiser
@@ -101,7 +131,8 @@ public class MenuController {
     }
 
     public void updateAlaCarteFlow(){
-        view.getAlaCarteItemChoice(menu.getAlaCarteItems(), itemChoice -> {
+
+        view.getAlaCarteItemChoice(2, menu.getAlaCarteItems(), itemChoice -> {
             
             // get ala carte object as toUpdate
             ArrayList<AlaCarteEntity> alaCarteItems = menu.getAlaCarteItems();
@@ -127,7 +158,7 @@ public class MenuController {
                         break;
 
                     case 4: // type
-                        view.getAlaCarteTypeChoice(type -> {
+                        view.getAlaCarteTypeChoice(2, type -> {
                             switch (type) {
                                 case 1: // appetiser
                                     menu.updateAlaCarteEntityType(toUpdate, Type.APPETISER);
@@ -155,7 +186,7 @@ public class MenuController {
 
     
     public void removeAlaCarteFlow(){
-        view.getAlaCarteItemChoice(menu.getAlaCarteItems(), itemChoice -> {
+        view.getAlaCarteItemChoice(3, menu.getAlaCarteItems(), itemChoice -> {
            
             // get ala carte object as toRemove
             ArrayList<AlaCarteEntity> alaCarteItems = menu.getAlaCarteItems();

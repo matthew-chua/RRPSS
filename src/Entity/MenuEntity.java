@@ -11,6 +11,12 @@ public class MenuEntity {
     private ArrayList<AlaCarteEntity> alaCarteItems;
     private ArrayList<PackageEntity> packages;
 
+    // Constructor
+    public MenuEntity(){
+        this.alaCarteItems = new ArrayList<AlaCarteEntity>();
+        this.packages = new ArrayList<PackageEntity>();
+    }
+
     public ArrayList<AlaCarteEntity> getAlaCarteItems(){
         return this.alaCarteItems;
     }

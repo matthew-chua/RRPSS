@@ -1,5 +1,6 @@
 package Controller;
 import Boundary.*;
+import Entity.*;
 
 public class SalesReportController {
     
@@ -31,7 +32,7 @@ public class SalesReportController {
 
     }
 
-    public int sumOfRevenue(Invoice[] invoice) {
+    public int sumOfRevenue(InvoiceEntity[] invoice) {
 
     }
 

@@ -31,6 +31,10 @@ public class ReservationBoundary extends Boundary {
         // Get User Choices is defined in parent class, Boundary.
     }
 
+    public void getUserRemoveChoice(ChoiceObserver callback){
+        
+    }
+
     /* =========== Find Reservation =========== */
     public void getUserReservationName(StringObserver callback){
 
@@ -70,5 +74,7 @@ public class ReservationBoundary extends Boundary {
         // getStringInput(callback, isRecurring, stringToPrint);
         return date + " " + time;
     }
+
+
 }
 

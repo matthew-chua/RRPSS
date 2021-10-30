@@ -17,67 +17,96 @@ public class MenuBoundary extends Boundary {
     private String updatePackageTitle = separators + " Update Package " + separators + "\n";
     private String removePackageTitle = separators + " Remove Package " + separators + "\n";
 
-    public void printMenu(ArrayList<AlaCarteEntity> items, ArrayList<PackageEntity> packages){
+    public String printMenu(ArrayList<AlaCarteEntity> items, ArrayList<PackageEntity> packages){
         // print menu
 
         if (items.size() == 0 && packages.size() == 0) {
-            System.out.printf("No items in menu. Add a menu item to start");
-            return;
+            // System.out.printf("No items in menu. Add a menu item to start");
+            return "No items in menu. Add a menu item to start \n";
         }
 
-        System.out.printf(manageMenuTitle);
-        System.out.printf("Menu: " + "\n");
-        System.out.println("\n==============================");
-        System.out.println("\nChef KuKu's Italian Cock with Tails");
-        System.out.println("\n==============================");
+        String toPrint = manageMenuTitle + "Menu: \n";
+        toPrint += separators+separators+separators;
+        toPrint += "\n" + "Chef KuKu's Italian Cock with Tails\n";
+        toPrint += separators+separators+separators + "\n";
+
+        // System.out.printf(manageMenuTitle);
+        // System.out.printf("Menu: " + "\n");
+        // System.out.println("\n==============================");
+        // System.out.println("\nChef KuKu's Italian Cock with Tails");
+        // System.out.println("\n==============================");
         
         // print appetisers
-        System.out.println("\n- Appetisers: ");
+        // System.out.println("\n- Appetisers: ");
+        toPrint += " - Appetisers:\n";
+
         for(AlaCarteEntity item : items){
             if (item.getType() == Type.APPETISER){
-                System.out.printf("\n    - %s          $%d", item.getName(), item.getPrice());
+                // System.out.printf("\n    - %s\t$ %.2f", item.getName(), item.getPrice());
+                // toPrint += " - " + item.getName() + "\t" + String.format("%.2f", item.getPrice()) + "\n";
+                toPrint += formatItem(item);
             }
         }
 
+        
         // print main courses
-        System.out.println("\n- Main Courses: ");
+        // System.out.println("\n- Main Courses: ");
+        toPrint += " - Main Courses:\n";
         for(AlaCarteEntity item : items){
             if (item.getType() == Type.MAINCOURSE){
-                System.out.printf("\n    - %s          $%d", item.getName(), item.getPrice());
+                // System.out.printf("\n    - %s          $%.2f", item.getName(), item.getPrice());
+                // toPrint += " - " + item.getName() + "\t" + String.format("%.2f", item.getPrice()) + "\n";
+                toPrint += formatItem(item);
             }
         }
 
-        // print drinks
-        System.out.println("\n- Drinks: ");
+        // // print drinks
+        // System.out.println("\n- Drinks: ");
+        toPrint += " - Drinks:\n";
         for(AlaCarteEntity item : items){
             if (item.getType() == Type.DRINK){
-                System.out.printf("\n    - %s          $%d", item.getName(), item.getPrice());
+                // System.out.printf("\n    - %s          $%.2f", item.getName(), item.getPrice());
+                toPrint += formatItem(item);
             }
         }
 
-        // print desserts
-        System.out.println("\n- Desserts: ");
+        // // print desserts
+        // System.out.println("\n- Desserts: ");
+        toPrint += " - Drinks:\n";
         for(AlaCarteEntity item : items){
             if (item.getType() == Type.DESSERT){
-                System.out.printf("\n    - %s          $%d", item.getName(), item.getPrice());
+                // System.out.printf("\n    - %s          $%.2f", item.getName(), item.getPrice());
+                toPrint += formatItem(item);
             }
         }
 
-        // print packages
-        System.out.println("\nPackages: ");
+        // // print packages
+        // System.out.println("\nPackages: ");
+        toPrint += " - Packages:\n";
         for(PackageEntity pkg : packages){
-            System.out.printf("\n- %s          $%d", pkg.getName(), pkg.getPrice());
+            // System.out.printf("\n- %s          $%.2f", pkg.getName(), pkg.getPrice());
+            toPrint += "   " + " - " + pkg.getName() + "\t\t\t" + String.format("%.2f", pkg.getPrice()) + "\n";
             
             ArrayList<AlaCarteEntity> packageItems = pkg.getItems();
             for(AlaCarteEntity pkgItem : packageItems){
-                System.out.printf("\n    - %s          $%d", pkgItem.getName(), pkgItem.getPrice());
+                // System.out.printf("\n    - %s          $%.2f", pkgItem.getName(), pkgItem.getPrice());
+                toPrint += formatItem(pkgItem);
             }
         }
+        toPrint += "\n";
+        return toPrint;
+    }
+
+
+    private String formatItem(AlaCarteEntity item){
+        return "    " + " - " + item.getName() + "\t\t\t" + String.format("%.2f", item.getPrice()) + "\n";
     }
 
 
     // Get User's Choice for what menu component they would like to manage
-    public void getUserMenuChoice(ChoiceObserver callback){
+    public void getUserMenuChoice(ArrayList<AlaCarteEntity> items, ArrayList<PackageEntity> packages, ChoiceObserver callback){
+        
+        
         /* =========== User's Menu choices =========== */
         String choice1String = "1. Add a new menu item\n";
         String choice2String = "2. Update a menu item\n";
@@ -90,12 +119,12 @@ public class MenuBoundary extends Boundary {
         // -> PRINT MENU HERE?
 
         // String to print
-        String stringToPrint = choice1String + choice2String +
+        String stringToPrint = printMenu(items, packages) + choice1String + choice2String +
         choice3String + choice4String + choice5String + choice6String + choice7String;
 
         // Get the user's choice
         int numberOfChoices = 6;
-        boolean isRecurring = true;
+        boolean isRecurring = false;
         getUserChoices(numberOfChoices, 
         callback, 
         isRecurring, 
@@ -132,10 +161,43 @@ public class MenuBoundary extends Boundary {
         }
     }
 
+    private String getTitle(int choice){
+        String stringToPrint = "";
+        switch(choice){
+            case 1:
+                stringToPrint += addItemTitle;
+                break;
+            
+            case 2:
+                stringToPrint += updateItemTitle;
+                break;
+            
+            case 3:
+                stringToPrint += removeItemTitle;
+                break;
+            
+            case 4:
+                stringToPrint += addPackageTitle;
+                break;
+            
+            case 5:
+                stringToPrint += updatePackageTitle;
+                break;
+            
+            case 6:
+                stringToPrint += removePackageTitle;
+                break; 
+        }
+        return stringToPrint;
+    }
+
     /////////////////// Adding/Updating Ala Carte Item //////////////////////
     // Get User's Choice for what an item's type is
-    public void getAlaCarteTypeChoice(ChoiceObserver callback){
-        System.out.println("\nEnter menu item type: ");
+    public void getAlaCarteTypeChoice(int choice, ChoiceObserver callback){
+        // System.out.println("\nEnter menu item type: ");
+
+        
+
         String choice1String = "1. Appetiser\n";
         String choice2String = "2. Main Course\n";
         String choice3String = "3. Drink\n";
@@ -143,11 +205,13 @@ public class MenuBoundary extends Boundary {
         String choice5String = "0. Back to main menu\n";
 
         // String to print
-        String stringToPrint = choice1String + choice2String + choice3String + choice4String + choice5String;
+        String stringToPrint = getTitle(choice);
+        stringToPrint += "Enter menu item type: \n";
+        stringToPrint += choice1String + choice2String + choice3String + choice4String + choice5String;
 
         // Get the user's choice
         int numberOfChoices = 4;
-        boolean isRecurring = true;
+        boolean isRecurring = false;
 
         getUserChoices(numberOfChoices, 
         callback, 
@@ -182,10 +246,17 @@ public class MenuBoundary extends Boundary {
 
 
     /////////////////// Updating/Removing Ala Carte Item //////////////////////
-    public void getAlaCarteItemChoice(ArrayList<AlaCarteEntity> items, ChoiceObserver callback){ 
-        System.out.println("\nChoose menu item: ");
+    public void getAlaCarteItemChoice(int choice, ArrayList<AlaCarteEntity> items, ChoiceObserver callback){ 
+        
+        // System.out.println("\nChoose menu item: ");
         
         String stringToPrint = "";
+
+        stringToPrint += getTitle(choice);
+        
+        stringToPrint += "\nChoose menu item: ";
+
+
         int counter = 1;
         for (AlaCarteEntity item : items) {
             String itemString = Integer.toString(counter) + ". " + item.getName() + " - " + Double.toString(item.getPrice()) + "\n";
@@ -193,6 +264,7 @@ public class MenuBoundary extends Boundary {
             stringToPrint = stringToPrint + itemString;
             counter++;
         }
+
 
         // Get the user's choice
         int numberOfChoices = items.size();

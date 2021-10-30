@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class OrderEntity {
 
     private ArrayList<MenuItem> menuItems;
-    private ArrayList<Special> specials;
+    // private ArrayList<Special> specials;
     private StaffEntity servingStaffEntity;
     private Table table;
 
@@ -20,9 +20,9 @@ public class OrderEntity {
         return this.menuItems;
     }
 
-    public ArrayList<Special> getSpecials() {
-        return this.specials;
-    }
+    // public ArrayList<Special> getSpecials() {
+        // return this.specials;
+    // }
 
     public StaffEntity getStaffEntity() {
         return this.servingStaffEntity;
@@ -41,16 +41,16 @@ public class OrderEntity {
         this.menuItems.add(item);
     }
 
-    public void addSpecial(Special specialItem) {
-        this.specials.add(specialItem);
-    }
+    // public void addSpecial(Special specialItem) {
+    //     this.specials.add(specialItem);
+    // }
 
     public void removeMenuItem(int index) {
         this.menuItems.remove(index);
     }
 
-    public void removeSpecial(int index) {
-        this.specials.remove(index);
-    }
+    // public void removeSpecial(int index) {
+    //     this.specials.remove(index);
+    // }
 
 }

@@ -1,5 +1,6 @@
 package Controller;
 import Boundary.*;
+import Controller.MenuController;
 import Entity.RestaurantEntity;
 
 public class HomeController {
@@ -19,7 +20,7 @@ public class HomeController {
     // Load up controller
     private void start(){
 
-        RestaurantEntity res = RestaurantEntity.shared.tables
+        // RestaurantEntity res = RestaurantEntity.shared.tables;
 
         // pass in the anonymous callback function
         view.getUserManagerChoice(choice -> {
@@ -30,6 +31,7 @@ public class HomeController {
 
                 case 1:
                 System.out.println("Hello");
+                MenuController menuController = new MenuController();
                 break;
 
                 case 2:
@@ -45,7 +47,7 @@ public class HomeController {
                 case 4:
                 System.out.println("Manage Sales");
                 // SalesController sale
-                SalesReportController salesReportController = new SalesReportController;
+                // SalesReportController salesReportController = new SalesReportController();
                 break;
 
                 case 5:

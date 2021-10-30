@@ -1,6 +1,8 @@
 package Entity;
 
-public class StaffEntity {
+import java.io.Serializable;
+
+public class StaffEntity implements Serializable{
 
     private String name;
     private String gender;
@@ -8,7 +10,7 @@ public class StaffEntity {
     private String jobTitle;
 
     // constructor
-    public StaffEntity() {
+    public StaffEntity(){
         name = "Name";
         gender = "MaleOrFemale";
         employeeID = 00000000;
