@@ -1,5 +1,7 @@
 package Entity;
-public class MenuItem {
+
+// this is a single alacarte object
+public class AlaCarteEntity {
     public enum Type{
         APPETISER(1),
         MAINCOURSE(2),
@@ -12,20 +14,17 @@ public class MenuItem {
         }
     }
     //instantiate attributes
-    private int id;
     private String name;
     private String desc;
     private double price;
     private Type type;
-    private boolean isRemoved;
 
-    public MenuItem(int item_id){
-        id = item_id;
-        isRemoved = false;
-    }
-
-    public int getItemId(){
-        return id;
+    // constructor
+    public AlaCarteEntity(String name, String desc, double price, Type type){
+        this.name = name;
+        this.desc = desc;
+        this.price = price;
+        this.type = type;
     }
 
     public String getName(){
@@ -44,10 +43,6 @@ public class MenuItem {
         return type;
     }
 
-    public boolean getRemovalStatus(){
-        return isRemoved;
-    }
-
     public void setType(Type inputType){
         type = inputType;
     }
@@ -64,17 +59,8 @@ public class MenuItem {
         price = inputPrice;
     }
 
-    public void removeItem(){
-        isRemoved = true;
-    }
-
-public class MenuItem {
-
-
-    private int itemID;
-
-    public MenuItem(int itemID){
-        this.itemID = itemID;
-    }
+    // public void removeItem(){
+    //     isRemoved = true;
+    // }
     
 }

@@ -1,400 +1,238 @@
 package Controller;
-import Entity.MenuItem;
-import Entity.PackageItem;
-import Entity.MenuItem.Type;
 import java.util.ArrayList;
 import java.util.Scanner;
-
-// change this document to become menu entity
-// menu controller will call the functions in this entity + print stuff/get input from boundary
-// controller only calls functions, does not define any function or get any input
-
-// import Boundary.*;
+import Boundary.MenuBoundary;
+import Entity.AlaCarteEntity;
+import Entity.PackageEntity;
+import Entity.MenuEntity;
+import Entity.AlaCarteEntity.Type;
+import Helpers.*;
 
 public class MenuController {
     
-    // UI
-    // private MenuBoundary view;
+    private MenuBoundary view;
+    private MenuEntity menu;
+    Scanner sc = new Scanner(System.in);
 
-    // Attributes -> put in restaurant entity
-    private ArrayList<MenuItem> alaCarteItems;
-    private ArrayList<PackageItem> packageItems;
-
-    // Constructor
-    public MenuController(){
-        // this.view = new MenuBoundary();
+    public MenuController() {
+        this.view = new MenuBoundary();
+        this.menu = new MenuEntity();
         this.start();
     }
 
-    private void start(){
-    }
+    private void start() {
+        /* Selection Prompt */
+        // int choice;
+        // choice = sc.nextInt();
+        view.printMenu(menu.getAlaCarteItems(), menu.getPackages());
 
-    // use hashmap??
-    public MenuItem getMenuItemByID(int menuItemID){
-        for(MenuItem menuItem : this.alaCarteItems){
-            if(menuItem.getItemId()==menuItemID){
-                return menuItem;
-            }
-        }
-    }
+        view.getUserMenuChoice(choice -> {
+            view.printTitle(choice);
+            switch (choice) {
+                case 1: /* add new alacarte item */
+                    addAlaCarteFlow();
+                    break;
 
-    public void printAlaCarteItems(){
+                case 2: /* update alacarte item */
+                    updateAlaCarteFlow();
+                    break;
 
-    }
-
-    public void printMenu(){
-        ArrayList<MenuItem> items = this.alaCarteItems;
-        ArrayList<PackageItem> packages = this.packageItems;
-
-        System.out.println("\n==============================");
-        System.out.println("\nChef KuKu's Italian Cock with Tails");
-        System.out.println("\n==============================");
-        System.out.println("\nMenu Items: ");
-
-        System.out.println("\n- Appetisers: ");
-        for(MenuItem item : items){
-            if (item.getType() == Type.APPETISER
-            && !item.getRemovalStatus()){
-                System.out.printf("\n    - %s          $%d", item.getName(), item.getPrice());
-            }
-        }
-
-        System.out.println("\n- Main Courses: ");
-        for(MenuItem item : items){
-            if (item.getType() == Type.MAINCOURSE
-            && !item.getRemovalStatus()){
-                System.out.printf("\n    - %s          $%d", item.getName(), item.getPrice());
-            }
-        }
-
-        System.out.println("\n- Drinks: ");
-        for(MenuItem item : items){
-            if (item.getType() == Type.DRINK
-            && !item.getRemovalStatus()){
-                System.out.printf("\n    - %s          $%d", item.getName(), item.getPrice());
-            }
-        }
-
-        System.out.println("\n- Desserts: ");
-        for(MenuItem item : items){
-            if (item.getType() == Type.DESSERT
-            && !item.getRemovalStatus()){
-                System.out.printf("\n    - %s          $%d", item.getName(), item.getPrice());
-            }
-        }
-
-        System.out.println("\n");
-        System.out.println("\nPackages: ");
-        for(PackageItem pkg : packages){
-            if(!pkg.getRemovalStatus()){
-                System.out.printf("\n- %s          $%d", pkg.getName(), pkg.getPrice());
-            
-                ArrayList<MenuItem> packageItems = pkg.getItems();
-                for(MenuItem pkgItem : packageItems){
-                    if(!pkgItem.getRemovalStatus()){
-                        System.out.printf("\n    - %s          $%d", pkgItem.getName(), pkgItem.getPrice());
-                    }
-                }
-            }
-        }
-    }
-
-    public ArrayList<MenuItem> getAlaCarteItems(){
-        return this.alaCarteItems;
-    }
-    
-    public ArrayList<PackageItem> getPackageItems(){
-        return this.packageItems;
-    }
-
-    public void addAlaCarteItem(){
-        // "Add new menu item"
-        // create new menu object
-        int createdId = this.alaCarteItems.size() + 1;
-        MenuItem acItem = new MenuItem(createdId);
-        
-        Scanner scan = new Scanner(System.in);
-        // set name
-        System.out.println("\nEnter menu item name: ");
-        acItem.setName(scan.nextLine());
-
-import java.lang.reflect.Constructor;
-
-public class MenuController {
-    
-    
-
-    public MenuController(){
-
-    }
-
-        // set desc
-        System.out.println("\nEnter menu item description: ");
-        acItem.setDesc(scan.nextLine());
-
-        //set price
-        System.out.println("\nEnter menu item price: ");
-        acItem.setPrice(scan.nextDouble());
-
-        // set type
-        System.out.println("\nEnter menu item type (1-4): ");
-        System.out.println("\n1. Appetiser");
-        System.out.println("\n2. Main Course");
-        System.out.println("\n3. Drink");
-        System.out.println("\n4. Dessert");
-        int choice = scan.nextInt();
-
-        switch(choice){
-            case 1:
-                acItem.setType(Type.APPETISER);
-            case 2:
-                acItem.setType(Type.MAINCOURSE);
-            case 3:
-                acItem.setType(Type.DRINK);
-            case 4:
-                acItem.setType(Type.DESSERT);
-        }
-        scan.close();
-        
-    }
-    
-    public void addPackageItem(){
-        // package item = 1 package
-        // 1 package item contains multiple menu items
-
-        // create new menu object
-        int createdId = this.packageItems.size() + 1;
-        PackageItem pkgItem = new PackageItem(createdId);
-        
-        Scanner scan = new Scanner(System.in);
-        // set name
-        System.out.println("\nEnter package name: ");
-        pkgItem.setName(scan.nextLine());
-
-        // set desc
-        System.out.println("\nEnter package description: ");
-        pkgItem.setDesc(scan.nextLine());
-
-        //set price
-        System.out.println("\nEnter package price: ");
-        pkgItem.setPrice(scan.nextDouble());
-
-        // set type
-        System.out.println("\nEnter number of menu items to be added to package: ");
-        int num = scan.nextInt();
-
-        for(int i = 0; i<num; i++){
-            int itemCheck = 0; // check if item is deleted
-
-            while(itemCheck == 0){
-                System.out.println("\nEnter menu item ID to add to package: ");
-            
-                // print out all menu items with id as options
-                for(MenuItem menuItem : this.alaCarteItems){
-                    System.out.printf("\n    %d. %s --$%d", menuItem.getItemId(), menuItem.getName(), menuItem.getPrice());
-                }
-                int choice = scan.nextInt();
-
-                if(choice > 1 && choice <= this.alaCarteItems.size()){
-                    if(!menuItem.isRemoved){
-
-                    }
-                }
-            }
-            
-            // add corresponding menu item to package
-            pkgItem.addItem(menuItem);
-
-        }
-        
-        scan.close();
-    }
-
-    // GET ITEM BY ID
-    public void updateAlaCarteItem(int item_id){
-
-        // update package respectively
-
-        // choose item to update
-
-        // DO THIS ->> get item by item id
-
-        //////////////////////////////////////////
-        // temporary menuItem object
-        MenuItem menuItem = new MenuItem(item_id);
-        //////////////////////////////////////////
-
-        // print item to be updated
-        System.out.printf("\nUpdating menu item %d...", menuItem.getItemId());
-        System.out.printf("\nName: %s", menuItem.getName());
-        System.out.printf("\nDescription: %s", menuItem.getDesc());
-        System.out.printf("\nPrice: %s", menuItem.getPrice());
-        System.out.printf("\nType: %s", menuItem.getType());
-
-        // choose field to update
-        Scanner scan = new Scanner(System.in);
-        int choice;
-
-        while(true){
-            System.out.println("\nChoose field to update, press 0 to exit: ");
-            System.out.println("\n1. Name ");
-            System.out.println("\n2. Description ");
-            System.out.println("\n3. Price ");
-            System.out.println("\n4. Type ");
-            System.out.println("\n0. Update Complete ");
-            choice = scan.nextInt();
-            if(choice == 0){
-                break;
-            }
-            switch(choice){
-                case 1:
-                    System.out.println("\nEnter new menu item name: ");
-                    String name = scan.nextLine();
-                    menuItem.setName(name);
-                    System.out.printf("\nMenu item new name set as: %s", name);
-                    
-                case 2:
-                    System.out.println("\nEnter new menu item description: ");
-                    String desc = scan.nextLine();
-                    menuItem.setDesc(desc);
-                    System.out.printf("\nMenu item new description set as: %s", desc);
-
-                case 3:
-                    System.out.println("\nEnter new menu item price: ");
-                    Double price = scan.nextDouble();
-                    menuItem.setPrice(price);
-                    System.out.printf("\nMenu item new name set as: %d", price);
-
-                case 4:
-                    System.out.println("\nEnter new menu item type (1-4): ");
-                    System.out.println("\n1. Appetiser");
-                    System.out.println("\n2. Main Course");
-                    System.out.println("\n3. Drink");
-                    System.out.println("\n4. Dessert");
-                    int type = scan.nextInt();
-            
-                    switch(type){
-                        case 1:
-                            menuItem.setType(Type.APPETISER);
-                            System.out.printf("\nMenu item new type set as: %s", Type.APPETISER);
-                        case 2:
-                            menuItem.setType(Type.MAINCOURSE);
-                            System.out.printf("\nMenu item new type set as: %s", Type.MAINCOURSE);
-                        case 3:
-                            menuItem.setType(Type.DRINK);
-                            System.out.printf("\nMenu item new type set as: %s", Type.DRINK);
-                        case 4:
-                            menuItem.setType(Type.DESSERT);
-                            System.out.printf("\nMenu item new type set as: %s", Type.DESSERT);
-                    }
-            }
-        }
-        scan.close();
-
-        // print updated menu item
-        System.out.printf("\nUpdated Menu item %d", menuItem.getItemId());
-        System.out.printf("\nName: %s", menuItem.getName());
-        System.out.printf("\nDescription: %s", menuItem.getDesc());
-        System.out.printf("\nPrice: %s", menuItem.getPrice());
-        System.out.printf("\nType: %s", menuItem.getType());
-    }
-    
-    // GET ITEM BY ID
-    public void updatePackageItem(int package_id){
-        // find a package, edit contents - add/remove menu item
-        // choose item to update
-
-        // DO THIS ->> get item by item id
-
-        //////////////////////////////////////////
-        // temporary menuItem object
-        PackageItem pkg = new PackageItem(package_id);
-        //////////////////////////////////////////
-
-        // print item to be updated
-        System.out.printf("\nUpdating package item %d...", pkg.getPackageId());
-        System.out.printf("\nName: %s", pkg.getName());
-        System.out.printf("\nDescription: %s", pkg.getDesc());
-        System.out.printf("\nPrice: %s", pkg.getPrice());
-        System.out.println("\nContents: ");
-        pkg.printPackageContents();
-
-        // choose field to update
-        Scanner scan = new Scanner(System.in);
-        int choice;
-
-        while(true){
-            System.out.println("\nChoose field to update, press 0 to exit: ");
-            System.out.println("\n1. Name ");
-            System.out.println("\n2. Description ");
-            System.out.println("\n3. Price ");
-            System.out.println("\n4. Add Item ");
-            System.out.println("\n5. Remove Item ");
-            System.out.println("\n0. Update Complete ");
-            choice = scan.nextInt();
-            if(choice == 0){
-                break;
-            }
-            switch(choice){
-                case 1:
-                    System.out.println("\nEnter new Package name: ");
-                    String name = scan.nextLine();
-                    pkg.setName(name);
-                    System.out.printf("\nPackage new name set as: %s", name);
-                    
-                case 2:
-                    System.out.println("\nEnter new Package description: ");
-                    String desc = scan.nextLine();
-                    pkg.setDesc(desc);
-                    System.out.printf("\nPackage new description set as: %s", desc);
-
-                case 3:
-                    System.out.println("\nEnter new Package price: ");
-                    Double price = scan.nextDouble();
-                    pkg.setPrice(price);
-                    System.out.printf("\nPackage new name set as: %d", price);
+                case 3: /* remove alacarte item */
+                    removeAlaCarteFlow();
+                    break;
                 
-                // add item -> // ref add package item
-                case 4:
-                    System.out.println("\nEnter menu item ID to be added: ");
-                    // print all alacarte items
-                    // get menu item by id
-                    // check if pkg contains selected item
-                    // pkg.addItem();
-                    // print - item added
+                case 4: /* add new package */
+                    addPackageFlow();
+                    break;
                 
-                // remove item
-                case 5:
-                    System.out.println("\nEnter menu item ID to be removed: ");
-                    pkg.printPackageContents();
-                    
-                    int item_id = scan.nextInt();
-                    // menuItem = get menu item by id
-                    // pkg.removeItem(menuItem);
-                    // System.out.printf("\nMenu item %s removed", menuItem.getName());
+                case 5: /* update package */
+                    updatePackageFlow();
+                    break;
+                
+                case 6: /* remove package */
+                    removePackageFlow();
+                    break;
+
+                case 0: /* Back to main menu */
+                    break;
+                }
+        });
+    }
+
+    // create alacarte object according to type
+    public void addAlaCarteFlow(){
+        boolean isPackage = false;
+        String name = view.getName(isPackage);
+        String desc = view.getDesc(isPackage);
+        double price = view.getPrice(isPackage);
+
+        view.getAlaCarteTypeChoice(type -> {
+            switch (type) {
+                
+                // appetiser
+                case 1: 
+                    createAlaCarteObject(name, desc, price, Type.APPETISER);
+                    break;
+                
+                // main course
+                case 2:
+                    createAlaCarteObject(name, desc, price, Type.MAINCOURSE);
+                    break;
+
+                // drink
+                case 3:
+                    createAlaCarteObject(name, desc, price, Type.DRINK);
+                    break;
+
+                // dessert
+                case 4:
+                    createAlaCarteObject(name, desc, price, Type.DESSERT);
+                    break;
             }
-        }
-        
-        scan.close();
-
-        // print updated menu item
-        System.out.printf("\nUpdated package item %d...", pkg.getPackageId());
-        System.out.printf("\nName: %s", pkg.getName());
-        System.out.printf("\nDescription: %s", pkg.getDesc());
-        System.out.printf("\nPrice: %s", pkg.getPrice());
-        System.out.println("\nContents: ");
-        pkg.printPackageContents();
+            });
     }
 
-    public void removeAlaCarteItem(int item_id){
-        // menuItem = get item by id
-        //  menuItem.removeItem()
-        // remove all packages containing this item
+    public void createAlaCarteObject(String name, String desc, double price, Type type){
+        // create new alacarte entity
+        AlaCarteEntity newAlaCarteItem = new AlaCarteEntity(name, desc, price, type);
+
+        // add to menu entity
+        menu.addAlaCarteEntity(newAlaCarteItem);
     }
+
+    public void updateAlaCarteFlow(){
+        view.getAlaCarteItemChoice(menu.getAlaCarteItems(), itemChoice -> {
+            
+            // get ala carte object as toUpdate
+            ArrayList<AlaCarteEntity> alaCarteItems = menu.getAlaCarteItems();
+            AlaCarteEntity toUpdate = alaCarteItems.get(itemChoice-1);
+
+            view.getAlaCarteFieldChoice(fieldChoice -> {
+                boolean isPackage = false;
+                switch(fieldChoice){
+                    
+                    case 1: // name
+                        String newName = view.getName(isPackage);
+                        menu.updateAlaCarteEntityName(toUpdate, newName);
+                        break;
+                    
+                    case 2: // desc
+                        String newDesc = view.getDesc(isPackage);
+                        menu.updateAlaCarteEntityDesc(toUpdate, newDesc);
+                        break;
+
+                    case 3: // price
+                        double newPrice = view.getPrice(isPackage);
+                        menu.updateAlaCarteEntityPrice(toUpdate, newPrice);
+                        break;
+
+                    case 4: // type
+                        view.getAlaCarteTypeChoice(type -> {
+                            switch (type) {
+                                case 1: // appetiser
+                                    menu.updateAlaCarteEntityType(toUpdate, Type.APPETISER);
+                                    break;
+                                
+                                case 2: // main course
+                                    menu.updateAlaCarteEntityType(toUpdate, Type.MAINCOURSE);
+                                    break;
+                
+                                case 3: // drink
+                                    menu.updateAlaCarteEntityType(toUpdate, Type.DRINK);
+                                    break;
+                
+                                case 4: // dessert
+                                    menu.updateAlaCarteEntityType(toUpdate, Type.DESSERT);
+                                    break;
+                            }
+                        });
+                        break;
+                }
+            });
+
+        });
+    }
+
     
-    public void removePackageItem(int package_id){
-        // packageItem = get package by id
-        //  packageItem.removePackage()
+    public void removeAlaCarteFlow(){
+        view.getAlaCarteItemChoice(menu.getAlaCarteItems(), itemChoice -> {
+           
+            // get ala carte object as toRemove
+            ArrayList<AlaCarteEntity> alaCarteItems = menu.getAlaCarteItems();
+            AlaCarteEntity toRemove = alaCarteItems.get(itemChoice-1);
+            menu.removeAlaCarteEntity(toRemove);
+        });
+    }
+
+    public void addPackageFlow(){
+        boolean isPackage = true;
+        String name = view.getName(isPackage);
+        String desc = view.getDesc(isPackage);
+        double price = view.getPrice(isPackage);
+
+        PackageEntity newPackage = new PackageEntity(name, desc, price);
+        menu.addPackageEntity(newPackage);
+
+        view.getItemToPackageChoice(menu.getAlaCarteItems(), itemChoice -> {
+            // get ala carte object as toRemove
+            ArrayList<AlaCarteEntity> alaCarteItems = menu.getAlaCarteItems();
+            AlaCarteEntity toAdd = alaCarteItems.get(itemChoice-1);
+            menu.addPackageEntityItem(newPackage, toAdd);
+        });
+    }
+
+    public void updatePackageFlow(){
+        view.getPackageChoice(menu.getPackages(), item -> {
+            // use item as an int
+            ArrayList<PackageEntity> packages = menu.getPackages();
+            PackageEntity packageToUpdate = packages.get(item - 1);
+            
+            view.getPackageFieldChoice(fieldChoice -> {
+                boolean isPackage = false;
+                switch(fieldChoice) {
+                    case 1: // name
+                        String newName = view.getName(isPackage);
+                        menu.updatePackageEntityName(packageToUpdate, newName);
+                        break;
+                    
+                    case 2: // desc
+                        String newDesc = view.getDesc(isPackage);
+                        menu.updatePackageEntityDesc(packageToUpdate, newDesc);
+                        break;
+
+                    case 3: // price
+                        double newPrice = view.getPrice(isPackage);
+                        menu.updatePackageEntityPrice(packageToUpdate, newPrice);
+                        break;
+                    case 4: // add item
+                        view.getItemToPackageChoice(menu.getAlaCarteItems(), itemChoice -> {
+                            // get ala carte object as toRemove
+                            ArrayList<AlaCarteEntity> alaCarteItems = menu.getAlaCarteItems();
+                            AlaCarteEntity itemToAdd = alaCarteItems.get(itemChoice-1);
+                            menu.addPackageEntityItem(packageToUpdate, itemToAdd);
+                        });
+                        break;
+                    
+                    case 5: // remove item
+                        view.getItemToPackageChoice(menu.getAlaCarteItems(), itemChoice -> {
+                            // get ala carte object as toRemove
+                            ArrayList<AlaCarteEntity> alaCarteItems = menu.getAlaCarteItems();
+                            AlaCarteEntity itemToRemove = alaCarteItems.get(itemChoice-1);
+                            menu.removePackageEntityItem(packageToUpdate, itemToRemove);
+                        });
+                        break;
+                }
+            });
+        });
+    }
+
+    public void removePackageFlow(){
+        view.getPackageChoice(menu.getPackages(), item -> {
+            // use item as an int
+            ArrayList<PackageEntity> packages = menu.getPackages();
+            PackageEntity toRemove = packages.get(item-1);
+            menu.removePackageEntity(toRemove);
+        });
     }
 
 }

@@ -17,7 +17,7 @@ public class ReservationController {
     public ReservationController() {
         this.view = new ReservationBoundary();
 
-        this.reservationList = new ArrayList<ReservationEntity>();
+        reservationList = new ArrayList<ReservationEntity>();
 
         this.start();
     }

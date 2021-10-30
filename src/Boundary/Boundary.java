@@ -74,8 +74,20 @@ public class Boundary {
                 nonNumber = true;
             }
         }
+
     }
 
+
+    public double getPositiveDouble(){
+         
+         // check for error
+        return sc.nextDouble();
+    }
+
+    public int getPositiveInt(){
+        // ?? check for error
+        return sc.nextInt();
+    }
 
 
 }
