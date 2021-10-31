@@ -166,12 +166,9 @@ public class OrderController {
 
         // get rid of this next time and pull the StaffEntity from somewhere else
         System.out.println("Hello");
+        System.out.println("Which table are you serving?");
+        int tableNo = sc.nextInt();
 
-        //need to get some table logic here also, idk where to pull table data from though
-        // System.out.println("Which table are you serving?");
-        // int tableNo = sc.nextInt();
-
-        int tableNo = 1;
 
         StaffEntity servingStaffEntity = new StaffEntity();
         view.getManagerChoice(choice -> {
