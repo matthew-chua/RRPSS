@@ -1,6 +1,8 @@
 package Controller;
 import Boundary.*;
 import Entity.*;
+import java.util.ArrayList;
+import java.time.LocalDateTime;
 
 public class SalesReportController {
     
@@ -18,6 +20,7 @@ public class SalesReportController {
 
     public ArrayList<InvoiceEntity> getReportbyDay(LocalDateTime date) {
         // some function to get all invoices from selected date
+        
     }
 
     public ArrayList<InvoiceEntity> getReportbyMonth(LocalDateTime month) {
@@ -33,7 +36,7 @@ public class SalesReportController {
     }
 
     public int sumOfRevenue(InvoiceEntity[] invoice) {
-
+        return 1;
     }
 
     // Load up controller

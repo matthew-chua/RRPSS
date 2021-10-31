@@ -6,8 +6,8 @@ import java.util.ArrayList;
 
 public class OrderEntity implements Serializable{
 
-    private ArrayList<MenuItem> menuItems;
-    // private ArrayList<Special> specials;
+    private ArrayList<AlaCarteEntity> menuItems;
+    private ArrayList<PackageEntity> specials;
     private StaffEntity servingStaffEntity;
     private Table table;
 
@@ -17,13 +17,13 @@ public class OrderEntity implements Serializable{
     }
 
     // getters
-    public ArrayList<MenuItem> getMenuItems() {
+    public ArrayList<AlaCarteEntity> getMenuItems() {
         return this.menuItems;
     }
 
-    // public ArrayList<Special> getSpecials() {
-        // return this.specials;
-    // }
+    public ArrayList<PackageEntity> getSpecials() {
+        return this.specials;
+    }
 
     public StaffEntity getStaffEntity() {
         return this.servingStaffEntity;
@@ -38,20 +38,20 @@ public class OrderEntity implements Serializable{
         this.table = table;
     }
 
-    public void addMenuItem(MenuItem item) {
+    public void addMenuItem(AlaCarteEntity item) {
         this.menuItems.add(item);
     }
 
-    // public void addSpecial(Special specialItem) {
-    //     this.specials.add(specialItem);
-    // }
+    public void addSpecial(PackageEntity specialItem) {
+        this.specials.add(specialItem);
+    }
 
     public void removeMenuItem(int index) {
         this.menuItems.remove(index);
     }
 
-    // public void removeSpecial(int index) {
-    //     this.specials.remove(index);
-    // }
+    public void removeSpecial(int index) {
+        this.specials.remove(index);
+    }
 
 }
