@@ -100,6 +100,7 @@ public class Boundary {
         System.out.println(stringToPrint);
         System.out.println("Press enter to continue");
         sc.nextLine();
+        sc.nextLine();
     }
 
 }

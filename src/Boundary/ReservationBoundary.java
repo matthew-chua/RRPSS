@@ -41,13 +41,11 @@ public class ReservationBoundary extends Boundary {
     }
 
     public void printReservations(ArrayList<ReservationEntity> tempList, String name) {
-        if (tempList.size() == 0) {
-            System.out.printf("%s currently has no reservations\n", name);
-        } else {
-            System.out.printf("Our records show that %s has reservation(s) on\n", name);
+        if (tempList.size() != 0) {
+            System.out.printf("Our records show that %s has reservation(s) on: \n", name);
             int index = 1;
             for (ReservationEntity j : tempList) {
-                System.out.printf("%d. %s at %s", index, j.getDate(), j.getTime());
+                System.out.printf("%d. %s at %s\n", index, j.getDate(), j.getTime());
                 index++;
             }
         }
@@ -70,7 +68,7 @@ public class ReservationBoundary extends Boundary {
 
     public void getUserReservationIndex(int indexRange, ChoiceObserver callback) {
         String stringToPrint = "Which reservation is to be removed?\n";
-        int numberOfChoices = indexRange;
+        int numberOfChoices = indexRange + 1;
         boolean isRecurring = true;
         getUserChoices(numberOfChoices, callback, isRecurring, stringToPrint);
     }
@@ -92,6 +90,20 @@ public class ReservationBoundary extends Boundary {
         }
     }
 
+    public void getUserCreateChoice(ChoiceObserver callback) {
+        /* =========== User's Create choices =========== */
+        String choice1String = "1. Create reservation\n";
+        String choice2String = "0. Back to main menu\n";
+
+        // String to print
+        String stringToPrint = removeReservationTitle + choice1String + choice2String;
+
+        // Get the user's choice
+        int numberOfChoices = 1;
+        boolean isRecurring = true;
+        getUserChoices(numberOfChoices, callback, isRecurring, stringToPrint);
+    }
+
     public String getUserDateTime(String title) {
         System.out.println(separators + " " + title + " " + separators);
 
@@ -103,5 +115,15 @@ public class ReservationBoundary extends Boundary {
         String inputTime = getStringInput();
 
         return (inputDate + " " + inputTime);
+    }
+
+    public int getUserReservationPax() {
+        System.out.println("Enter number of people (2 - 10): ");
+        return getPositiveInt();
+    }
+
+    public String getUserReservationContact() {
+        System.out.println("Enter contact number: ");
+        return getStringInput();
     }
 }
