@@ -95,4 +95,11 @@ public class Boundary {
         return sc.nextInt();
     }
 
+
+    public void displayResults(String stringToPrint){
+        System.out.println(stringToPrint);
+        System.out.println("Press enter to continue");
+        sc.nextLine();
+    }
+
 }
