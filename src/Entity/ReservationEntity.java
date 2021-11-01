@@ -1,16 +1,17 @@
 package Entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class ReservationEntity implements Serializable {
-    private String date;
-    private String time;
+    private Date date;
+    private Date time;
     private int pax;
     private String name;
     private String contact;
     // private int table;
 
-    public ReservationEntity(String date, String time, int pax, String name, String contact/* , int table */) {
+    public ReservationEntity(Date date, Date time, int pax, String name, String contact/* , int table */) {
         this.date = date;
         this.time = time;
         this.pax = pax;
@@ -19,19 +20,19 @@ public class ReservationEntity implements Serializable {
         // this.table = table;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return this.date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
-    public String getTime() {
+    public Date getTime() {
         return this.time;
     }
 
-    public void setTime(String time) {
+    public void setTime(Date time) {
         this.time = time;
     }
 

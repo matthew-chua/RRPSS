@@ -1,7 +1,7 @@
 package Controller;
 
 import java.io.IOException;
-import java.sql.Date;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Scanner;
@@ -57,13 +57,8 @@ public class ReservationController {
             ArrayList<ReservationEntity> tmpList = new ArrayList<ReservationEntity>(existingReservations.stream()
                     .filter(res -> res.getName().equals(reservationName)).collect(Collectors.toList()));
             
-            view.printReservations(existingReservations, reservationName);
-            view.displayResults("");
-
-            if (tmpList.size() == 0) {
-                String stringToPrint = "No reservations found.";
-                view.displayResults(stringToPrint);
-            } else {
+            view.printReservations(tmpList, reservationName);
+            if (tmpList.size() != 0) {
                 view.getUserRemoveChoice(choice -> {
                     switch (choice) {
                     case 1:
@@ -74,6 +69,7 @@ public class ReservationController {
                     }
                 });
             }
+            return;
         });
     }
 
@@ -82,7 +78,7 @@ public class ReservationController {
         view.printReservations(tmpList, name);
         view.getUserReservationIndex(tmpList.size(), index -> {
             try {
-                existingReservations.remove(tmpList.get(index));
+                existingReservations.remove(tmpList.get(index - 1));
                 status = true;
             }
             catch (NoSuchFieldError e) {}
@@ -94,17 +90,15 @@ public class ReservationController {
     /* Check table availability */
     public void checkTableAvailability(String stringToPrint, boolean create) {
         updateReservations();
-        String dateTime = view.getUserDateTime(stringToPrint);
-        String[] dateTimeList = dateTime.split(" ");
-        String date = dateTimeList[0];
-        String time = dateTimeList[1];
+        Date date = view.getUserReservationDate();
+        Date time = view.getUserReservationTime();
 
         /* filter date */
         ArrayList<ReservationEntity> dateList = new ArrayList<ReservationEntity>(
-                existingReservations.stream().filter(res -> res.getDate() == date).collect(Collectors.toList()));
+                existingReservations.stream().filter(res -> res.getDate().equals(date)).collect(Collectors.toList()));
         /* filter time */
         ArrayList<ReservationEntity> tmpList = new ArrayList<ReservationEntity>(
-                dateList.stream().filter(res -> res.getTime() == time).collect(Collectors.toList()));
+                dateList.stream().filter(res -> res.getTime().equals(time)).collect(Collectors.toList()));
 
         view.checkTableAvailabilityStatus(tmpList.size());
 
@@ -127,18 +121,18 @@ public class ReservationController {
     }
 
     /* Making reservation */
-    public void createReservation(String date, String time) {
-        view.getUserReservationName(name -> {
-            String reservationName = name;
-            String reservationContact = view.getUserReservationContact();
+    public void createReservation(Date date, Date time) {
+        
+        String reservationName = view.getUserReservationName();
 
-            int reservationPax = view.getUserReservationPax();
+        String reservationContact = view.getUserReservationContact();
 
-            ReservationEntity reservation = new ReservationEntity(date, time, reservationPax, reservationName, reservationContact);
+        int reservationPax = view.getUserReservationPax();
 
-            existingReservations.add(reservation);
-            restaurant.setReservations(existingReservations);
-        });
+        ReservationEntity reservation = new ReservationEntity(date, time, reservationPax, reservationName, reservationContact);
+
+        existingReservations.add(reservation);
+        restaurant.setReservations(existingReservations);
     }
 
     public void updateReservations() {

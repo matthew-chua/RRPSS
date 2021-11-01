@@ -3,6 +3,9 @@ package Boundary;
 import Helpers.*;
 import Entity.ReservationEntity;
 import java.util.ArrayList;
+import java.util.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 public class ReservationBoundary extends Boundary {
     public ReservationBoundary() {
@@ -11,6 +14,9 @@ public class ReservationBoundary extends Boundary {
     /* =========== Manage Reservations Title =========== */
     private String manageReservationsTitle = separators + " Manage Reservations " + separators + "\n";
     private String removeReservationTitle = separators + " Remove Reservation " + separators + "\n";
+    private String createReservationTitle = separators + " Create Reservation " + separators + "\n";
+    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 
     // Get User's Choice for which manager they would like
     public void getUserReservationChoice(ChoiceObserver callback) {
@@ -41,14 +47,19 @@ public class ReservationBoundary extends Boundary {
     }
 
     public void printReservations(ArrayList<ReservationEntity> tempList, String name) {
+        String stringToPrint;
         if (tempList.size() != 0) {
             System.out.printf("Our records show that %s has reservation(s) on: \n", name);
             int index = 1;
             for (ReservationEntity j : tempList) {
-                System.out.printf("%d. %s at %s\n", index, j.getDate(), j.getTime());
+                System.out.printf("%d. %s at %s\n", index, dateFormat.format(j.getDate()), timeFormat.format(j.getTime()));
                 index++;
             }
+            stringToPrint = " ";
+        }else{
+            stringToPrint = "No reservations found.";
         }
+        displayResults(stringToPrint);
     }
 
     /* =========== Remove Reservation =========== */
@@ -62,14 +73,14 @@ public class ReservationBoundary extends Boundary {
 
         // Get the user's choice
         int numberOfChoices = 1;
-        boolean isRecurring = true;
+        boolean isRecurring = false;
         getUserChoices(numberOfChoices, callback, isRecurring, stringToPrint);
     }
 
     public void getUserReservationIndex(int indexRange, ChoiceObserver callback) {
-        String stringToPrint = "Which reservation is to be removed?\n";
+        String stringToPrint = "Which reservation index is to be removed?\n";
         int numberOfChoices = indexRange + 1;
-        boolean isRecurring = true;
+        boolean isRecurring = false;
         getUserChoices(numberOfChoices, callback, isRecurring, stringToPrint);
     }
 
@@ -96,7 +107,7 @@ public class ReservationBoundary extends Boundary {
         String choice2String = "0. Back to main menu\n";
 
         // String to print
-        String stringToPrint = removeReservationTitle + choice1String + choice2String;
+        String stringToPrint = createReservationTitle + choice1String + choice2String;
 
         // Get the user's choice
         int numberOfChoices = 1;
@@ -104,17 +115,37 @@ public class ReservationBoundary extends Boundary {
         getUserChoices(numberOfChoices, callback, isRecurring, stringToPrint);
     }
 
-    public String getUserDateTime(String title) {
-        System.out.println(separators + " " + title + " " + separators);
+    public Date getUserReservationDate() {
+        System.out.println("Enter date (DD/MM/YYYY):");
+        while(true){
+            String input = getStringInput();
+            try{
+                Date inputDate = dateFormat.parse(input);
+                return inputDate;
+            }
+            catch(ParseException e){
+                continue;
+            }
+        }
+    }
 
-        System.out.println("Enter date (DDMMYYYY):");
-        String inputDate = getStringInput();
+    public Date getUserReservationTime() {
+        System.out.println("Enter time (HH:MM 24hr):");
+        while(true){
+            String input = getStringInput();
+            try{
+                Date inputTime = timeFormat.parse(input);
+                return inputTime;
+            }
+            catch(ParseException e){
+                continue;
+            }
+        }
+    }
 
-        System.out.println();
-        System.out.println("Enter time (HHMM 24hr):");
-        String inputTime = getStringInput();
-
-        return (inputDate + " " + inputTime);
+    public String getUserReservationName(){
+        System.out.println("Enter name of reserver: ");
+        return getStringInput();
     }
 
     public int getUserReservationPax() {
