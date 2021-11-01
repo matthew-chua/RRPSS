@@ -30,48 +30,35 @@ public class AlaCarteEntity implements Serializable {
     }
 
     public String getName(){
-        return name;
+        return this.name;
     }
 
     public String getDesc(){
-        return desc;
+        return this.desc;
     }
 
     public double getPrice(){
-        return price;
+        return this.price;
     }
 
     public Type getType(){
-        return type;
+        return this.type;
     }
 
     public void setType(Type inputType){
-        type = inputType;
+        this.type = inputType;
     }
 
     public void setName(String inputName){
-        name = inputName;
+        this.name = inputName;
     }
 
     public void setDesc(String inputDesc){
-        desc = inputDesc;
+        this.desc = inputDesc;
     }
 
     public void setPrice(double inputPrice){
-        price = inputPrice;
-    }
-
-    public void removeItem(){
-        // isRemoved = true;
+        this.price = inputPrice;
     }
 }
-// public class MenuItem {
 
-
-//     private int itemID;
-
-//     public MenuItem(int itemID){
-//         this.itemID = itemID;
-//     }
-    
-// }
