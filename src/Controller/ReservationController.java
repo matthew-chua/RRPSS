@@ -1,180 +1,145 @@
 package Controller;
+
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Scanner;
 import Boundary.ReservationBoundary;
 import Entity.ReservationEntity;
+import Entity.RestaurantEntity;
 import Helpers.*;
 
 public class ReservationController {
 
     private ReservationBoundary view;
     private ReservationEntity reservation;
-    private static ArrayList<ReservationEntity> reservationList;
-    private int tableCount = 10;
+    private RestaurantEntity restaurant;
+    private ArrayList<ReservationEntity> workingList;
+    private ArrayList<ReservationEntity> existingReservations;
     Scanner sc = new Scanner(System.in);
+
+    boolean status = false;
+
+    private RestaurantDataType type = RestaurantDataType.RESERVATION;
 
     public ReservationController() {
         this.view = new ReservationBoundary();
-
-        reservationList = new ArrayList<ReservationEntity>();
-
+        this.restaurant = RestaurantEntity.getInstance();
+        this.existingReservations = restaurant.getReservations();
+        this.workingList = new ArrayList<ReservationEntity>();
         this.start();
     }
 
     private void start() {
-        
-
-        /* Selection Prompt */
-        // int choice;
-        
-        // choice = sc.nextInt();
+        // System.out.println("existing reservation");
+        // System.out.println(existingReservations);
+        // updateReservations();
         view.getUserReservationChoice(choice -> {
             switch (choice) {
-                case 1: /* remove reservation */
-                    findReservation();
-                    break;
-                case 2: /* show list of available tables */
-                    checkTableAvailability(0);
-                    break;
-                case 3: /* create reservation */
-                    checkTableAvailability(1);
-                    break;
-                case 0: /* Back to main menu */
-                    break;
-                }
+            case 1: /* remove reservation */
+                findReservation();
+                break;
+            case 2: /* show number of available tables */
+                checkTableAvailability();
+                break;
+            case 3: /* create reservation */
+                createReservation();
+                break;
+            case 0: /* Back to main menu */
+                break;
+            }
         });
-
-        // findReservation();
     }
 
     /* Find then remove reservation */
     public void findReservation() {
-        // System.out.println("=============== Find Reservations ===============");
-        // System.out.println("Enter the name of reserver:");
-        // String name = sc.nextLine();
         view.getUserReservationName(reservationName -> {
             /* Get list of reservations */
-            ArrayList<ReservationEntity> reservationList = getReservationsByName(reservationName);
-            view.printReservations(reservationList, reservationName);
-            
-            // break flow if no reservations found
-            if (reservationList.size() == 0) return;
 
-            // reservation found, ask them what they wanna do with it
-            
+            // workrestaurant.getList(RestaurantDataType.RESERVATION);
 
-            System.out.println("1. Cancel reservation");
-            System.out.println("0. Return");
+            // for (ReservationEntity i : restaurant.getReservations()) {
+            //     if (i.getName() == reservationName) {
+            //         workingList.add(i);
+            //     }
+            // }
 
-            int choice;
-            System.out.print("Enter your choice: ");
-            choice = sc.nextInt();
-            switch (choice) {
-            case 1:
-                /* remove reservation of current customer */
-                removeReservation(reservationName);
-                break;
-            case 0:
-                break;
-            default:
-                break;
+            // ArrayList<ReservationEntity> tmpList = existingReservations.stream().filter(res -> res.getName() == reservationName)
+
+            // int index = existingReservations.indexOf(o)
+
+            view.printReservations(workingList, reservationName);
+
+            if (workingList.size() == 0) {
+                System.out.println("No reservations found. Press enter to continue");
+                sc.nextLine();
+                return;
+            } else {
+                view.getUserRemoveChoice(choice -> {
+                    switch (choice) {
+                    case 1:
+                        removeReservation(workingList, reservationName);
+                        break;
+                    case 0:
+                        break;
+                    }
+                });
             }
         });
     }
 
-
-
-    /* Print reservations made by specific customer */
-    public ArrayList<ReservationEntity> getReservationsByName(String name) {
-        ArrayList<ReservationEntity> tempList = new ArrayList<ReservationEntity>();
-        for (ReservationEntity i : reservationList) {
-            if (i.getName() == name) {
-                tempList.add(i);
-            }
-        }
-
-        return tempList;
-    }
-
     /* Remove one reservation by specific customer */
-    public void removeReservation(String name) {
+    public void removeReservation(ArrayList<ReservationEntity> workingList, String name) {
 
-        String dateTime = view.getUserDateTime("Remove Reservation");
-        // not optimal but ok
-        String[] dateTimeList = dateTime.split(" ");
-        
-        for (ReservationEntity i : reservationList) {
-            if (i.getName() == name && i.getDate() == dateTimeList[0] && i.getTime() == dateTimeList[1]) {
-                i.printReservation();
-                reservationList.remove(i);
-                System.out.println("Reservation succesfully removed");
-                return;
+        view.printReservations(workingList, name);
+        view.getUserReservationIndex(workingList.size(), index -> {
+            for (int i = 0; i < existingReservations.size(); i++) {
+                if (existingReservations.get(i) == workingList.get(index)) {
+                    restaurant.removeDataFromList(RestaurantDataType.RESERVATION, i);
+                    workingList.clear();
+                    existingReservations = restaurant.getReservations();
+                    status = true;
+                    break;
+                }
             }
-        }
-        System.out.println("Reservation does not exist");
+        });
+        view.reservationCancellationStatus(status);
     }
 
-    /* Takes in input based on whether customer wants to simply check availability or directly make reservation */
-    public void checkTableAvailability(int makeReservation) {
-        
-        String dateTime = view.getUserDateTime("Remove Reservation");
+    /* */
+    public void checkTableAvailability() {
+
+        String dateTime = view.getUserDateTime("Check Table Availability");
         String[] dateTimeList = dateTime.split(" ");
         String date = dateTimeList[0];
         String time = dateTimeList[1];
-        // System.out.println("Enter the date (DD/MM/YYYY):");
-        // String date = sc.nextLine();
 
-        // System.out.println();
-        // System.out.println("Enter the time (HHMM 24hr):");
-        // String time = sc.nextLine();
-
-        // System.out.println();
         System.out.println("Enter the number of people:");
         System.out.println("Max: 10, Min: 2");
         int pax = sc.nextInt();
 
         /* Check if for that date and time, whether all tables are used up */
         int reservationCount = 0;
-        for (ReservationEntity i : reservationList) {
-            if (i.getDate() == date && i.getTime() == time && i.getPax() == pax) {
-                reservationCount++;
-            }
-        }
-
-        if (tableCount - reservationCount == 0) {
-            System.out.println("No available tables");
-            return;
-        } 
-        else if (makeReservation == 0) {
-            System.out.println("1. Reserve table");
-            System.out.println("2. Change date");
-            System.out.println("0. Return");
-            int input = sc.nextInt();
-            switch (input) {
-            case 1:
-                makeReservation = 1;
-                break;
-            case 2:
-                /* Allow customer to enter another date and time, not sure if this recursion will break the system */
-                checkTableAvailability(0);
-                makeReservation = 0;
-                break;
-            case 0:
-                break;
-            default:
-                break;
-            }
-        }
-
-        /* Customer may not want to make reservation */
-        if (makeReservation == 1) {
-            createReservation(date, time, pax);
-        }
+        // for (ReservationEntity i :
+        // restaurant.getList(RestaurantDataType.RESERVATION)) {
+        // if (i.getDate() == date && i.getTime() == time /* && i.getPax() == pax */) {
+        // // should check 30mins before specified time too
+        // reservationCount++;
+        // }
+        // }
+        int availableTables = existingReservations.size() - reservationCount;
+        view.checkTableAvailabilityStatus(availableTables);
     }
 
-    /* On confirmation of making reservation */
-    public void createReservation(String date, String time, int pax) {
+    /* Making reservation */
+    public void createReservation() {
+        int pax = 5;
+
+        String dateTime = view.getUserDateTime("Check Table Availability");
+        String[] dateTimeList = dateTime.split(" ");
+        String date = dateTimeList[0];
+        String time = dateTimeList[1];
+
         System.out.println();
         System.out.println("Enter the name of reserver:");
         String name = sc.nextLine();
@@ -184,7 +149,18 @@ public class ReservationController {
         String contact = sc.nextLine();
 
         ReservationEntity reservation = new ReservationEntity(date, time, pax, name, contact);
-        reservationList.add(reservation);
+        restaurant.addDataToList(RestaurantDataType.RESERVATION, reservation);
         reservation.printReservation();
     }
+
+    // public void updateReservations() {
+    // for (int i = 0; i < existingReservations.size(); i++) {
+
+    // // if (restaurant.getList(RestaurantDataType.RESERVATION).get(i).getTime() <
+    // // Calendar.getInstance().getTime()){
+    // // restaurant.removeDataFromList(RestaurantDataType.RESERVATION, i);
+    // // i--;
+    // // }
+    // }
+    // }
 }
