@@ -29,15 +29,6 @@ public class MenuBoundary extends Boundary {
         toPrint += separators+separators+separators;
         toPrint += "\n" + "Chef KuKu's Italian Cock with Tails\n";
         toPrint += separators+separators+separators + "\n";
-
-        // System.out.printf(manageMenuTitle);
-        // System.out.printf("Menu: " + "\n");
-        // System.out.println("\n==============================");
-        // System.out.println("\nChef KuKu's Italian Cock with Tails");
-        // System.out.println("\n==============================");
-        
-        // print appetisers
-        // System.out.println("\n- Appetisers: ");
         toPrint += " - Appetisers:\n";
 
         for(AlaCarteEntity item : items){
@@ -50,7 +41,6 @@ public class MenuBoundary extends Boundary {
 
         
         // print main courses
-        // System.out.println("\n- Main Courses: ");
         toPrint += " - Main Courses:\n";
         for(AlaCarteEntity item : items){
             if (item.getType() == Type.MAINCOURSE){
@@ -61,7 +51,6 @@ public class MenuBoundary extends Boundary {
         }
 
         // // print drinks
-        // System.out.println("\n- Drinks: ");
         toPrint += " - Drinks:\n";
         for(AlaCarteEntity item : items){
             if (item.getType() == Type.DRINK){

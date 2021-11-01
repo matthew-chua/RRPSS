@@ -23,12 +23,13 @@ public class RestaurantEntity extends PersistenceManager {
     // Attributes
     private static RestaurantEntity shared = null;
 
+    static int NUMBER_OF_TABLES = 10;
     private ArrayList<Table> tables;
     private ArrayList<StaffEntity> staff;
     private ArrayList<OrderEntity> orders;
     private ArrayList<ReservationEntity> reservations;
     private MenuEntity menu;
-    // private InvoiceEntity[] invoices;
+    private ArrayList<InvoiceEntity> invoices;
 
     // Constructor
     public RestaurantEntity() {
@@ -39,6 +40,8 @@ public class RestaurantEntity extends PersistenceManager {
         // this.reservations.add(newRes);
         // this.reservations.add(newRes2);
         // saveReservationData();
+        loadAllData();
+        resetTables();
     }
 
     // Constants
@@ -46,6 +49,7 @@ public class RestaurantEntity extends PersistenceManager {
     private static String tablesFile = "Tables.txt";
     private static String staffFile = "Staff.txt";
     private static String ordersFile = "Orders.txt";
+    private static String invoiceFile = "Invoice.txt";
 
     public static RestaurantEntity getInstance() {
         if (shared == null) {
@@ -54,40 +58,39 @@ public class RestaurantEntity extends PersistenceManager {
         return shared;
     }
 
+
+    private void resetTables(){
+        for (int i=1; i<=NUMBER_OF_TABLES; i++){
+            int cap=0;
+            if (i<3){
+                cap=2;
+            }else if(i<5){
+                cap=4;
+            }else if(i<7){
+                cap=6;
+            }else if (i<9){
+                cap=8;
+            }
+            else{
+                cap=10;
+            }
+            tables.add(new Table(i, cap, true));
+        }
+        saveAllData();
+    }
+
     private void instantiateData() {
         this.tables = new ArrayList<Table>();
         this.staff = new ArrayList<StaffEntity>();
         this.orders = new ArrayList<OrderEntity>();
         this.reservations = new ArrayList<ReservationEntity>();
         this.menu = new MenuEntity();
-        // this.invoices = new ArrayList<InvoiceEntity>();
+        this.invoices = new ArrayList<InvoiceEntity>();
     }
 
     public void printReservations() {
         this.reservations.forEach(item -> System.out.println(item.getName()));
     }
-
-    // public <T> ArrayList<T> getList(RestaurantDataType type) {
-    // switch (type) {
-    // case ORDER:
-    // return orders;
-    // case STAFF:
-    // return staff;
-    // case RESERVATION:
-    // return reservations;
-    // case TABLE:
-    // return tables;
-    // case INVOICE:
-    // // haven't done up yet
-    // // return;
-    // case MENU:
-    // // break;
-    // // return;
-    // // return menu;
-    // default:
-    // return new ArrayList<>();
-    // }
-    // }
 
     public ArrayList<ReservationEntity> getReservations() {
         return reservations;
@@ -105,6 +108,10 @@ public class RestaurantEntity extends PersistenceManager {
         return staff;
     }
 
+    public ArrayList<InvoiceEntity> getInvoices(){
+        return invoices;
+    }
+
     public MenuEntity getMenu() {
         return this.menu;
     }
@@ -112,6 +119,16 @@ public class RestaurantEntity extends PersistenceManager {
     public void setReservations(ArrayList<ReservationEntity> reservations) {
         this.reservations = reservations;
         saveData(reservationsFile, this.reservations);
+    }
+
+    public void setTables(ArrayList<Table> tables){
+        this.tables = tables;
+        saveData(tablesFile, this.tables);
+    }
+
+    public void addInvoice(InvoiceEntity i){
+        this.invoices.add(i);
+        saveData(invoiceFile, this.invoices);
     }
 
     public <T> void addDataToList(RestaurantDataType type, T data) {

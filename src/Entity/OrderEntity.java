@@ -12,8 +12,11 @@ public class OrderEntity implements Serializable{
     private Table table;
 
     // constructor
-    public OrderEntity(StaffEntity servingStaffEntity) {
+    public OrderEntity(StaffEntity servingStaffEntity, Table table) {
         this.servingStaffEntity = servingStaffEntity;
+        this.table = table;
+        this.menuItems = new ArrayList<AlaCarteEntity>();
+        this.specials = new ArrayList<PackageEntity>();
     }
 
     // getters
@@ -54,4 +57,17 @@ public class OrderEntity implements Serializable{
         this.specials.remove(index);
     }
 
+    // public float calculateTotal(){
+
+    //     float total = 0;
+
+    //     for (int i=0; i<this.specials.size(); i++){
+    //         total += packageItems.get(i).getPrice();
+    //     }
+    //     for (int i=0; i<this.menuItems.size(); i++){
+    //         total += menuItems.get(i).getPrice();
+    //     }
+    //     return total;
+    // }
 }
+

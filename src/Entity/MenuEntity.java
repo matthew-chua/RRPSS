@@ -21,7 +21,6 @@ public class MenuEntity extends PersistenceManager{
         this.alaCarteItems = new ArrayList<AlaCarteEntity>();
         this.packages = new ArrayList<PackageEntity>();
 
-        // uncomment this to reset menu (don't save changes)
         // resetData();
 
         loadData(alaCarteFile, this.alaCarteItems);
@@ -125,7 +124,80 @@ public class MenuEntity extends PersistenceManager{
         saveData(packageFile, packages);
     }
 
+    public String toString(){
+        // print menu
 
+        ArrayList<AlaCarteEntity> items = this.alaCarteItems;
+        ArrayList<PackageEntity> packages = this.packages;
+        String separators = "=============";
+        if (items.size() == 0 && packages.size() == 0) {
+            // System.out.printf("No items in menu. Add a menu item to start");
+            return "No items in menu. Add a menu item to start \n";
+        }
 
+        String toPrint = "Menu: \n";
+        toPrint += separators+separators+separators;
+        toPrint += "\n" + "Chef KuKu's Italian Cock with Tails\n";
+        toPrint += separators+separators+separators + "\n";
+        toPrint += " - Appetisers:\n";
+
+        for(AlaCarteEntity item : items){
+            if (item.getType() == Type.APPETISER){
+                // System.out.printf("\n    - %s\t$ %.2f", item.getName(), item.getPrice());
+                // toPrint += " - " + item.getName() + "\t" + String.format("%.2f", item.getPrice()) + "\n";
+                toPrint += formatItem(item);
+            }
+        }
+
+        
+        // print main courses
+        toPrint += " - Main Courses:\n";
+        for(AlaCarteEntity item : items){
+            if (item.getType() == Type.MAINCOURSE){
+                // System.out.printf("\n    - %s          $%.2f", item.getName(), item.getPrice());
+                // toPrint += " - " + item.getName() + "\t" + String.format("%.2f", item.getPrice()) + "\n";
+                toPrint += formatItem(item);
+            }
+        }
+
+        // // print drinks
+        toPrint += " - Drinks:\n";
+        for(AlaCarteEntity item : items){
+            if (item.getType() == Type.DRINK){
+                // System.out.printf("\n    - %s          $%.2f", item.getName(), item.getPrice());
+                toPrint += formatItem(item);
+            }
+        }
+
+        // // print desserts
+        // System.out.println("\n- Desserts: ");
+        toPrint += " - Desserts:\n";
+        for(AlaCarteEntity item : items){
+            if (item.getType() == Type.DESSERT){
+                // System.out.printf("\n    - %s          $%.2f", item.getName(), item.getPrice());
+                toPrint += formatItem(item);
+            }
+        }
+
+        // // print packages
+        // System.out.println("\nPackages: ");
+        toPrint += " - Packages:\n";
+        for(PackageEntity pkg : packages){
+            // System.out.printf("\n- %s          $%.2f", pkg.getName(), pkg.getPrice());
+            toPrint += "   " + " - " + pkg.getName() + "\t\t\t" + String.format("%.2f", pkg.getPrice()) + "\n";
+            
+            ArrayList<AlaCarteEntity> packageItems = pkg.getItems();
+            for(AlaCarteEntity pkgItem : packageItems){
+                // System.out.printf("\n    - %s          $%.2f", pkgItem.getName(), pkgItem.getPrice());
+                toPrint += formatItem(pkgItem);
+            }
+        }
+        toPrint += "\n";
+        return toPrint;
+    }
+
+    private String formatItem(AlaCarteEntity item){
+        return "    " + " - " + item.getName() + "\t\t\t" + String.format("%.2f", item.getPrice()) + "\n";
+    }
 
 }

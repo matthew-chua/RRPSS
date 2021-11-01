@@ -1,11 +1,14 @@
 package Entity;
 
+import java.io.Serializable;
 import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+import Boundary.Boundary;
 
-public class InvoiceEntity {
+
+public class InvoiceEntity implements Serializable{
 
     private String StaffEntityName; // need on receipt?
     private LocalDateTime timestamp; // or the order time?
@@ -24,7 +27,6 @@ public class InvoiceEntity {
         this.menuItems = menuItems;
         this.packageItems = packageItems;
         this.tableNumber = tableNumber;
-        
     }
 
     public void printInvoice(){
@@ -46,8 +48,29 @@ public class InvoiceEntity {
         if (this.membership){
             System.out.println("TOTAL AFTER MEMBERSHIP DISCOUNT: " + total*1.17*0.9);
         }
-        
+    }
 
+    public String toString(){
+        String invoiceString = "INVOICE FOR TABLE NO: " + String.valueOf(this.tableNumber) + "\n\n";
+        invoiceString += "ALA CARTE ITEMS\n";
+        invoiceString += Boundary.separators + Boundary.separators + Boundary.separators + "\n";
+
+        for (int i=0; i<this.menuItems.size(); i++){
+            invoiceString += this.menuItems.get(i).getName()+"\t\t\t"+this.menuItems.get(i).getPrice() + "\n";
+        }
+        invoiceString += "\nPACKAGE ITEMS:\n";
+        for (int i=0; i<this.packageItems.size(); i++){
+            invoiceString += this.packageItems.get(i).getName()+ "\t\t\t" + String.valueOf(this.packageItems.get(i).getPrice()) + "\n";
+        }
+
+        float total = calculateTotal();
+        invoiceString += "\nTOTAL W/O TAX: " + String.valueOf(total) + "\n";
+        invoiceString += "TOTAL  TAX: " + String.valueOf(total*1.17) + "\n";
+        if (this.membership){
+            invoiceString += "TOTAL AFTER MEMBERSHIP DISCOUNT: " + String.valueOf(total*1.17*0.9) + "\n";
+        }
+
+        return invoiceString;
     }
 
 
