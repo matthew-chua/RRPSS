@@ -15,55 +15,48 @@ public class PackageEntity implements Serializable {
         this.name = name;
         this.desc = desc;
         this.price = price;
+        this.items = new ArrayList<AlaCarteEntity>();
     }
 
     public String getName(){
-        return name;
+        return this.name;
     }
 
     public String getDesc(){
-        return desc;
+        return this.desc;
     }
 
     public double getPrice(){
-        return price;
+        return this.price;
     }
 
     public ArrayList<AlaCarteEntity> getItems(){
-        return items;
+        return this.items;
     }
 
     public void setName(String inputName){
-        name = inputName;
+        this.name = inputName;
     }
 
     public void setDesc(String inputDesc){
-        desc = inputDesc;
+        this.desc = inputDesc;
     }
 
     public void setPrice(double inputPrice){
-        price = inputPrice;
+        this.price = inputPrice;
     }
 
     // straight awway pass in array of alacarte items to make package
     public void setItems(ArrayList<AlaCarteEntity> inputItems){
-        items = inputItems;
+        this.items = inputItems;
     }
 
     public void addItem(AlaCarteEntity alacarteItem){
-        items.add(alacarteItem);
+        this.items.add(alacarteItem);
     }
 
     public void removeItem(AlaCarteEntity alacarteItem){
-        items.remove(alacarteItem);
+        this.items.remove(alacarteItem);
     }
 
-    // public void printPackageContents(){
-    //     for(AlaCarteEntity item: this.items){
-    //         if(!item.getRemovalStatus()){
-    //             System.out.printf("\n%d. %s (%s) -- $%d",
-    //             item.getItemId(),item.getName(),item.getType(),item.getPrice());
-    //         }
-    //     }
-    // }
 }

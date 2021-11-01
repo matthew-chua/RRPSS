@@ -21,7 +21,8 @@ public class MenuEntity extends PersistenceManager{
         this.alaCarteItems = new ArrayList<AlaCarteEntity>();
         this.packages = new ArrayList<PackageEntity>();
 
-        resetData();
+        // uncomment this to reset menu (don't save changes)
+        // resetData();
 
         loadData(alaCarteFile, this.alaCarteItems);
         loadData(packageFile, this.packages);
