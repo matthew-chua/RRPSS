@@ -39,7 +39,6 @@ public class RestaurantEntity extends PersistenceManager {
         // this.reservations.add(newRes);
         // this.reservations.add(newRes2);
         // saveReservationData();
-        loadAllData();
     }
 
     // Constants

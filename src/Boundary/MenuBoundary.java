@@ -99,7 +99,9 @@ public class MenuBoundary extends Boundary {
 
 
     private String formatItem(AlaCarteEntity item){
-        return "    " + " - " + item.getName() + "\t\t\t" + String.format("%.2f", item.getPrice()) + "\n";
+        return "    " + " - " + item.getName() + "\t\t\t" 
+        + String.format("%.2f", item.getPrice()) + "\n"
+        + "\t" + item.getDesc() + "\r\n\n";
     }
 
 
@@ -114,13 +116,13 @@ public class MenuBoundary extends Boundary {
         String choice4String = "4. Add a new package\n";
         String choice5String = "5. Update a package\n";
         String choice6String = "6. Remove a package\n";
-        String choice7String = "0. Back to main menu\n";
+        // String choice7String = "0. Back to main menu\n";
 
         // -> PRINT MENU HERE?
 
         // String to print
         String stringToPrint = printMenu(items, packages) + choice1String + choice2String +
-        choice3String + choice4String + choice5String + choice6String + choice7String;
+        choice3String + choice4String + choice5String + choice6String;
 
         // Get the user's choice
         int numberOfChoices = 6;
@@ -194,20 +196,17 @@ public class MenuBoundary extends Boundary {
     /////////////////// Adding/Updating Ala Carte Item //////////////////////
     // Get User's Choice for what an item's type is
     public void getAlaCarteTypeChoice(int choice, ChoiceObserver callback){
-        // System.out.println("\nEnter menu item type: ");
-
-        
 
         String choice1String = "1. Appetiser\n";
         String choice2String = "2. Main Course\n";
         String choice3String = "3. Drink\n";
         String choice4String = "4. Dessert\n";
-        String choice5String = "0. Back to main menu\n";
+        // String choice5String = "0. Back to main menu\n";
 
         // String to print
         String stringToPrint = getTitle(choice);
         stringToPrint += "Enter menu item type: \n";
-        stringToPrint += choice1String + choice2String + choice3String + choice4String + choice5String;
+        stringToPrint += choice1String + choice2String + choice3String + choice4String;
 
         // Get the user's choice
         int numberOfChoices = 4;
@@ -254,7 +253,7 @@ public class MenuBoundary extends Boundary {
 
         stringToPrint += getTitle(choice);
         
-        stringToPrint += "\nChoose menu item: ";
+        stringToPrint += "\nChoose menu item: \n";
 
 
         int counter = 1;

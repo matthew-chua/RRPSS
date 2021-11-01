@@ -6,6 +6,7 @@ import Helpers.StringObserver;
 
 public class Boundary {
     Scanner sc = new Scanner(System.in);
+    
     public static String separators = "============";
 
     /** Resets the console **/
@@ -32,6 +33,7 @@ public class Boundary {
     }
 
     public String getStringInput() {
+        sc.useDelimiter("\n");
         return sc.next();
     }
 
