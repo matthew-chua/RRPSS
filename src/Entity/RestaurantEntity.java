@@ -51,6 +51,7 @@ public class RestaurantEntity extends PersistenceManager {
         // saveAllData();
 
         // saveData(ordersFile, orders);
+
         loadAllData();
     }
 

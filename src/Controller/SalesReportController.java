@@ -37,7 +37,7 @@ public class SalesReportController {
     public void printByDay(){
         Date userDate = view.getUserDate();
         
-        SimpleDateFormat fmt = new SimpleDateFormat("ddMMyyyy");
+        SimpleDateFormat fmt = new SimpleDateFormat("dd/MM/yyyy");
 
         List<InvoiceEntity> filteredList = this.invoiceList.stream().filter(invoice -> {
             // Compare dates without time
@@ -48,10 +48,10 @@ public class SalesReportController {
             return;
         }
 
-        // float sum = filteredList.stream().filter(predicate)
+        double sum = filteredList.stream().mapToDouble(invoice -> invoice.calculateTotal()).sum();
 
         view.resetUI();
-        // view.displayResults("Showing sales for" + fmt.format(userDate) + "\n" + String.valueOf(sum));
+        view.displayResults("Showing sales for " + fmt.format(userDate) + ":\n$" + String.valueOf(sum));
     }
 
     public void printByMonth() {

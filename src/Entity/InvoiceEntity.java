@@ -5,7 +5,10 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Map;
+import java.util.HashMap;
 // import java.sql.Date;
+import java.util.Dictionary;
 
 import Boundary.Boundary;
 
@@ -18,6 +21,10 @@ public class InvoiceEntity implements Serializable{
     private int tableNumber; // get from Table class?
     private ArrayList<AlaCarteEntity> menuItems; // get from Order class?
     private ArrayList<PackageEntity> packageItems;
+    
+    // private Map<AlaCarteEntity, Integer> menuItems;
+    // private Map<PackageEntity, Integer> packageItems;
+
     private double paymentDue; // do in order or invoice
     private Boolean membership; // checking here?
     
