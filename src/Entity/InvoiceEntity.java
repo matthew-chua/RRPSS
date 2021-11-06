@@ -1,9 +1,11 @@
 package Entity;
 
 import java.io.Serializable;
-import java.sql.Date;
+// import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
+// import java.sql.Date;
 
 import Boundary.Boundary;
 
@@ -11,7 +13,8 @@ import Boundary.Boundary;
 public class InvoiceEntity implements Serializable{
 
     private String StaffEntityName; // need on receipt?
-    private LocalDateTime timestamp; // or the order time?
+    // private LocalDateTime timestamp; // or the order time?
+    private Date timestamp; // or the order time?
     private int tableNumber; // get from Table class?
     private ArrayList<AlaCarteEntity> menuItems; // get from Order class?
     private ArrayList<PackageEntity> packageItems;
@@ -22,11 +25,18 @@ public class InvoiceEntity implements Serializable{
     // constructor
     public InvoiceEntity(String staffName, int tableNumber, ArrayList<AlaCarteEntity> menuItems, ArrayList<PackageEntity> packageItems, Boolean membership) {
         this.StaffEntityName = staffName;
-        this.timestamp = LocalDateTime.now();
+        // this.timestamp = LocalDateTime.now();
+        // SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        long millis=System.currentTimeMillis(); 
+        this.timestamp = new Date(millis);
         this.membership = membership;
         this.menuItems = menuItems;
         this.packageItems = packageItems;
         this.tableNumber = tableNumber;
+    }
+
+    public Date getTimeStamp(){
+        return this.timestamp;
     }
 
     public void printInvoice(){

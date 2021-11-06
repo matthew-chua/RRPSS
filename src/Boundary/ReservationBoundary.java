@@ -115,19 +115,6 @@ public class ReservationBoundary extends Boundary {
         getUserChoices(numberOfChoices, callback, isRecurring, stringToPrint);
     }
 
-    public Date getUserReservationDate() {
-        System.out.println("Enter date (DD/MM/YYYY):");
-        while(true){
-            String input = getStringInput();
-            try{
-                Date inputDate = dateFormat.parse(input);
-                return inputDate;
-            }
-            catch(ParseException e){
-                continue;
-            }
-        }
-    }
 
     public Date getUserReservationTime() {
         System.out.println("Enter time (HH:MM 24hr):");

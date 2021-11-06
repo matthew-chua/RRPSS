@@ -63,20 +63,32 @@ public class OrderBoundary extends Boundary{
     private String getOrderString(OrderEntity order){
         String orderString = "ALCARTE ITEMS:\n";
         for (int i=0; i<order.getMenuItems().size(); i++){
-            orderString += order.getMenuItems().get(i).getName()+ "\t\t\t" + String.valueOf(order.getMenuItems().get(i).getPrice()) + "\n";
+            String orderName = order.getMenuItems().get(i).getName();
+            String updatedOrderName = ((orderName.length() > 25) ? (orderName.substring(0, 24) + "...") : orderName);
+            // String price = String.valueOf(order.getMenuItems().get(i).getPrice());
+            String price = String.format("%.2f", order.getMenuItems().get(i).getPrice());
+            String alignedPrice = String.format("%" + String.valueOf(40 -  updatedOrderName.length())+ "s", price);
+            orderString += updatedOrderName + alignedPrice + "\n";
         }
 
         orderString += "\nPACKAGE ITEMS:\n";
         for (int i=0; i<order.getSpecials().size(); i++){
-            orderString += order.getSpecials().get(i).getName()+ "\t\t\t" + String.valueOf(order.getSpecials().get(i).getPrice()) + "\n";
+            String orderName = order.getSpecials().get(i).getName();
+            String updatedOrderName = ((orderName.length() > 25) ? (orderName.substring(0, 24) + "...") : orderName);
+            String price = String.format("%.2f", order.getSpecials().get(i).getPrice());
+            String alignedPrice = String.format("%" + String.valueOf(40 -  updatedOrderName.length())+ "s", price);
+            orderString +=  updatedOrderName + alignedPrice + "\n\n";
         }
 
         order.getSpecials().forEach(o -> total += o.getPrice());
         order.getMenuItems().forEach(o -> total += o.getPrice());
 
-        
-        orderString += "\nTOTAL W/O TAX: " + String.valueOf(total) + "\n\n";
+        String taxString = "TOTAL W/O TAX: ";
+        String price = String.format("%.2f", total);
+        String alignedPrice = String.format("%" + String.valueOf(40 -  taxString.length())+ "s", price);
+        orderString += taxString + alignedPrice + "\n";
 
+        orderString += separators + separators + separators + "\n\n";
         total = 0;
 
         return orderString;

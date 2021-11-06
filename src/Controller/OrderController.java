@@ -39,7 +39,8 @@ public class OrderController {
         this.view = new OrderBoundary();
         this.restaurant = RestaurantEntity.getInstance();
         // this.orders = restaurant.getOrders();
-        this.servingStaffEntity = new StaffEntity();
+        // this.servingStaffEntity = new StaffEntity();
+        this.servingStaffEntity = restaurant.getCurrentStaff();
         this.tables = restaurant.getTables();
         this.start();
     }
@@ -195,6 +196,7 @@ public class OrderController {
             table.setOrder(null);
 
             restaurant.addInvoice(invoice);
+
             // save data
             restaurant.setTables(tables);
         });

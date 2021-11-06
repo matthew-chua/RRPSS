@@ -23,7 +23,7 @@ public class HomeController {
         // RestaurantEntity res = RestaurantEntity.shared.tables;
 
         // pass in the anonymous callback function
-        view.getUserManagerChoice(choice -> {
+        view.getUserManagerChoice(RestaurantEntity.getInstance().getCurrentStaff().getName(), choice -> {
             switch (choice){
                 case 0:
                 System.out.println("quitted");
@@ -47,12 +47,12 @@ public class HomeController {
                 case 4:
                 System.out.println("Manage Sales");
                 // SalesController sale
-                // SalesReportController salesReportController = new SalesReportController();
+                SalesReportController salesReportController = new SalesReportController();
                 break;
 
-                case 5:
-                System.out.println("Manage StaffEntity");
-                break;
+                // case 5:
+                // System.out.println("Manage StaffEntity");
+                // break;
 
                 default:
                 break;

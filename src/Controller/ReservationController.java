@@ -90,7 +90,8 @@ public class ReservationController {
     /* Check table availability */
     public void checkTableAvailability(String stringToPrint, boolean create) {
         updateReservations();
-        Date date = view.getUserReservationDate();
+        Date date = view.getUserDate();
+        if (date == null) return;
         Date time = view.getUserReservationTime();
 
         /* filter date */

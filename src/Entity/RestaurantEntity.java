@@ -30,6 +30,8 @@ public class RestaurantEntity extends PersistenceManager {
     private ArrayList<ReservationEntity> reservations;
     private MenuEntity menu;
     private ArrayList<InvoiceEntity> invoices;
+    private StaffEntity currentStaff;
+
 
     // Constructor
     public RestaurantEntity() {
@@ -40,8 +42,16 @@ public class RestaurantEntity extends PersistenceManager {
         // this.reservations.add(newRes);
         // this.reservations.add(newRes2);
         // saveReservationData();
+        
+        // saveAllData();
+
+        // setupStaff();
+        // this.orders = new ArrayList<OrderEntity>();
+        // resetTables();
+        // saveAllData();
+
+        // saveData(ordersFile, orders);
         loadAllData();
-        resetTables();
     }
 
     // Constants
@@ -86,6 +96,29 @@ public class RestaurantEntity extends PersistenceManager {
         this.reservations = new ArrayList<ReservationEntity>();
         this.menu = new MenuEntity();
         this.invoices = new ArrayList<InvoiceEntity>();
+    }
+
+    private void setupStaff(){
+
+        StaffEntity s1 = new StaffEntity("Xue Zhe", "Male" , 1, "Head Chef");
+        this.staff.add(s1);
+
+        StaffEntity s2 = new StaffEntity("Wei Bin", "Male" , 2, "Waiter");
+        this.staff.add(s2);
+
+        StaffEntity s3 = new StaffEntity("Grace", "Female" , 3, "Cashier");
+        this.staff.add(s3);
+
+        StaffEntity s4 = new StaffEntity("Matthew", "Male" , 4, "Manager");
+        this.staff.add(s4);
+
+        StaffEntity s5 = new StaffEntity("Ivan", "Male" , 5, "Temperature Taker");
+        this.staff.add(s5);
+
+    }
+
+    public StaffEntity getCurrentStaff(){
+        return this.currentStaff;
     }
 
     public void printReservations() {
@@ -163,6 +196,10 @@ public class RestaurantEntity extends PersistenceManager {
         }
     }
 
+    public void setCurrentStaff(StaffEntity staff){
+        currentStaff = staff;
+    }
+
     public void removeDataFromList(RestaurantDataType type, int index) {
         switch (type) {
         case ORDER:
@@ -195,11 +232,14 @@ public class RestaurantEntity extends PersistenceManager {
         }
     }
 
+
+
     private void loadAllData() {
         loadData(reservationsFile, reservations);
         loadData(tablesFile, tables);
         loadData(ordersFile, orders);
         loadData(staffFile, staff);
+        loadData(invoiceFile, invoices);
     }
 
     private void saveAllData() {
@@ -207,6 +247,7 @@ public class RestaurantEntity extends PersistenceManager {
         saveData(tablesFile, tables);
         saveData(staffFile, staff);
         saveData(reservationsFile, reservations);
+        saveData(invoiceFile, invoices);
     }
 
 }
