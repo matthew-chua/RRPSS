@@ -227,18 +227,18 @@ public class OrderController {
         
         view.getUserMembership(choice -> {
             view.resetUI();
-            // boolean isMember = choice == 1;
-            // InvoiceEntity invoice = new InvoiceEntity(servingStaffEntity.getName(), this.table.getNumber(), this.order.getMenuItems(), this.order.getSpecials(), isMember);
+            boolean isMember = choice == 1;
+            InvoiceEntity invoice = new InvoiceEntity(servingStaffEntity.getName(), this.table.getNumber(), this.order.getMenuItems(), this.order.getSpecials(), isMember);
             
-            // view.printInvoiceFormat();
-            // view.displayResults(invoice.toString());
-            // // delete order from table
-            // table.setOrder(null);
+            view.printInvoiceFormat();
+            view.displayResults(invoice.toString());
+            // delete order from table
+            table.setOrder(null);
 
-            // restaurant.addInvoice(invoice);
+            restaurant.addInvoice(invoice);
 
-            // // save data
-            // restaurant.setTables(tables);
+            // save data
+            restaurant.setTables(tables);
         });
     }
 
