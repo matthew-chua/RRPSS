@@ -137,6 +137,21 @@ public class ReservationController {
     }
 
     public void updateReservations() {
+        Calendar cal = Calendar.getInstance();
+        Date dateNow = cal.getTime();
+        for (ReservationEntity i : existingReservations){
+            if (i.getDate().before(dateNow)){
+                existingReservations.remove(i);
+            }
+            else{
+                if(!i.getDate().after(dateNow)){
+                    if(i.getTime().before(dateNow)){
+                        existingReservations.remove(i)
+                    }
+                }
+            }
+        }
+        restaurant.setReservations(existingReservations);
         return;
     }
 }
