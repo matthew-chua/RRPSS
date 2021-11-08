@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import Boundary.ReservationBoundary;
 import Entity.ReservationEntity;
 import Entity.RestaurantEntity;
+import Entity.Table;
 import Helpers.*;
 
 public class ReservationController {
@@ -51,15 +52,16 @@ public class ReservationController {
     /* Find then remove reservation */
     public void findReservation() {
         updateReservations();
-        view.getUserReservationName(reservationName -> {
-            /* Get list of reservations */
 
+        view.getUserReservationName(reservationName -> {
+            
+            /* Get list of reservations */
             ArrayList<ReservationEntity> tmpList = new ArrayList<ReservationEntity>(existingReservations.stream()
                     .filter(res -> res.getName().equals(reservationName)).collect(Collectors.toList()));
             
-            view.printReservations(tmpList, reservationName);
+            // view.printReservations(tmpList, reservationName);
             if (tmpList.size() != 0) {
-                view.getUserRemoveChoice(choice -> {
+                view.getUserRemoveChoice(tmpList, reservationName, choice -> {
                     switch (choice) {
                     case 1:
                         removeReservation(tmpList, reservationName);
@@ -68,6 +70,8 @@ public class ReservationController {
                         break;
                     }
                 });
+            }else{
+                view.displayResults("No reservations found under " + reservationName);
             }
             return;
         });
@@ -75,8 +79,8 @@ public class ReservationController {
 
     /* Remove reservation using indexing */
     public void removeReservation(ArrayList<ReservationEntity> tmpList, String name) {
-        view.printReservations(tmpList, name);
-        view.getUserReservationIndex(tmpList.size(), index -> {
+        // view.printReservations(tmpList, name);
+        view.getUserReservationIndex(tmpList, name, index -> {
             try {
                 existingReservations.remove(tmpList.get(index - 1));
                 status = true;
@@ -94,21 +98,50 @@ public class ReservationController {
         if (date == null) return;
         Date time = view.getUserReservationTime();
 
+        Calendar calendarTime = Calendar.getInstance();
+        calendarTime.setTime(time);
+
+        Calendar calendarDate = Calendar.getInstance();
+        calendarDate.setTime(date);
+        calendarDate.set(Calendar.HOUR_OF_DAY, calendarTime.get(Calendar.HOUR_OF_DAY));
+        calendarDate.set(Calendar.MINUTE, calendarTime.get(Calendar.MINUTE));
+        calendarDate.set(Calendar.SECOND, calendarTime.get(Calendar.SECOND));
+        // view.displayResults(date.toString() + "\nTime:" + time.toString() );
+        // date = calendarDate.getTime();
+        
+        // check that there isnt a reservation two hours before
+        calendarDate.set(Calendar.HOUR_OF_DAY, calendarTime.get(Calendar.HOUR_OF_DAY) - 2);
+        Date twoHoursBefore = calendarDate.getTime();
+        // check that there isnt a reservation two hours before
+        calendarDate.set(Calendar.HOUR_OF_DAY, calendarTime.get(Calendar.HOUR_OF_DAY) + 2);
+        Date twoHoursAfter = calendarDate.getTime();
+
+        // set back the time
+        calendarDate.set(Calendar.HOUR_OF_DAY, calendarTime.get(Calendar.HOUR_OF_DAY));
+
         /* filter date */
         ArrayList<ReservationEntity> dateList = new ArrayList<ReservationEntity>(
-                existingReservations.stream().filter(res -> res.getDate().equals(date)).collect(Collectors.toList()));
+                existingReservations.stream().filter(res -> {
+                    // view.displayResults("saved date: " + res.getDate().toString() + "\ntwo hours before: " + twoHoursBefore.toString());
+                    boolean isOccupied2HoursBefore = (res.getDate().compareTo(twoHoursBefore) > 0 && res.getDate().compareTo(calendarDate.getTime()) <= 0);
+                    boolean isOccupied2HoursAfter = (res.getDate().compareTo(calendarDate.getTime()) > 0 && res.getDate().compareTo(twoHoursAfter) <= 0);
+                    // view.displayResults(String.valueOf(isOccupied2HoursBefore || isOccupied2HoursAfter));
+                    // JUST LEFT THIS PART
+                    return (isOccupied2HoursAfter || isOccupied2HoursBefore);
+                    }
+                ).collect(Collectors.toList()));
         /* filter time */
-        ArrayList<ReservationEntity> tmpList = new ArrayList<ReservationEntity>(
-                dateList.stream().filter(res -> res.getTime().equals(time)).collect(Collectors.toList()));
+        // ArrayList<ReservationEntity> tmpList = new ArrayList<ReservationEntity>(
+                // dateList.stream().filter(res -> res.getTime().equals(time)).collect(Collectors.toList()));
 
-        view.checkTableAvailabilityStatus(tmpList.size());
+        // view.checkTableAvailabilityStatus(dateList.size());
 
-        if (tmpList.size() == 0) {
+        if (dateList.size() < restaurant.getTables().size()) {
             if (!create){
-                view.getUserCreateChoice(choice -> {
+                view.getUserCreateChoice(calendarDate.getTime(), restaurant.getAvailableTables(0, calendarDate.getTime()), choice -> {
                     switch (choice) {
                     case 1:
-                        createReservation(date, time);
+                        createReservation(calendarDate.getTime(), time);
                         break;
                     case 0:
                         break;
@@ -116,21 +149,34 @@ public class ReservationController {
                 });
             }
             else{
-                createReservation(date, time);
+                createReservation(calendarDate.getTime(), time);
             }
+        }else{
+            view.displayResults("Oops, we're fully booked for this timing.");
         }
     }
 
     /* Making reservation */
     public void createReservation(Date date, Date time) {
         
-        String reservationName = view.getUserReservationName();
-
-        String reservationContact = view.getUserReservationContact();
-
         int reservationPax = view.getUserReservationPax();
 
-        ReservationEntity reservation = new ReservationEntity(date, time, reservationPax, reservationName, reservationContact);
+        // ArrayList<Table> tables = restaurant.getTablesForPax(reservationPax);
+
+        // check that there are enough tables
+        ArrayList<Table> availableTables = restaurant.getAvailableTables(reservationPax, date);
+        if (availableTables.size() == 0){
+            view.displayResults("Oops, we dont have anymore tables for " + reservationPax + " people.");
+            return;
+        }
+
+        // get more inputs from user
+        String reservationName = view.getUserReservationName();
+        String reservationContact = view.getUserReservationContact();
+
+        view.displayResults("Reservation created!");
+        // peg a table into reservation
+        ReservationEntity reservation = new ReservationEntity(date, time, reservationPax, reservationName, reservationContact, availableTables.get(0).getNumber());
 
         existingReservations.add(reservation);
         restaurant.setReservations(existingReservations);
@@ -139,18 +185,7 @@ public class ReservationController {
     public void updateReservations() {
         Calendar cal = Calendar.getInstance();
         Date dateNow = cal.getTime();
-        for (ReservationEntity i : existingReservations){
-            if (i.getDate().before(dateNow)){
-                existingReservations.remove(i);
-            }
-            else{
-                if(!i.getDate().after(dateNow)){
-                    if(i.getTime().before(dateNow)){
-                        existingReservations.remove(i)
-                    }
-                }
-            }
-        }
+        existingReservations.removeIf(reservation -> reservation.getDate().before(dateNow));
         restaurant.setReservations(existingReservations);
         return;
     }

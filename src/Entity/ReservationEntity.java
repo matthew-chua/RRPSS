@@ -2,6 +2,7 @@ package Entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Calendar;
 
 public class ReservationEntity implements Serializable {
     private Date date;
@@ -9,15 +10,15 @@ public class ReservationEntity implements Serializable {
     private int pax;
     private String name;
     private String contact;
-    // private int table;
+    private int table;
 
-    public ReservationEntity(Date date, Date time, int pax, String name, String contact/* , int table */) {
+    public ReservationEntity(Date date, Date time, int pax, String name, String contact, int table ) {
         this.date = date;
         this.time = time;
         this.pax = pax;
         this.name = name;
         this.contact = contact;
-        // this.table = table;
+        this.table = table;
     }
 
     public Date getDate() {
@@ -60,13 +61,13 @@ public class ReservationEntity implements Serializable {
         this.contact = contact;
     }
 
-    // public int getTable() {
-    // return this.table;
-    // }
+    public int getTable() {
+    return this.table;
+    }
 
-    // public void setTable(int table) {
-    // this.table = table;
-    // }
+    public void setTable(int table) {
+        this.table = table;
+    }
 
     public void printReservation() {
         System.out.println("******* Reservation for " + name + " *******");
@@ -76,4 +77,20 @@ public class ReservationEntity implements Serializable {
         System.out.println("Number of people: " + pax);
         System.out.println("Contact Number: " + contact);
     }
+
+    public boolean isOccupiedDuring(Date date){
+        Calendar calendarDate = Calendar.getInstance();
+        calendarDate.setTime(date);
+
+        calendarDate.set(Calendar.HOUR_OF_DAY, calendarDate.get(Calendar.HOUR_OF_DAY) - 2);
+        Date twoHoursBefore = calendarDate.getTime();
+        // check that there isnt a reservation two hours before
+        calendarDate.set(Calendar.HOUR_OF_DAY, calendarDate.get(Calendar.HOUR_OF_DAY) + 4);
+        Date twoHoursAfter = calendarDate.getTime();
+
+        boolean isOccupied2HoursBefore = (this.date.compareTo(twoHoursBefore) > 0 && this.date.compareTo(calendarDate.getTime()) <= 0);
+        boolean isOccupied2HoursAfter = (this.date.compareTo(calendarDate.getTime()) > 0 && this.date.compareTo(twoHoursAfter) <= 0);
+        return (isOccupied2HoursAfter || isOccupied2HoursBefore);
+    }
+
 }

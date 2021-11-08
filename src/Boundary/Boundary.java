@@ -29,10 +29,21 @@ public class Boundary {
             System.out.println("Press 0 to go back\n");
 
             userInput = sc.next();
-            if (userInput == "0")
-                break;
+
+            try{
+                int input = Integer.parseInt(userInput);
+                if (input == 0) return;
+            }catch(NumberFormatException e) { 
+                 
+            } catch(NullPointerException e) {
+
+            }
+
+            // if ( userInput == "0" )
+            //     return;
+
             callback.userDidEnterString(userInput);
-        } while (userInput != "0" && isRecurring);
+        } while (isRecurring);
     }
 
     public String getStringInput() {
@@ -102,12 +113,20 @@ public class Boundary {
 
     public Date getUserDate() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        System.out.println("Enter date (DD/MM/YYYY):");
+        System.out.println("Enter date (DD/MM/YYYY): \n");
+        System.out.println("Press 0 to go back");
         while(true){
             String input = getStringInput();
-            if (input == "0"){
-                return null;
+            
+            try{
+                int inputInt = Integer.parseInt(input);
+                if (inputInt == 0) return null;
+            }catch(NumberFormatException e) { 
+                 
+            } catch(NullPointerException e) {
+
             }
+
             try{
                 Date inputDate = dateFormat.parse(input);
                 return inputDate;
@@ -121,10 +140,19 @@ public class Boundary {
 
     public Date getUserMonth(){
         SimpleDateFormat dateFormat = new SimpleDateFormat("MM/yyyy");
-        System.out.println("Enter month and year (MM/YYYY):");
+        System.out.println("Enter month and year (MM/YYYY):\n");
+
+        System.out.println("Press 0 to go back");
         while(true){
             String input = getStringInput();
-            if (input == "0") return null;
+            try{
+                int inputInt = Integer.parseInt(input);
+                if (inputInt == 0) return null;
+            }catch(NumberFormatException e) { 
+                 
+            } catch(NullPointerException e) {
+
+            }
 
             try{
                 Date inputDate = dateFormat.parse(input);

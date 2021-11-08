@@ -59,7 +59,8 @@ public class SalesReportController {
 
     public void printByDay(){
         Date userDate = view.getUserDate();
-        
+        if (userDate == null) return;
+    
         SimpleDateFormat fmt = new SimpleDateFormat("dd/MM/yyyy");
 
         printSalesString += fmt.format(userDate) + "\n\n";
@@ -106,6 +107,8 @@ public class SalesReportController {
 
     public void printByMonth() {
         Date userDate = view.getUserMonth();
+
+        if (userDate == null) return;
         
         SimpleDateFormat fmt = new SimpleDateFormat("MM/yyyy");
 

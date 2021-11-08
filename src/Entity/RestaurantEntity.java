@@ -5,7 +5,9 @@ import Helpers.*;
 import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.Scanner;
-
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileInputStream;
@@ -13,6 +15,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.lang.reflect.Array;
+import java.util.Date;
+import java.util.List;
+
 
 // public enum RestaurantDataType{
 //     TABLE, STAFF, ORDER, INVOICE, RESERVATION
@@ -132,6 +138,38 @@ public class RestaurantEntity extends PersistenceManager {
 
     public ArrayList<Table> getTables() {
         return tables;
+    }
+
+    public ArrayList<Table> getTablesForPax(int pax){
+        Stream<Table> filteredTableStream = this.tables.stream().filter(table -> table.getCapacity() >= pax);
+        List<Table> filteredTableList = filteredTableStream.collect(Collectors.toList());
+        ArrayList<Table> filteredTables = new ArrayList<Table>(filteredTableList);
+        return filteredTables;
+    }
+
+    public ArrayList<Table> getAvailableTables(int pax, Date date){
+        Stream<Table> filteredTableStreamByPax = this.tables.stream().filter(table -> table.getCapacity() >= pax);
+
+        Stream<ReservationEntity> filteredReservations = this.reservations.stream().filter(reservations -> {
+            return reservations.isOccupiedDuring(date);
+        });
+
+        // List<ReservationEntity> filteredReservationList = filteredReservations.collect(Collectors.toList());
+
+        Stream<Integer> occupiedTableIds = filteredReservations.map(res -> {
+            return res.getTable();
+        });
+
+        ArrayList<Integer> occupiedTableIdsList = new ArrayList<Integer>(occupiedTableIds.collect(Collectors.toList()));
+
+        Stream<Table> availableTableStream = filteredTableStreamByPax.filter(table -> {
+            return (!occupiedTableIdsList.contains(table.getNumber()));
+        });
+        
+        List<Table> availableTableList = availableTableStream.collect(Collectors.toList());
+        ArrayList<Table> availableTables = new ArrayList<Table>(availableTableList);
+        return availableTables;
+        // Stream<Table> filteredTableStreamByDate = filteredTableStreamByPax.filter(table -> table.)
     }
 
     public ArrayList<OrderEntity> getOrders() {
