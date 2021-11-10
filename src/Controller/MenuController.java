@@ -130,7 +130,8 @@ public class MenuController {
                     createAlaCarteObject(name, desc, price, Type.DESSERT);
                     break;
             }
-            });
+        });
+        view.displayResults("\n" + "Ala Carte item added");
     }
 
     public void createAlaCarteObject(String name, String desc, double price, Type type){
@@ -142,33 +143,44 @@ public class MenuController {
     }
 
     public void updateAlaCarteFlow(){
-
+        view.resetUI();
         view.getAlaCarteItemChoice(2, menu.getAlaCarteItems(), itemChoice -> {
             
             // get ala carte object as toUpdate
             ArrayList<AlaCarteEntity> alaCarteItems = menu.getAlaCarteItems();
             AlaCarteEntity toUpdate = alaCarteItems.get(itemChoice-1);
-
-            view.getAlaCarteFieldChoice(fieldChoice -> {
+            view.resetUI();
+            view.getAlaCarteFieldChoice(2,fieldChoice -> {
                 boolean isPackage = false;
                 switch(fieldChoice){
                     
                     case 1: // name
+                        view.resetUI();
+                        view.printTitle(2);
                         String newName = view.getName(isPackage);
                         menu.updateAlaCarteEntityName(toUpdate, newName);
+                        view.displayResults("\n" + "Ala Carte item name updated");
                         break;
                     
                     case 2: // desc
+                        view.resetUI();
+                        view.printTitle(2);
                         String newDesc = view.getDesc(isPackage);
                         menu.updateAlaCarteEntityDesc(toUpdate, newDesc);
+                        view.displayResults("\n" + "Ala Carte item description updated");
                         break;
 
                     case 3: // price
+                        view.resetUI();
+                        view.printTitle(2);
                         double newPrice = view.getPrice(isPackage);
                         menu.updateAlaCarteEntityPrice(toUpdate, newPrice);
+                        view.displayResults("\n" + "Ala Carte item price updated");
                         break;
 
                     case 4: // type
+                        view.resetUI();
+                        view.printTitle(2);
                         view.getAlaCarteTypeChoice(2, type -> {
                             switch (type) {
                                 case 1: // appetiser
@@ -187,6 +199,8 @@ public class MenuController {
                                     menu.updateAlaCarteEntityType(toUpdate, Type.DESSERT);
                                     break;
                             }
+                            view.displayResults("\n" + "Ala Carte item type updated");
+
                         });
                         break;
                 }
@@ -203,64 +217,101 @@ public class MenuController {
             ArrayList<AlaCarteEntity> alaCarteItems = menu.getAlaCarteItems();
             AlaCarteEntity toRemove = alaCarteItems.get(itemChoice-1);
             menu.removeAlaCarteEntity(toRemove);
+            view.displayResults("\n" + "Ala Carte item and packages containing this item are removed");
         });
     }
 
     public void addPackageFlow(){
         boolean isPackage = true;
+        view.resetUI();
+        view.printTitle(4);
         String name = view.getName(isPackage);
+        view.resetUI();
+        view.printTitle(4);
         String desc = view.getDesc(isPackage);
+        view.resetUI();
+        view.printTitle(4);
         double price = view.getPrice(isPackage);
 
         PackageEntity newPackage = new PackageEntity(name, desc, price);
         menu.addPackageEntity(newPackage);
 
-        view.getItemToPackageChoice(menu.getAlaCarteItems(), itemChoice -> {
+        view.getItemToPackageChoice(4, menu.getAlaCarteItems(), itemChoice -> {
             // get ala carte object as toRemove
             ArrayList<AlaCarteEntity> alaCarteItems = menu.getAlaCarteItems();
             AlaCarteEntity toAdd = alaCarteItems.get(itemChoice-1);
-            menu.addPackageEntityItem(newPackage, toAdd);
+            if (newPackage.getItems().contains(toAdd)){
+                view.displayResults("\n" + toAdd.getName() + " is already in package.");
+            }
+            else{
+                menu.addPackageEntityItem(newPackage, toAdd);
+                view.displayResults("\n" + toAdd.getName() + " added.");
+            }
+            
         });
     }
 
     public void updatePackageFlow(){
-        view.getPackageChoice(menu.getPackages(), item -> {
+        view.getPackageChoice(5, menu.getPackages(), item -> {
             // use item as an int
             ArrayList<PackageEntity> packages = menu.getPackages();
             PackageEntity packageToUpdate = packages.get(item - 1);
             
-            view.getPackageFieldChoice(fieldChoice -> {
-                boolean isPackage = false;
+            view.getPackageFieldChoice(5, fieldChoice -> {
+                boolean isPackage = true;
                 switch(fieldChoice) {
                     case 1: // name
+                        view.resetUI();
+                        view.printTitle(5);
                         String newName = view.getName(isPackage);
                         menu.updatePackageEntityName(packageToUpdate, newName);
+                        view.displayResults("\n" + "Package name updated");
                         break;
                     
                     case 2: // desc
+                        view.resetUI();
+                        view.printTitle(5);
                         String newDesc = view.getDesc(isPackage);
                         menu.updatePackageEntityDesc(packageToUpdate, newDesc);
+                        view.displayResults("\n" + "Package description updated");
                         break;
 
                     case 3: // price
+                        view.resetUI();
+                        view.printTitle(5);
                         double newPrice = view.getPrice(isPackage);
                         menu.updatePackageEntityPrice(packageToUpdate, newPrice);
+                        view.displayResults("\n" + "Package price updated");
                         break;
+
                     case 4: // add item
-                        view.getItemToPackageChoice(menu.getAlaCarteItems(), itemChoice -> {
+                        view.getItemToPackageChoice(5, menu.getAlaCarteItems(), itemChoice -> {
                             // get ala carte object as toRemove
                             ArrayList<AlaCarteEntity> alaCarteItems = menu.getAlaCarteItems();
-                            AlaCarteEntity itemToAdd = alaCarteItems.get(itemChoice-1);
-                            menu.addPackageEntityItem(packageToUpdate, itemToAdd);
+                            AlaCarteEntity toAdd = alaCarteItems.get(itemChoice-1);
+                            if (packageToUpdate.getItems().contains(toAdd)){
+                                view.displayResults("\n" + toAdd.getName() + " is already in package");
+                            }
+                            else{
+                                menu.addPackageEntityItem(packageToUpdate, toAdd);
+                                view.displayResults("\n" +  toAdd.getName() + " added");
+                            }
+                            
                         });
                         break;
                     
                     case 5: // remove item
-                        view.getItemToPackageChoice(menu.getAlaCarteItems(), itemChoice -> {
+                        view.getItemToPackageChoice(5, menu.getAlaCarteItems(), itemChoice -> {
                             // get ala carte object as toRemove
                             ArrayList<AlaCarteEntity> alaCarteItems = menu.getAlaCarteItems();
-                            AlaCarteEntity itemToRemove = alaCarteItems.get(itemChoice-1);
-                            menu.removePackageEntityItem(packageToUpdate, itemToRemove);
+                            AlaCarteEntity toRemove = alaCarteItems.get(itemChoice-1);
+                            if(!packageToUpdate.getItems().contains(toRemove)){
+                                view.displayResults("\n" + toRemove.getName() + " has already been ermoved from package.");
+                            }
+                            else{
+                                menu.removePackageEntityItem(packageToUpdate, toRemove);
+                                view.displayResults("\n" + toRemove.getName() + " removed");
+                            }
                         });
                         break;
                 }
@@ -269,11 +320,12 @@ public class MenuController {
     }
 
     public void removePackageFlow(){
-        view.getPackageChoice(menu.getPackages(), item -> {
+        view.getPackageChoice(6, menu.getPackages(), item -> {
             // use item as an int
             ArrayList<PackageEntity> packages = menu.getPackages();
             PackageEntity toRemove = packages.get(item-1);
             menu.removePackageEntity(toRemove);
+            view.displayResults("\n" + "Package removed");
         });
     }
 

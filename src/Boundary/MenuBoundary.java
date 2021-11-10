@@ -74,7 +74,9 @@ public class MenuBoundary extends Boundary {
         toPrint += " - Packages:\n";
         for(PackageEntity pkg : packages){
             // System.out.printf("\n- %s          $%.2f", pkg.getName(), pkg.getPrice());
-            toPrint += "   " + " - " + pkg.getName() + "\t\t\t" + String.format("%.2f", pkg.getPrice()) + "\n";
+            toPrint += "   " + " - " + pkg.getName() + "\t\t\t" + 
+            String.format("%.2f", pkg.getPrice()) + "\n"
+            + "     -----------------" + "\n";
             
             ArrayList<AlaCarteEntity> packageItems = pkg.getItems();
             for(AlaCarteEntity pkgItem : packageItems){
@@ -242,7 +244,12 @@ public class MenuBoundary extends Boundary {
 
         stringToPrint += getTitle(choice);
         
-        stringToPrint += "\nChoose menu item: \n";
+        if(choice==2){
+            stringToPrint += "\nChoose menu item to update: \n";
+        }
+        if(choice==3){
+            stringToPrint += "\nChoose menu item to remove: \n";
+        }
 
 
         int counter = 1;
@@ -265,8 +272,14 @@ public class MenuBoundary extends Boundary {
         // Get User Choices is defined in parent class, Boundary.
     }
 
-    public void getAlaCarteFieldChoice(ChoiceObserver callback){
-        System.out.println("\nEnter field to update: ");
+    public void getAlaCarteFieldChoice(int choice, ChoiceObserver callback){
+        // System.out.println("\nChoose field to update: ");
+        String stringToPrint = "";
+
+        stringToPrint += getTitle(choice);
+        
+        stringToPrint += "\nChoose field to update: \n";
+        
         String choice1String = "1. Name\n";
         String choice2String = "2. Description\n";
         String choice3String = "3. Price\n";
@@ -274,8 +287,8 @@ public class MenuBoundary extends Boundary {
         String choice5String = "0. Back to main menu\n";
 
         // String to print
-        String stringToPrint = choice1String + choice2String + choice3String + choice4String + choice5String;
-
+        String itemString = choice1String + choice2String + choice3String + choice4String + choice5String;
+        stringToPrint = stringToPrint + itemString;
         // Get the user's choice
         int numberOfChoices = 4;
         boolean isRecurring = true;
@@ -290,10 +303,13 @@ public class MenuBoundary extends Boundary {
 
     ////////////////////// Adding ala carte item to package /////////////////////////
     // THIS IS THE SAME AS getAlaCarteItemChoice EXCEPT IT IS RECURRING -> keep querying for items to add to package, user exits at will
-    public void getItemToPackageChoice(ArrayList<AlaCarteEntity> items, ChoiceObserver callback){ 
-        System.out.println("\nChoose menu item to add to Package: ");
+    public void getItemToPackageChoice(int choice, ArrayList<AlaCarteEntity> items, ChoiceObserver callback){ 
+        // System.out.println("\nChoose menu item to add to Package: \n");
         
-        String stringToPrint = "0. Back to Main Menu \n";
+        String stringToPrint = getTitle(choice);;
+
+        stringToPrint += "\nChoose Ala Carte item to add to/remove from package\n";
+        stringToPrint += "\n0. Back to Main Menu \n";
         int counter = 1;
         for (AlaCarteEntity item : items) {
             String itemString = Integer.toString(counter) + ". " + item.getName() + " - " + Double.toString(item.getPrice()) + "\n";
@@ -314,8 +330,11 @@ public class MenuBoundary extends Boundary {
     }
 
     ////////////////////// CHOOSE to change name/desc/price/Add/remove existing items to/from package entity/////////////////////////
-    public void getPackageFieldChoice(ChoiceObserver callback){
-        System.out.println("\nEnter field to update: ");
+    public void getPackageFieldChoice(int choice, ChoiceObserver callback){
+        // System.out.println("\nChoose field to update: ");
+        String stringToPrint = getTitle(choice);;
+        stringToPrint += "\nChoose field to update: \n";
+
         String choice1String = "1. Name\n";
         String choice2String = "2. Description\n";
         String choice3String = "3. Price\n";
@@ -324,8 +343,8 @@ public class MenuBoundary extends Boundary {
         String choice6String = "0. Back to main menu\n";
 
         // String to print
-        String stringToPrint = choice1String + choice2String + choice3String + choice4String + choice5String + choice6String;
-
+        String itemString = choice1String + choice2String + choice3String + choice4String + choice5String + choice6String;
+        stringToPrint += itemString;
         // Get the user's choice
         int numberOfChoices = 5;
         boolean isRecurring = true;
@@ -339,10 +358,17 @@ public class MenuBoundary extends Boundary {
 
 
     ////////////////////// Updating/Removing whole package entity/////////////////////////
-    public void getPackageChoice(ArrayList<PackageEntity> packages, ChoiceObserver callback){ 
-        System.out.println("\nChoose Package: ");
-        
-        String stringToPrint = "";
+    public void getPackageChoice(int choice,ArrayList<PackageEntity> packages, ChoiceObserver callback){ 
+        // System.out.println("\nChoose Package: ");
+        String stringToPrint = getTitle(choice);
+
+        if(choice == 5){
+            stringToPrint += "\nChoose package to update: \n";
+        }
+        if(choice == 6){
+            stringToPrint += "\nChoose package to remove: \n";
+        }
+
         int counter = 1;
         for (PackageEntity pkg : packages) {
             String pkgString = Integer.toString(counter) + ". " + pkg.getName() + " - " + Double.toString(pkg.getPrice()) + "\n";

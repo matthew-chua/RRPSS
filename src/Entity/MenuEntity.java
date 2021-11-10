@@ -80,11 +80,14 @@ public class MenuEntity extends PersistenceManager{
     public void removeAlaCarteEntity(AlaCarteEntity alacarteEntity){
         this.alaCarteItems.remove(alacarteEntity);
         // also remove all package entities containing removed alacarte entity
+        ArrayList<PackageEntity> packagesToRemove = new ArrayList<PackageEntity>();
         for(PackageEntity pkg : this.packages){
-            for(AlaCarteEntity item : pkg.getItems()){
-                if(item == alacarteEntity)
-                    removePackageEntity(pkg);
+            if(pkg.getItems().contains(alacarteEntity)){
+                packagesToRemove.add(pkg);
             }
+        }
+        for(PackageEntity i : packagesToRemove){
+            removePackageEntity(i);
         }
         saveData(alaCarteFile, alaCarteItems);
     }
