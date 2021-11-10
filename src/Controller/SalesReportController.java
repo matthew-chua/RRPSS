@@ -34,13 +34,13 @@ public class SalesReportController {
     // setup menu
     private void setupMenuItems(){
         this.menuItems = new HashMap<AlaCarteEntity, Integer>();
-        res.getMenu().getAlaCarteItems().forEach(item -> menuItems.put(item, 0));
+        // res.getMenu().getAlaCarteItems().forEach(item -> menuItems.put(item, 0));
     }
 
     // setup package
     private void setupPackageItems(){
         this.packageItems = new HashMap<PackageEntity, Integer>();
-        res.getMenu().getPackages().forEach(item -> packageItems.put(item, 0));
+        // res.getMenu().getPackages().forEach(item -> packageItems.put(item, 0));
     }
 
     // public ArrayList<InvoiceEntity> getReportbyDay(Date date) {
@@ -58,6 +58,7 @@ public class SalesReportController {
     String printSalesString = title + "Showing sales for ";
 
     public void printByDay(){
+        resetLists();
         Date userDate = view.getUserDate();
         if (userDate == null) return;
     
@@ -94,18 +95,19 @@ public class SalesReportController {
         });
 
         this.packageItems.forEach((item, qty) -> {
-            printSalesString += qty + " x " + item.getName() + "\n";
+            printSalesString += qty + " x " + item.getName() + ": $" + item.getPrice()*qty + "\n";
         });
 
         double sum = filteredList.stream().mapToDouble(invoice -> invoice.calculateTotal()).sum();
 
 
         view.resetUI();
-        view.displayResults(printSalesString + "\nTotal Revenue: $" + String.valueOf(sum));
+        view.displayResults(printSalesString + "\nTotal Revenue: $" + String.format("%.2f", sum));
         printSalesString = title + "Showing sales for ";
     }
 
     public void printByMonth() {
+        resetLists();
         Date userDate = view.getUserMonth();
 
         if (userDate == null) return;
@@ -123,7 +125,7 @@ public class SalesReportController {
             printSalesString = title + "Showing sales for ";
             return;
         }
-
+        
         updateCurrentLists(filteredList);
 
         // add all items for the period into string
@@ -134,6 +136,11 @@ public class SalesReportController {
         view.resetUI();
         view.displayResults(printSalesString + "\nTotal Revenue: $" + String.valueOf(sum));
         printSalesString = title + "Showing sales for ";
+    }
+
+    private void resetLists(){
+        setupMenuItems();
+        setupPackageItems();
     }
 
     private void currentListsToString(){
