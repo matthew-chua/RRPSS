@@ -3,6 +3,8 @@ package Controller;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import javax.lang.model.element.PackageElement;
+
 import Boundary.MenuBoundary;
 import Boundary.OrderBoundary;
 import Entity.OrderEntity;
@@ -39,7 +41,8 @@ public class OrderController {
         this.view = new OrderBoundary();
         this.restaurant = RestaurantEntity.getInstance();
         // this.orders = restaurant.getOrders();
-        this.servingStaffEntity = new StaffEntity();
+        // this.servingStaffEntity = new StaffEntity();
+        this.servingStaffEntity = restaurant.getCurrentStaff();
         this.tables = restaurant.getTables();
         this.start();
     }
@@ -114,55 +117,93 @@ public class OrderController {
 
     private void addAlaCarteFlow(){
         view.getAlaCarteItemIndex(this.restaurant.getMenu().getAlaCarteItems(), choice -> {
-            addAlaCarteItem(choice-1);
-            view.displayResults("Item added");
+            
+            view.getQty(100, qty -> {
+                addAlaCarteItem(choice-1, qty);
+                view.displayResults("Item added");
+            });
         });
-    }
-    private void addPackageFlow(){
-        view.getPackageIndex(this.restaurant.getMenu().getPackages(), choice -> {
-            addPackageItem(choice-1);
-        });
-        view.displayResults("Item added");
     }
 
-    public void addAlaCarteItem(int index) {
+
+    private void addPackageFlow(){
+        view.getPackageIndex(this.restaurant.getMenu().getPackages(), choice -> {
+            
+            view.getQty(100, qty -> {
+                // addAlaCarteItem(choice-1, qty);
+                addPackageItem(choice-1, qty);
+                view.displayResults("Item added");
+            });
+        });
+        // view.displayResults("Item added");
+    }
+
+    public void addAlaCarteItem(int index, int qty) {
         AlaCarteEntity item = this.restaurant.getMenu().getAlaCarteItems().get(index);
-        this.order.addMenuItem(item);
+        this.order.addMenuItem(item, qty);
         restaurant.setTables(tables);
         // this.restaurant.set
     }
 
-    public void addPackageItem(int index){
+    public void addPackageItem(int index, int qty){
         PackageEntity pkg = this.restaurant.getMenu().getPackages().get(index);
-        this.order.addSpecial(pkg);
+        this.order.addSpecial(pkg, qty);
         restaurant.setTables(tables);
     }
 
     public void removeAlaCarteFlow(){
-        view.getAlaCarteItemIndex(this.order.getMenuItems(), choice -> {
-            // addAlaCarteItem(choice-1);
-            removeAlaCarteItem(choice-1);
-            restaurant.setTables(tables);
-            view.displayResults("Item removed");
+
+        ArrayList<AlaCarteEntity> alaCarteItems = new ArrayList<AlaCarteEntity>(this.order.getMenuItems().keySet());
+
+        view.getAlaCarteItemIndex(alaCarteItems , choice -> {
+
+            view.getQty(100, qty -> {
+                // addPackageItem(choice-1, qty);
+                // view.displayResults("Item added");
+
+                // first, get the item
+                AlaCarteEntity item = alaCarteItems.get(choice-1);
+                // remove
+                removeAlaCarteItem(item, qty);
+                restaurant.setTables(tables);
+                view.displayResults("Item removed");
+            });
+            
+            // removeAlaCarteItem(choice-1);
+            // restaurant.setTables(tables);
+            // view.displayResults("Item removed");
         });
+
     }
     private void removePackageFlow(){
-        view.getPackageIndex(this.order.getSpecials(), choice -> {
-            removePackageItem(choice-1);
-            restaurant.setTables(tables);
-            view.displayResults("Item removed");
+        ArrayList<PackageEntity> pkgItems = new ArrayList<PackageEntity>(this.order.getSpecials().keySet());
+        view.getPackageIndex(pkgItems, choice -> {
+            view.getQty(100, qty -> {
+                // addPackageItem(choice-1, qty);
+                // view.displayResults("Item added");
+
+                // first, get the item
+                PackageEntity item = pkgItems.get(choice-1);
+                // remove
+                removePackageItem(item, qty);
+                restaurant.setTables(tables);
+                view.displayResults("Item removed");
+            });
+
+            // removePackageItem(choice-1);
+            // restaurant.setTables(tables);
+            // view.displayResults("Item removed");
         });
     }
 
-    public void removeAlaCarteItem(int index) {
-        AlaCarteEntity item = this.restaurant.getMenu().getAlaCarteItems().get(index);
-        this.order.removeMenuItem(index);
-        // this.restaurant.set
+    public void removeAlaCarteItem(AlaCarteEntity item, int qty) {
+        // AlaCarteEntity item = this.restaurant.getMenu().getAlaCarteItems().get(index);
+        this.order.removeMenuItem(item, qty);
     }
 
-    public void removePackageItem(int index){
-        PackageEntity pkg = this.restaurant.getMenu().getPackages().get(index);
-        this.order.removeSpecial(index);
+    public void removePackageItem(PackageEntity item, int qty){
+        // PackageEntity pkg = this.restaurant.getMenu().getPackages().get(index);
+        this.order.removeSpecial(item, qty);
     }
 
 
@@ -195,6 +236,7 @@ public class OrderController {
             table.setOrder(null);
 
             restaurant.addInvoice(invoice);
+
             // save data
             restaurant.setTables(tables);
         });
@@ -206,89 +248,6 @@ public class OrderController {
         table.setOrder(newOrder);
         order = newOrder;
         restaurant.setTables(tables);
-    }
-
-    public void viewOrder() {
-        // idk how to check for an order that is not created yet lol
-        printMenuItems();
-        printSpecialItems();
-    }
-
-    public void printMenuItems() {
-        System.out.println("MENU ITEMS");
-        System.out.println("===========================");
-        
-        ArrayList<AlaCarteEntity> menuItems = order.getMenuItems();
-
-        if (menuItems.size() == 0) {
-            System.out.println("No Menu Items Ordered Yet.");
-        }
-
-        for (int i = 0; i < menuItems.size(); i++) {
-            System.out.println(menuItems.get(i));
-        }
-    }
-
-    public void printSpecialItems() {
-        System.out.println("SPECIAL ITEMS");
-        System.out.println("===========================");
-        ArrayList<PackageEntity> specials = order.getSpecials();
-
-        if (specials.size() == 0) {
-            System.out.println("No Specials Ordered Yet.");
-        }
-
-        for (int i = 0; i < specials.size(); i++) {
-            System.out.println(specials.get(i));
-        }
-    }
-
-    public void updateOrder() {
-        System.out.println("Would you like to remove or add an item?");
-        System.out.println("0. Go Back");
-        System.out.println("1. Add item");
-        System.out.println("2. Remove item");
-
-        int input = sc.nextInt();
-
-        switch (input) {
-        case 1:
-            // addItem();
-            break;
-        case 2:
-            // removeItem();
-            break;
-
-        case 0:
-            break;
-        default:
-            break;
-
-        }
-
-    }
-
-
-    public void removeItem() {
-        System.out.println("What item would you like to remove?");
-        System.out.println("1. Menu Items");
-        System.out.println("2. Specials");
-
-        int input = sc.nextInt();
-        if (input == 1) {
-            printMenuItems();
-            System.out.println("Which item do you want to remove?");
-            int removeIndex = sc.nextInt();
-            this.order.removeMenuItem(removeIndex);
-        } else if (input == 2) {
-            printSpecialItems();
-            System.out.println("Which special do you want to remove?");
-            int removeIndex = sc.nextInt();
-            this.order.removeSpecial(removeIndex);
-        } else {
-            return;
-        }
-
     }
 
     // public void printInvoice(StaffEntity servingStaffEntity, int tableNo) {

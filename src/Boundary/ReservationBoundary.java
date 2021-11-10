@@ -2,8 +2,11 @@ package Boundary;
 
 import Helpers.*;
 import Entity.ReservationEntity;
+import Entity.Table;
+
 import java.util.ArrayList;
 import java.util.Date;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -13,6 +16,7 @@ public class ReservationBoundary extends Boundary {
 
     /* =========== Manage Reservations Title =========== */
     private String manageReservationsTitle = separators + " Manage Reservations " + separators + "\n";
+    private String findReservationTitle = separators + " Find Reservation " + separators + "\n";
     private String removeReservationTitle = separators + " Remove Reservation " + separators + "\n";
     private String createReservationTitle = separators + " Create Reservation " + separators + "\n";
     SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -46,30 +50,56 @@ public class ReservationBoundary extends Boundary {
         getStringInput(callback, false, stringToPrint);
     }
 
-    public void printReservations(ArrayList<ReservationEntity> tempList, String name) {
-        String stringToPrint;
+    String getReservationString (ArrayList<ReservationEntity> tempList, String name){
+        String stringToPrint = "";
         if (tempList.size() != 0) {
-            System.out.printf("Our records show that %s has reservation(s) on: \n", name);
+            stringToPrint += "Our records show that " + name + " has reservation(s) on: \n";
+            // System.out.printf("Our records show that %s has reservation(s) on: \n", name);
             int index = 1;
             for (ReservationEntity j : tempList) {
-                System.out.printf("%d. %s at %s\n", index, dateFormat.format(j.getDate()), timeFormat.format(j.getTime()));
+                // System.out.printf("%d. %s at %s\n", index, dateFormat.format(j.getDate()), timeFormat.format(j.getTime()));
+                stringToPrint += index + ". " + dateFormat.format(j.getDate()) + " at " + timeFormat.format(j.getDate()) + " for " + String.valueOf(j.getPax()) + " people" + "\n";
                 index++;
             }
-            stringToPrint = " ";
+            // stringToPrint = " ";
         }else{
             stringToPrint = "No reservations found.";
         }
-        displayResults(stringToPrint);
+        return stringToPrint + "\n";
+    }
+
+    public void printReservations(ArrayList<ReservationEntity> tempList, String name) {
+        // String stringToPrint = "";
+        // if (tempList.size() != 0) {
+        //     stringToPrint += "Our records show that " + name + " has reservation(s) on: \n";
+        //     // System.out.printf("Our records show that %s has reservation(s) on: \n", name);
+        //     int index = 1;
+        //     for (ReservationEntity j : tempList) {
+        //         // System.out.printf("%d. %s at %s\n", index, dateFormat.format(j.getDate()), timeFormat.format(j.getTime()));
+        //         stringToPrint += index + ". " + dateFormat.format(j.getDate()) + " at " + timeFormat.format(j.getDate());
+        //         index++;
+        //     }
+        //     // stringToPrint = " ";
+        // }else{
+        //     stringToPrint = "No reservations found.";
+        // }
+        String stringToPrint = getReservationString(tempList, name);
+        resetUI();
+        displayResults(findReservationTitle + stringToPrint);
     }
 
     /* =========== Remove Reservation =========== */
-    public void getUserRemoveChoice(ChoiceObserver callback) {
+    public void getUserRemoveChoice(ArrayList<ReservationEntity> tempList, String name, ChoiceObserver callback) {
         /* =========== User's Cancellation choices =========== */
-        String choice1String = "1. Cancel reservation\n";
-        String choice2String = "0. Back to main menu\n";
+
+        // String option = "Reservation found. What would you like to do?\n";
+        String reservationString = getReservationString(tempList, name);
+        String option = "What would you like to do?\n";  
+        String choice1String = "1. Remove reservation\n";
+        // String choice2String = "0. Back to main menu\n";
 
         // String to print
-        String stringToPrint = removeReservationTitle + choice1String + choice2String;
+        String stringToPrint = findReservationTitle + reservationString + option + choice1String;
 
         // Get the user's choice
         int numberOfChoices = 1;
@@ -77,19 +107,23 @@ public class ReservationBoundary extends Boundary {
         getUserChoices(numberOfChoices, callback, isRecurring, stringToPrint);
     }
 
-    public void getUserReservationIndex(int indexRange, ChoiceObserver callback) {
+    public void getUserReservationIndex(ArrayList<ReservationEntity> tempList, String name, ChoiceObserver callback) {
+        
+        String reservationString = getReservationString(tempList, name);
         String stringToPrint = "Which reservation index is to be removed?\n";
-        int numberOfChoices = indexRange + 1;
+        int numberOfChoices = tempList.size();
         boolean isRecurring = false;
-        getUserChoices(numberOfChoices, callback, isRecurring, stringToPrint);
+        getUserChoices(numberOfChoices, callback, isRecurring, removeReservationTitle + reservationString + stringToPrint);
     }
 
     public void reservationCancellationStatus(boolean status) {
-        if (status) {
-            System.out.print("Reservation successfully removed\n");
-        } else {
-            System.out.print("Error, reservation not found\n");
-        }
+        // if (status) {
+        //     System.out.print("Reservation successfully removed\n");
+        // } else {
+        //     System.out.print("Error, reservation not found\n");
+        // }
+        resetUI();
+        displayResults(removeReservationTitle + "Reservation successfully removed");
     }
 
     public void checkTableAvailabilityStatus(int availableTables) {
@@ -101,13 +135,28 @@ public class ReservationBoundary extends Boundary {
         }
     }
 
-    public void getUserCreateChoice(ChoiceObserver callback) {
+    private String availableTablesString = "";
+
+    public void getUserCreateChoice(Date date, ArrayList<Table> availableTables, ChoiceObserver callback) {
         /* =========== User's Create choices =========== */
-        String choice1String = "1. Create reservation\n";
-        String choice2String = "0. Back to main menu\n";
+        SimpleDateFormat dateTimeFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+
+        String info = "Available Tables for " + dateTimeFormat.format(date) + ": \n\n";
+
+
+
+        availableTables.forEach(table -> {
+            availableTablesString += "Table " + table.getNumber() + ": " + table.getCapacity() + " pax\n";
+        });
+
+
+        String choice1String = "\n1. Create reservation\n";
+        // String choice2String = "0. Back to main menu\n";
 
         // String to print
-        String stringToPrint = createReservationTitle + choice1String + choice2String;
+        String stringToPrint = createReservationTitle + info + availableTablesString + choice1String;
+
+        availableTablesString = "";
 
         // Get the user's choice
         int numberOfChoices = 1;
@@ -115,19 +164,6 @@ public class ReservationBoundary extends Boundary {
         getUserChoices(numberOfChoices, callback, isRecurring, stringToPrint);
     }
 
-    public Date getUserReservationDate() {
-        System.out.println("Enter date (DD/MM/YYYY):");
-        while(true){
-            String input = getStringInput();
-            try{
-                Date inputDate = dateFormat.parse(input);
-                return inputDate;
-            }
-            catch(ParseException e){
-                continue;
-            }
-        }
-    }
 
     public Date getUserReservationTime() {
         System.out.println("Enter time (HH:MM 24hr):");

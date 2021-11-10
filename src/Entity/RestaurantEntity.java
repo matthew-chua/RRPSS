@@ -5,7 +5,9 @@ import Helpers.*;
 import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.Scanner;
-
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileInputStream;
@@ -13,6 +15,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.lang.reflect.Array;
+import java.util.Date;
+import java.util.List;
+
 
 // public enum RestaurantDataType{
 //     TABLE, STAFF, ORDER, INVOICE, RESERVATION
@@ -30,6 +36,8 @@ public class RestaurantEntity extends PersistenceManager {
     private ArrayList<ReservationEntity> reservations;
     private MenuEntity menu;
     private ArrayList<InvoiceEntity> invoices;
+    private StaffEntity currentStaff;
+
 
     // Constructor
     public RestaurantEntity() {
@@ -40,8 +48,17 @@ public class RestaurantEntity extends PersistenceManager {
         // this.reservations.add(newRes);
         // this.reservations.add(newRes2);
         // saveReservationData();
+        
+        // saveAllData();
+
+        // setupStaff();
+        // this.orders = new ArrayList<OrderEntity>();
+        // resetTables();
+        // saveAllData();
+
+        // saveData(ordersFile, orders);
+
         loadAllData();
-        resetTables();
     }
 
     // Constants
@@ -88,6 +105,29 @@ public class RestaurantEntity extends PersistenceManager {
         this.invoices = new ArrayList<InvoiceEntity>();
     }
 
+    private void setupStaff(){
+
+        StaffEntity s1 = new StaffEntity("Xue Zhe", "Male" , 1, "Head Chef");
+        this.staff.add(s1);
+
+        StaffEntity s2 = new StaffEntity("Wei Bin", "Male" , 2, "Waiter");
+        this.staff.add(s2);
+
+        StaffEntity s3 = new StaffEntity("Grace", "Female" , 3, "Cashier");
+        this.staff.add(s3);
+
+        StaffEntity s4 = new StaffEntity("Matthew", "Male" , 4, "Manager");
+        this.staff.add(s4);
+
+        StaffEntity s5 = new StaffEntity("Ivan", "Male" , 5, "Temperature Taker");
+        this.staff.add(s5);
+
+    }
+
+    public StaffEntity getCurrentStaff(){
+        return this.currentStaff;
+    }
+
     public void printReservations() {
         this.reservations.forEach(item -> System.out.println(item.getName()));
     }
@@ -98,6 +138,38 @@ public class RestaurantEntity extends PersistenceManager {
 
     public ArrayList<Table> getTables() {
         return tables;
+    }
+
+    public ArrayList<Table> getTablesForPax(int pax){
+        Stream<Table> filteredTableStream = this.tables.stream().filter(table -> table.getCapacity() >= pax);
+        List<Table> filteredTableList = filteredTableStream.collect(Collectors.toList());
+        ArrayList<Table> filteredTables = new ArrayList<Table>(filteredTableList);
+        return filteredTables;
+    }
+
+    public ArrayList<Table> getAvailableTables(int pax, Date date){
+        Stream<Table> filteredTableStreamByPax = this.tables.stream().filter(table -> table.getCapacity() >= pax);
+
+        Stream<ReservationEntity> filteredReservations = this.reservations.stream().filter(reservations -> {
+            return reservations.isOccupiedDuring(date);
+        });
+
+        // List<ReservationEntity> filteredReservationList = filteredReservations.collect(Collectors.toList());
+
+        Stream<Integer> occupiedTableIds = filteredReservations.map(res -> {
+            return res.getTable();
+        });
+
+        ArrayList<Integer> occupiedTableIdsList = new ArrayList<Integer>(occupiedTableIds.collect(Collectors.toList()));
+
+        Stream<Table> availableTableStream = filteredTableStreamByPax.filter(table -> {
+            return (!occupiedTableIdsList.contains(table.getNumber()));
+        });
+        
+        List<Table> availableTableList = availableTableStream.collect(Collectors.toList());
+        ArrayList<Table> availableTables = new ArrayList<Table>(availableTableList);
+        return availableTables;
+        // Stream<Table> filteredTableStreamByDate = filteredTableStreamByPax.filter(table -> table.)
     }
 
     public ArrayList<OrderEntity> getOrders() {
@@ -163,6 +235,10 @@ public class RestaurantEntity extends PersistenceManager {
         }
     }
 
+    public void setCurrentStaff(StaffEntity staff){
+        currentStaff = staff;
+    }
+
     public void removeDataFromList(RestaurantDataType type, int index) {
         switch (type) {
         case ORDER:
@@ -195,11 +271,14 @@ public class RestaurantEntity extends PersistenceManager {
         }
     }
 
+
+
     private void loadAllData() {
         loadData(reservationsFile, reservations);
         loadData(tablesFile, tables);
         loadData(ordersFile, orders);
         loadData(staffFile, staff);
+        loadData(invoiceFile, invoices);
     }
 
     private void saveAllData() {
@@ -207,6 +286,7 @@ public class RestaurantEntity extends PersistenceManager {
         saveData(tablesFile, tables);
         saveData(staffFile, staff);
         saveData(reservationsFile, reservations);
+        saveData(invoiceFile, invoices);
     }
 
 }

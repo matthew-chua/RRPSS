@@ -12,7 +12,7 @@ public class App {
         RestaurantEntity resEntity = RestaurantEntity.getInstance();
         resEntity.printReservations();
 
-        HomeController controller = new HomeController();
+        StaffController controller = new StaffController();
 
     }
 }

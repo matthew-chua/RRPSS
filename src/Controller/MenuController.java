@@ -27,8 +27,7 @@ public class MenuController {
         this.menu = res.getMenu();
 
 
-        this.res.addDataToList(RestaurantDataType.STAFF , new StaffEntity());
-        
+        // this.res.addDataToList(RestaurantDataType.STAFF , new StaffEntity());
 
         this.start();
     }

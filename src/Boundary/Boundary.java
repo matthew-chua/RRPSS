@@ -3,6 +3,9 @@ package Boundary;
 import java.util.*;
 import Helpers.ChoiceObserver;
 import Helpers.StringObserver;
+import java.util.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 public class Boundary {
     Scanner sc = new Scanner(System.in);
@@ -26,10 +29,21 @@ public class Boundary {
             System.out.println("Press 0 to go back\n");
 
             userInput = sc.next();
-            if (userInput == "0")
-                break;
+
+            try{
+                int input = Integer.parseInt(userInput);
+                if (input == 0) return;
+            }catch(NumberFormatException e) { 
+                 
+            } catch(NullPointerException e) {
+
+            }
+
+            // if ( userInput == "0" )
+            //     return;
+
             callback.userDidEnterString(userInput);
-        } while (userInput != "0" && isRecurring);
+        } while (isRecurring);
     }
 
     public String getStringInput() {
@@ -96,6 +110,61 @@ public class Boundary {
         // ?? check for error
         return sc.nextInt();
     }
+
+    public Date getUserDate() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        System.out.println("Enter date (DD/MM/YYYY): \n");
+        System.out.println("Press 0 to go back");
+        while(true){
+            String input = getStringInput();
+            
+            try{
+                int inputInt = Integer.parseInt(input);
+                if (inputInt == 0) return null;
+            }catch(NumberFormatException e) { 
+                 
+            } catch(NullPointerException e) {
+
+            }
+
+            try{
+                Date inputDate = dateFormat.parse(input);
+                return inputDate;
+            }
+            catch(ParseException e){
+                System.out.println("Oops, that's not a valid date. Please Try again!");
+                continue;
+            }
+        }
+    }
+
+    public Date getUserMonth(){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/yyyy");
+        System.out.println("Enter month and year (MM/YYYY):\n");
+
+        System.out.println("Press 0 to go back");
+        while(true){
+            String input = getStringInput();
+            try{
+                int inputInt = Integer.parseInt(input);
+                if (inputInt == 0) return null;
+            }catch(NumberFormatException e) { 
+                 
+            } catch(NullPointerException e) {
+
+            }
+
+            try{
+                Date inputDate = dateFormat.parse(input);
+                return inputDate;
+            }
+            catch(ParseException e){
+                System.out.println("Oops, that's not a valid input. Please try again!");
+                continue;
+            }
+        }
+    }
+
 
 
     public void displayResults(String stringToPrint){

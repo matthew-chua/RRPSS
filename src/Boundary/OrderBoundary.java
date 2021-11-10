@@ -1,5 +1,8 @@
 package Boundary;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 
 import javax.swing.MenuElement;
 
@@ -9,6 +12,8 @@ import Entity.MenuEntity;
 import Entity.OrderEntity;
 import Entity.PackageEntity;
 import Helpers.*;
+
+
 
 public class OrderBoundary extends Boundary{
     
@@ -60,26 +65,68 @@ public class OrderBoundary extends Boundary{
         getUserChoices(10, callback, false, stringToPrint);
     }
 
+    private String orderString = "ALA CARTE ITEMS:\n";
+    
+
     private String getOrderString(OrderEntity order){
-        String orderString = "ALCARTE ITEMS:\n";
-        for (int i=0; i<order.getMenuItems().size(); i++){
-            orderString += order.getMenuItems().get(i).getName()+ "\t\t\t" + String.valueOf(order.getMenuItems().get(i).getPrice()) + "\n";
-        }
+        
+        order.getMenuItems().forEach((alcItem, qty) -> {
+            String qtyString = String.valueOf(qty);
+            orderString += qtyString + " x ";
+            String orderName = alcItem.getName();
+            String updatedOrderName = ((orderName.length() > 25) ? (orderName.substring(0, 24) + "...") : orderName);
+            // String price = String.valueOf(order.getMenuItems().get(i).getPrice());
+            String price = String.format("%.2f", alcItem.getPrice());
+            String alignedPrice = String.format("%" + String.valueOf(40 -  updatedOrderName.length())+ "s", price);
+            orderString += updatedOrderName + alignedPrice + "\n";
+        });
+
+        // for (int i=0; i<order.getMenuItems().size(); i++){
+        //     String orderName = order.getMenuItems().get(i).getName();
+        //     String updatedOrderName = ((orderName.length() > 25) ? (orderName.substring(0, 24) + "...") : orderName);
+        //     // String price = String.valueOf(order.getMenuItems().get(i).getPrice());
+        //     String price = String.format("%.2f", order.getMenuItems().get(i).getPrice());
+        //     String alignedPrice = String.format("%" + String.valueOf(40 -  updatedOrderName.length())+ "s", price);
+        //     orderString += updatedOrderName + alignedPrice + "\n";
+        // }
 
         orderString += "\nPACKAGE ITEMS:\n";
-        for (int i=0; i<order.getSpecials().size(); i++){
-            orderString += order.getSpecials().get(i).getName()+ "\t\t\t" + String.valueOf(order.getSpecials().get(i).getPrice()) + "\n";
-        }
+        order.getSpecials().forEach((pkgItem, qty) -> {
+            String qtyString = String.valueOf(qty);
+            orderString += qtyString + " x ";
+            String orderName = pkgItem.getName();
+            String updatedOrderName = ((orderName.length() > 25) ? (orderName.substring(0, 24) + "...") : orderName);
+            // String price = String.valueOf(order.getMenuItems().get(i).getPrice());
+            String price = String.format("%.2f", pkgItem.getPrice());
+            String alignedPrice = String.format("%" + String.valueOf(40 -  updatedOrderName.length())+ "s", price);
+            orderString += updatedOrderName + alignedPrice + "\n";
+        });
 
-        order.getSpecials().forEach(o -> total += o.getPrice());
-        order.getMenuItems().forEach(o -> total += o.getPrice());
+        // for (int i=0; i<order.getSpecials().size(); i++){
+        //     String orderName = order.getSpecials().get(i).getName();
+        //     String updatedOrderName = ((orderName.length() > 25) ? (orderName.substring(0, 24) + "...") : orderName);
+        //     String price = String.format("%.2f", order.getSpecials().get(i).getPrice());
+        //     String alignedPrice = String.format("%" + String.valueOf(40 -  updatedOrderName.length())+ "s", price);
+        //     orderString +=  updatedOrderName + alignedPrice + "\n\n";
+        // }
 
-        
-        orderString += "\nTOTAL W/O TAX: " + String.valueOf(total) + "\n\n";
+        // order.getSpecials().forEach(item -> total += item.getPrice());
+        // order.getMenuItems().forEach(item -> total += item.getPrice());
 
+        order.getSpecials().forEach((k, v) -> total += (k.getPrice() * v ) );
+        order.getMenuItems().forEach((k, v) -> total += (k.getPrice() * v ));
+
+        String taxString = "TOTAL W/O TAX: ";
+        String price = String.format("%.2f", total);
+        String alignedPrice = String.format("%" + String.valueOf(40 -  taxString.length())+ "s", price);
+        orderString += taxString + alignedPrice + "\n";
+
+        orderString += separators + separators + separators + "\n\n";
         total = 0;
+        String toReturn = orderString;
+        orderString = "ALA CARTE ITEMS:\n";
 
-        return orderString;
+        return toReturn;
     }
 
     public void getMenuItemType(ChoiceObserver callback){
@@ -95,6 +142,7 @@ public class OrderBoundary extends Boundary{
         // String menuString = menu.toString();
         // String 
         String stringToPrint = orderManagerTitle;
+
         for (int i=0; i<items.size(); i++){
             stringToPrint += String.valueOf(i+1) + ". " + items.get(i).getName() + "\n";
         }
@@ -109,10 +157,14 @@ public class OrderBoundary extends Boundary{
         // String 
         String stringToPrint = orderManagerTitle;
         for (int i=0; i<items.size(); i++){
-            stringToPrint += String.valueOf(i+1) + " " + items.get(i).getName();
+            stringToPrint += String.valueOf(i+1) + " " + items.get(i).getName() + "\n";
         }
         getUserChoices(items.size(), callback, false, stringToPrint);
 
+    }
+
+    public void getQty(int max, ChoiceObserver callback){
+        getUserChoices(max, callback, false, orderManagerTitle + "How many would you like to add / remove?\n");
     }
     
     public void getUserMembership(ChoiceObserver callback){
