@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.HashMap;
 
 /**
- * Is a order per customer
+ * Is an Order per customer
  * 
  * @author Wong Wei Bin
  * @author Ivan Teo
