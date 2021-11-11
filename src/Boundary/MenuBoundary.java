@@ -4,7 +4,18 @@ import Entity.AlaCarteEntity;
 import Entity.AlaCarteEntity.Type;
 import Entity.PackageEntity;
 import java.util.ArrayList;
-
+/**
+ * 
+ * Is the boundary that is involved with all Menu flows.
+ * 
+ * @author      Wong Wei Bin
+ * @author      Ivan Teo
+ * @author      Grace Wong
+ * @author      Goh Xue Zhe
+ * @author      Matthew Chua
+ * @version     0.1.0
+ * @since       2021-11-11
+ */
 public class MenuBoundary extends Boundary {
     public MenuBoundary(){}
 
@@ -17,9 +28,15 @@ public class MenuBoundary extends Boundary {
     private String updatePackageTitle = separators + " Update Package " + separators + "\n";
     private String removePackageTitle = separators + " Remove Package " + separators + "\n";
 
+
+    /**
+     * Transforms an ArrayList of AlaCarteEntity and ArrayList of PackageEntity into a formatted string representing the menu
+     * @param items is an ArrayList of AlaCarteEntity representing the menu's ala carte items
+     * @param packages is an ArrayList of PackageEntity representing the menu's packages
+     * @return  a string representing the menu.
+     */
     public String printMenu(ArrayList<AlaCarteEntity> items, ArrayList<PackageEntity> packages){
         // print menu
-
         if (items.size() == 0 && packages.size() == 0) {
             // System.out.printf("No items in menu. Add a menu item to start");
             return "No items in menu. Add a menu item to start \n";
@@ -33,8 +50,6 @@ public class MenuBoundary extends Boundary {
 
         for(AlaCarteEntity item : items){
             if (item.getType() == Type.APPETISER){
-                // System.out.printf("\n    - %s\t$ %.2f", item.getName(), item.getPrice());
-                // toPrint += " - " + item.getName() + "\t" + String.format("%.2f", item.getPrice()) + "\n";
                 toPrint += formatItem(item);
             }
         }
@@ -89,6 +104,11 @@ public class MenuBoundary extends Boundary {
     }
 
 
+    /**
+     * Transforms an Ala Carte Entity into a formatted String
+     * @param item
+     * @return
+     */
     private String formatItem(AlaCarteEntity item){
         return "    " + " - " + item.getName() + "\t\t\t" 
         + String.format("%.2f", item.getPrice()) + "\n"
@@ -96,7 +116,12 @@ public class MenuBoundary extends Boundary {
     }
 
 
-    // Get User's Choice for what menu component they would like to manage
+    /**
+     * Get User's Choice for what menu component they would like to manage
+     * @param items is an ArrayList of AlaCarteEntity representing the menu's ala carte items
+     * @param packages is an ArrayList of PackageEntity representing the menu's packages
+     * @param callback is the anonymous callback function to run when user inputs a valid integer
+     */
     public void getUserMenuChoice(ArrayList<AlaCarteEntity> items, ArrayList<PackageEntity> packages, ChoiceObserver callback){
         
         
@@ -107,9 +132,6 @@ public class MenuBoundary extends Boundary {
         String choice4String = "4. Add a new package\n";
         String choice5String = "5. Update a package\n";
         String choice6String = "6. Remove a package\n";
-        // String choice7String = "0. Back to main menu\n";
-
-        // -> PRINT MENU HERE?
 
         // String to print
         String stringToPrint = printMenu(items, packages) + choice1String + choice2String +
@@ -126,6 +148,10 @@ public class MenuBoundary extends Boundary {
     }
 
     //////////////// Print banners for each manage menu choice ///////////////////////
+    /**
+     * Print banners for each manage menu choice
+     * @param choice is an int representing the user's previous choice to which the title will be appropriately printed out
+     */
     public void printTitle(int choice){
         switch(choice){
             case 1:
@@ -154,6 +180,11 @@ public class MenuBoundary extends Boundary {
         }
     }
 
+    /**
+     * Get the appropriate title for the current UI flow
+     * @param choice is an int representing the user's previous choice to which the title will be appropriately printed out
+     * @return the string representing the title of the UI that the user is currently viewing
+     */
     private String getTitle(int choice){
         String stringToPrint = "";
         switch(choice){
@@ -185,7 +216,11 @@ public class MenuBoundary extends Boundary {
     }
 
     /////////////////// Adding/Updating Ala Carte Item //////////////////////
-    // Get User's Choice for what an item's type is
+    /**
+     * Get User's Choice for what an item's type is
+     * @param choice is an int representing the user's previous choice.
+     * @param callback is the anonymous callback function to run when user inputs a valid integer
+     */
     public void getAlaCarteTypeChoice(int choice, ChoiceObserver callback){
 
         String choice1String = "1. Appetiser\n";
@@ -210,6 +245,11 @@ public class MenuBoundary extends Boundary {
         // Get User Choices is defined in parent class, Boundary.
     }
 
+    /**
+     * Gets the name of the menu item or package
+     * @param isPackage  is a bool that represents whether an item is a package or ala carte item.
+     * @return a string representing the name of the package or ala carte item
+     */
     public String getName(boolean isPackage){
         if(isPackage)
             System.out.println("\nEnter package name: ");
@@ -218,6 +258,11 @@ public class MenuBoundary extends Boundary {
         return getStringInput();
     }
 
+    /**
+     * Get the description
+     * @param isPackage  is a bool that represents whether an item is a package or ala carte item.
+     * @return a string representing the description of the package or ala carte item
+     */
     public String getDesc(boolean isPackage){
         if(isPackage)
             System.out.println("\nEnter package description: ");
@@ -226,6 +271,11 @@ public class MenuBoundary extends Boundary {
         return getStringInput();
     }
 
+    /**
+     * Get the price of either a package or ala carte item.
+     * @param isPackage  is a bool that represents whether an item is a package or ala carte item.
+     * @return a double corresponding to the price of package or ala carte item.
+     */
     public double getPrice(boolean isPackage){
         if(isPackage)
             System.out.println("\nEnter package price: ");
@@ -236,9 +286,14 @@ public class MenuBoundary extends Boundary {
 
 
     /////////////////// Updating/Removing Ala Carte Item //////////////////////
+
+    /**
+     * Get the user's choice to update an ala carte item
+     * @param choice
+     * @param items
+     * @param callback is the anonymous callback function to run when user inputs a valid integer
+     */
     public void getAlaCarteItemChoice(int choice, ArrayList<AlaCarteEntity> items, ChoiceObserver callback){ 
-        
-        // System.out.println("\nChoose menu item: ");
         
         String stringToPrint = "";
 
@@ -251,16 +306,13 @@ public class MenuBoundary extends Boundary {
             stringToPrint += "\nChoose menu item to remove: \n";
         }
 
-
         int counter = 1;
         for (AlaCarteEntity item : items) {
             String itemString = Integer.toString(counter) + ". " + item.getName() + " - " + Double.toString(item.getPrice()) + "\n";
-            // eg. "1. kukubird with ketchup - $69.00 \n"
+            // eg. "1. fries with ketchup - $69.00 \n"
             stringToPrint = stringToPrint + itemString;
             counter++;
         }
-
-
         // Get the user's choice
         int numberOfChoices = items.size();
         boolean isRecurring = false;
@@ -272,6 +324,11 @@ public class MenuBoundary extends Boundary {
         // Get User Choices is defined in parent class, Boundary.
     }
 
+    /**
+     * Choose the field to update for ala carte menu items
+     * @param choice is an int that represents the user's previous choice
+     * @param callback is the anonymous callback function to run when user inputs a valid integer
+     */
     public void getAlaCarteFieldChoice(int choice, ChoiceObserver callback){
         // System.out.println("\nChoose field to update: ");
         String stringToPrint = "";
@@ -302,10 +359,13 @@ public class MenuBoundary extends Boundary {
 
 
     ////////////////////// Adding ala carte item to package /////////////////////////
-    // THIS IS THE SAME AS getAlaCarteItemChoice EXCEPT IT IS RECURRING -> keep querying for items to add to package, user exits at will
+    /**
+     * Add ala carte item to package.
+     * @param choice is an int that represents the user's previous choice
+     * @param items is an ArrayList of AlaCarteEntity showing the available items to be added to package
+     * @param callback is the anonymous callback function to run when user inputs a valid integer
+     */
     public void getItemToPackageChoice(int choice, ArrayList<AlaCarteEntity> items, ChoiceObserver callback){ 
-        // System.out.println("\nChoose menu item to add to Package: \n");
-        
         String stringToPrint = getTitle(choice);;
 
         stringToPrint += "\nChoose Ala Carte item to add to/remove from package\n";
@@ -329,7 +389,11 @@ public class MenuBoundary extends Boundary {
         // Get User Choices is defined in parent class, Boundary.
     }
 
-    ////////////////////// CHOOSE to change name/desc/price/Add/remove existing items to/from package entity/////////////////////////
+    /**
+     * Update package
+     * @param choice is the user's previous choice to update package
+     * @param callback is the anonymous callback function to run when user inputs a valid integer
+     */
     public void getPackageFieldChoice(int choice, ChoiceObserver callback){
         // System.out.println("\nChoose field to update: ");
         String stringToPrint = getTitle(choice);;
@@ -356,8 +420,12 @@ public class MenuBoundary extends Boundary {
         // Get User Choices is defined in parent class, Boundary.
     }
 
-
-    ////////////////////// Updating/Removing whole package entity/////////////////////////
+     /**
+      * Updating/Removing whole package entity
+      * @param choice is the user's previous decision to either update or remove the package
+      * @param packages is an ArrayList of Package Entity stored in menu
+      * @param callback is the anonymous callback function to run when user inputs a valid integer
+      */
     public void getPackageChoice(int choice,ArrayList<PackageEntity> packages, ChoiceObserver callback){ 
         // System.out.println("\nChoose Package: ");
         String stringToPrint = getTitle(choice);

@@ -7,9 +7,21 @@ import java.util.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
+/**
+ * 
+ * Is the parent boundary class that has predefined methods to get inputs from the user.
+ * @author      Wong Wei Bin
+ * @author      Ivan Teo
+ * @author      Grace Wong
+ * @author      Goh Xue Zhe
+ * @author      Matthew Chua
+ * @version     0.1.0
+ * @since       2021-11-11
+ */
 public class Boundary {
     Scanner sc = new Scanner(System.in);
     
+    /** Static constant used to print titles and dividers **/
     public static String separators = "============";
 
     /** Resets the console **/
@@ -18,9 +30,18 @@ public class Boundary {
         System.out.flush();
     }
 
-    /** Gets a string input from user **/
+    /**
+     * Gets a string input from the user
+     * @param callback        is a function that takes in an int which corresponds
+     *                        to the user's choice
+     * @param isRecurring     is a bool that toggles whether to end the loop on
+     *                        first successful retrieval of user's choice
+     * 
+     * @param stringToPrint   is a String that is being printed before user inputs
+     *                        their choice
+     * 
+     */
     public void getStringInput(StringObserver callback, boolean isRecurring, String stringToPrint) {
-        // catch error later
         String userInput = "";
         do {
 
@@ -34,18 +55,19 @@ public class Boundary {
                 int input = Integer.parseInt(userInput);
                 if (input == 0) return;
             }catch(NumberFormatException e) { 
-                 
+                // do nothing
             } catch(NullPointerException e) {
-
+                // do nothing
             }
-
-            // if ( userInput == "0" )
-            //     return;
 
             callback.userDidEnterString(userInput);
         } while (isRecurring);
     }
 
+    /** Gets a string input from user.
+     * 
+     * @return string input from user
+     */
     public String getStringInput() {
         sc.useDelimiter("\n");
         return sc.next();
@@ -60,7 +82,11 @@ public class Boundary {
      *                        to the user's choice
      * @param isRecurring     is a bool that toggles whether to end the loop on
      *                        first successful retrieval of user's choice
-     **/
+     * 
+     * @param stringToPrint   is a String that is being printed before user inputs
+     *                        their choice
+     * 
+     */
 
     public void getUserChoices(int numberOfChoices, ChoiceObserver callback, boolean isRecurring,
             String stringToPrint) {
@@ -100,17 +126,38 @@ public class Boundary {
 
     }
 
+    /**
+     * Gets a positive double from user
+     * @return positive double from user if success. Otherwise, returns 0.0
+     */
     public double getPositiveDouble() {
-
         // check for error
-        return sc.nextDouble();
+        if (sc.hasNextDouble()){
+            return sc.nextDouble();
+        }
+        return 0.0
     }
 
+    /**
+     * Gets a positive integer
+     * @return positive integer
+     */
     public int getPositiveInt() {
         // ?? check for error
-        return sc.nextInt();
+        int choice = 0;
+        try{
+            choice = Integer.parseInt(sc.next());
+        }
+        catch (NumberFormatException e) {
+            System.out.println("Oops. That's not a valid number");
+        }
+        return choice;
     }
 
+    /**
+     * Gets date from user in dd/MM/yyyy format
+     * @return Date object
+     */
     public Date getUserDate() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         System.out.println("Enter date (DD/MM/YYYY): \n");
@@ -138,6 +185,10 @@ public class Boundary {
         }
     }
 
+    /**
+     * Gets month from user in MM/yyyy format
+     * @return Date object
+     */
     public Date getUserMonth(){
         SimpleDateFormat dateFormat = new SimpleDateFormat("MM/yyyy");
         System.out.println("Enter month and year (MM/YYYY):\n");
@@ -165,8 +216,11 @@ public class Boundary {
         }
     }
 
-
-
+    /**
+     * Method that prints results and forces the user to press enter to move on.
+     * 
+     * @param stringToPrint is the string that is printed.
+     */
     public void displayResults(String stringToPrint){
         System.out.println(stringToPrint);
         System.out.println("Press enter to continue");

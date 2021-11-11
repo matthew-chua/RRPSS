@@ -44,19 +44,26 @@ public class RestaurantEntity extends PersistenceManager {
 
         // init data
         instantiateData();
+        // saveData(invoiceFile, invoices);
 
         // this.reservations.add(newRes);
         // this.reservations.add(newRes2);
+
+
         // saveReservationData();
-        
+        // saveData(reservationsFile, reservations);
         // saveAllData();
 
         // setupStaff();
+        // saveData(staffFile, staff);
         // this.orders = new ArrayList<OrderEntity>();
         // resetTables();
+        // saveData(tablesFile, tables);
         // saveAllData();
 
         // saveData(ordersFile, orders);
+
+        
 
         loadAllData();
     }

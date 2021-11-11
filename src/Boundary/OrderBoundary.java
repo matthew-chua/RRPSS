@@ -15,6 +15,19 @@ import Helpers.*;
 
 
 
+
+/**
+ * 
+ * Is the boundary that is involved with all Order flows.
+ * 
+ * @author      Wong Wei Bin
+ * @author      Ivan Teo
+ * @author      Grace Wong
+ * @author      Goh Xue Zhe
+ * @author      Matthew Chua
+ * @version     0.1.0
+ * @since       2021-11-11
+ */
 public class OrderBoundary extends Boundary{
     
     //constructor
