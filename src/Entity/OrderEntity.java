@@ -1,116 +1,146 @@
 package Entity;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 
-public class OrderEntity implements Serializable{
-
-    // private ArrayList<AlaCarteEntity> menuItems;
-    // private ArrayList<PackageEntity> specials;
-
+/**
+ * Is a order per customer
+ * 
+ * @author Wong Wei Bin
+ * @author Ivan Teo
+ * @author Grace Wong
+ * @author Goh Xue Zhe
+ * @author Matthew Chua
+ * @version 0.1.0
+ * @since 2021-11-11
+ */
+public class OrderEntity implements Serializable {
+    /**
+     * The AlaCarte items ordered
+     */
     private Map<AlaCarteEntity, Integer> menuItems;
+    /**
+     * The Package items ordered
+     */
     private Map<PackageEntity, Integer> specials;
 
+    /**
+     * The Staff responsible for this order
+     */
     private StaffEntity servingStaffEntity;
+    /**
+     * Table at which this order was placed
+     */
     private Table table;
 
-    // constructor
+    /**
+     * Creates a new Order with Staff responsible and table at which this order was
+     * placed
+     * 
+     * @param servingStaffEntity This Order's Staff
+     * @param table              This Order's table details
+     */
     public OrderEntity(StaffEntity servingStaffEntity, Table table) {
         this.servingStaffEntity = servingStaffEntity;
         this.table = table;
-        // this.menuItems = new ArrayList<AlaCarteEntity>();
-        // this.specials = new ArrayList<PackageEntity>();
 
         this.menuItems = new HashMap<AlaCarteEntity, Integer>();
         this.specials = new HashMap<PackageEntity, Integer>();
     }
 
-    // getters
-    // public ArrayList<AlaCarteEntity> getMenuItems() {
-    //     return this.menuItems;
-    // }
-
-    // public ArrayList<PackageEntity> getSpecials() {
-    //     return this.specials;
-    // }
-
+    /**
+     * Gets the AlaCarte items of this Order
+     * 
+     * @return this Order's AlaCarte items
+     */
     public Map<AlaCarteEntity, Integer> getMenuItems() {
         return this.menuItems;
     }
 
+    /**
+     * Gets the Package items of this Order
+     * 
+     * @return this Order's Package items
+     */
     public Map<PackageEntity, Integer> getSpecials() {
         return this.specials;
     }
 
+    /**
+     * Gets the staff of this Order
+     * 
+     * @return this Order's Staff object
+     */
     public StaffEntity getStaffEntity() {
         return this.servingStaffEntity;
     }
 
+    /**
+     * Gets the table of this Order
+     * 
+     * @return this Order's Table object
+     */
     public Table getTable() {
         return this.table;
     }
 
-    // setters
+    /**
+     * Changes the Table object of this Order
+     * 
+     * @param table This Order's new Table object
+     */
     public void setTable(Table table) {
         this.table = table;
     }
 
+    /**
+     * Adds an AlaCarte item to this Order
+     * 
+     * @param item This Order's AlaCarte item to be added
+     * @param qty  This Order's number of AlaCarte item to be added
+     */
     public void addMenuItem(AlaCarteEntity item, int qty) {
-        // this.menuItems.add(item);
-        // this.menuItems.put(item, menuItems.get(item)==null ? 1 : menuItems.get(item)+1);
-        this.menuItems.put(item, (menuItems.getOrDefault(item, 0) + qty) );
+        this.menuItems.put(item, (menuItems.getOrDefault(item, 0) + qty));
     }
 
+    /**
+     * Adds a Package item to this Order
+     * 
+     * @param specialItem This Order's Package item to be added
+     * @param qty         This Order's number of Package item to be added
+     */
     public void addSpecial(PackageEntity specialItem, int qty) {
-        // this.specials.add(specialItem);
-        // this.specials.put(specialItem, specials.get(specialItem)==null ? 1 : specials.get(specialItem)+1);
-        this.specials.put(specialItem, (specials.getOrDefault(specialItem, 0) + qty ));
+        this.specials.put(specialItem, (specials.getOrDefault(specialItem, 0) + qty));
     }
 
+    /**
+     * Removes an AlaCarte item from this Order
+     * 
+     * @param item This Order's AlaCarte item to be removed
+     * @param qty  This Order's number of AlaCarte item to be removed
+     */
     public void removeMenuItem(AlaCarteEntity item, int qty) {
-        // this.menuItems.remove(index);
         int currentQty = menuItems.getOrDefault(item, 0);
-        if (qty >= currentQty){
+        if (qty >= currentQty) {
             this.menuItems.remove(item);
-        }else{
-            this.menuItems.put(item, (currentQty - qty) );
+        } else {
+            this.menuItems.put(item, (currentQty - qty));
         }
     }
 
+    /**
+     * Removes a Package item from this Order
+     * 
+     * @param item This Order's Package item to be removed
+     * @param qty  This Order's number of Package item to be removed
+     */
     public void removeSpecial(PackageEntity item, int qty) {
-        // this.specials.remove(index);
-
         int currentQty = specials.getOrDefault(item, 0);
-        if (qty >= currentQty){
+        if (qty >= currentQty) {
             this.specials.remove(item);
-        }else{
-            this.specials.put(item, (currentQty - qty) );
+        } else {
+            this.specials.put(item, (currentQty - qty));
         }
-
     }
-
-    // public void removeMenuItem(int index) {
-    //     this.menuItems.remove(index);
-    // }
-
-    // public void removeSpecial(int index) {
-    //     this.specials.remove(index);
-    // }
-
-    // public float calculateTotal(){
-
-    //     float total = 0;
-
-    //     for (int i=0; i<this.specials.size(); i++){
-    //         total += packageItems.get(i).getPrice();
-    //     }
-    //     for (int i=0; i<this.menuItems.size(); i++){
-    //         total += menuItems.get(i).getPrice();
-    //     }
-    //     return total;
-    // }
 }
-

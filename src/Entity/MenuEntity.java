@@ -6,7 +6,7 @@ import Helpers.PersistenceManager;
 import java.util.ArrayList;
 
 /**
- * this is the parent object for all alacarte and package entities contains
+ * This is the parent object for all alacarte and package entities contains
  * array list of all alacarte items and array list of all packages
  * 
  * @author Wong Wei Bin
