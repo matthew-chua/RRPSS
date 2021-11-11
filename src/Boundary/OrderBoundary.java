@@ -177,7 +177,7 @@ public class OrderBoundary extends Boundary{
 
     public void printInvoiceFormat(){
         System.out.println(separators + separators + separators);
-        System.out.println("Kiki's Italian Cocktail Bar");
+        System.out.println("Shui Qi Eating House Pte Ltd");
         System.out.println(separators + separators + separators);
     }
 

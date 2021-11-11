@@ -305,7 +305,7 @@ public class MenuController {
                             ArrayList<AlaCarteEntity> alaCarteItems = menu.getAlaCarteItems();
                             AlaCarteEntity toRemove = alaCarteItems.get(itemChoice-1);
                             if(!packageToUpdate.getItems().contains(toRemove)){
-                                view.displayResults("\n" + toRemove.getName() + " has already been ermoved from package.");
+                                view.displayResults("\n" + toRemove.getName() + " has already been removed from package.");
                             }
                             else{
                                 menu.removePackageEntityItem(packageToUpdate, toRemove);

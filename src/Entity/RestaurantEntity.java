@@ -50,11 +50,13 @@ public class RestaurantEntity extends PersistenceManager {
         // saveReservationData();
         
         // saveAllData();
-
+        saveData(invoiceFile, invoices);
         // setupStaff();
         // this.orders = new ArrayList<OrderEntity>();
         // resetTables();
+        // saveData(tablesFile, tables);
         // saveAllData();
+        // saveData(staffFile, staff);
 
         // saveData(ordersFile, orders);
 
@@ -93,7 +95,7 @@ public class RestaurantEntity extends PersistenceManager {
             }
             tables.add(new Table(i, cap, true));
         }
-        saveAllData();
+        // saveAllData();
     }
 
     private void instantiateData() {
