@@ -44,7 +44,7 @@ public class MenuBoundary extends Boundary {
 
         String toPrint = manageMenuTitle + "Menu: \n";
         toPrint += separators+separators+separators;
-        toPrint += "\n" + "Chef KuKu's Italian Cock with Tails\n";
+        toPrint += "\n" + "Shui Qi Eating House Pte Ltd\n";
         toPrint += separators+separators+separators + "\n";
         toPrint += " - Appetisers:\n";
 

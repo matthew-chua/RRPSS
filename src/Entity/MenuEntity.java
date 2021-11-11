@@ -60,19 +60,51 @@ public class MenuEntity extends PersistenceManager{
 
     // Update Ala Carte Entity
     public void updateAlaCarteEntityName(AlaCarteEntity alacarteEntity, String name){
+        for(PackageEntity pkg : this.packages){
+            for(AlaCarteEntity pkgItem: pkg.getItems()){
+                if(pkgItem.getName() == alacarteEntity.getName()){
+                    pkgItem.setName(name);
+                }
+            }
+        }
         alacarteEntity.setName(name);
+        saveData(packageFile, packages);
         saveData(alaCarteFile, alaCarteItems);
     }
     public void updateAlaCarteEntityDesc(AlaCarteEntity alacarteEntity, String desc){
+        for(PackageEntity pkg : this.packages){
+            for(AlaCarteEntity pkgItem: pkg.getItems()){
+                if(pkgItem.getName() == alacarteEntity.getName()){
+                    pkgItem.setDesc(desc);
+                }
+            }
+        }
         alacarteEntity.setDesc(desc);
+        saveData(packageFile, packages);        
         saveData(alaCarteFile, alaCarteItems);
     }
     public void updateAlaCarteEntityPrice(AlaCarteEntity alacarteEntity, double price){
+        for(PackageEntity pkg : this.packages){
+            for(AlaCarteEntity pkgItem: pkg.getItems()){
+                if(pkgItem.getName() == alacarteEntity.getName()){
+                    pkgItem.setPrice(price);
+                }
+            }
+        }
         alacarteEntity.setPrice(price);
+        saveData(packageFile, packages);
         saveData(alaCarteFile, alaCarteItems);
     }
     public void updateAlaCarteEntityType(AlaCarteEntity alacarteEntity, Type type){
+        for(PackageEntity pkg : this.packages){
+            for(AlaCarteEntity pkgItem: pkg.getItems()){
+                if(pkgItem.getName() == alacarteEntity.getName()){
+                    pkgItem.setType(type);
+                }
+            }
+        }
         alacarteEntity.setType(type);
+        saveData(packageFile, packages);
         saveData(alaCarteFile, alaCarteItems);
     }
 
