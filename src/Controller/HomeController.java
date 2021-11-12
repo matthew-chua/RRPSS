@@ -3,12 +3,25 @@ import Boundary.*;
 import Controller.MenuController;
 import Entity.RestaurantEntity;
 
+/**
+ * 
+ * Is the controller that updates the boundary and entities for all Home related scenes.
+ * 
+ * @author      Wong Wei Bin
+ * @author      Ivan Teo
+ * @author      Grace Wong
+ * @author      Goh Xue Zhe
+ * @author      Matthew Chua
+ * @version     0.1.0
+ * @since       2021-11-11
+ */
 public class HomeController {
 
     // UI
+    /** The HomeBoundary that updates the UI for the user */
     private HomeBoundary view;
 
-    // Constructor
+    /** Constructor */
     public HomeController() {
         // Instantiate view
         this.view = new HomeBoundary();
@@ -17,7 +30,7 @@ public class HomeController {
         this.start();
     }
 
-    // Load up controller
+    /** Runs the sequenece of events on initialisation */
     private void start(){
 
         // RestaurantEntity res = RestaurantEntity.shared.tables;

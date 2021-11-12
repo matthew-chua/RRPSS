@@ -12,39 +12,45 @@ import Entity.OrderEntity;
 import Entity.AlaCarteEntity.Type;
 import Helpers.*;
 
+
+/**
+ * 
+ * Is the controller that updates the boundary and entities for all Menu related scenes.
+ * 
+ * @author      Wong Wei Bin
+ * @author      Ivan Teo
+ * @author      Grace Wong
+ * @author      Goh Xue Zhe
+ * @author      Matthew Chua
+ * @version     0.1.0
+ * @since       2021-11-11
+ * 
+ */
 public class MenuController {
     
+    /** The Boundary responsible for displaying the UI */
     private MenuBoundary view;
+    /** The Entity which saves the data */
     private MenuEntity menu;
+    
     Scanner sc = new Scanner(System.in);
+    /** A reference to the shared instance of restaurant */
     private RestaurantEntity res;
-    // private boolean shouldEnd = false;
 
+    
     public MenuController() {
         this.view = new MenuBoundary();
 
         this.res = RestaurantEntity.getInstance();
         this.menu = res.getMenu();
 
-
-        // this.res.addDataToList(RestaurantDataType.STAFF , new StaffEntity());
-
         this.start();
     }
 
-    // public void setShouldEnd(){
-    //     shouldEnd = true;
-    // }
 
+    /** Runs the sequenece of events for menu flows */
     private void start() {
         /* Selection Prompt */
-        // int choice;
-        // choice = sc.nextInt();
-        // view.printMenu(menu.getAlaCarteItems(), menu.getPackages());
-
-
-        
-
         view.getUserMenuChoice(menu.getAlaCarteItems(), menu.getPackages(), choice -> {
             // view.printTitle(choice);
             switch (choice) {
@@ -89,7 +95,7 @@ public class MenuController {
         // start();
     }
 
-    // create alacarte object according to type
+    /** Create alacarte object according to type  */
     public void addAlaCarteFlow(){
         boolean isPackage = false;
         view.resetUI();
@@ -133,6 +139,13 @@ public class MenuController {
         view.displayResults("\n" + "Ala Carte item added");
     }
 
+    /**
+     * Creates and stores an Ala Carte Object with the given parameters
+     * @param name      a String representing the name of the ala carte item
+     * @param desc      a String representing the description of the ala carte item
+     * @param price     a double representing the price of the ala carte item
+     * @param type      an enum representing the type of ala carte item
+     */
     public void createAlaCarteObject(String name, String desc, double price, Type type){
         // create new alacarte entity
         AlaCarteEntity newAlaCarteItem = new AlaCarteEntity(name, desc, price, type);
@@ -141,6 +154,7 @@ public class MenuController {
         menu.addAlaCarteEntity(newAlaCarteItem);
     }
 
+    /** The flow to update the ala carte item fields */
     public void updateAlaCarteFlow(){
         view.resetUI();
         view.getAlaCarteItemChoice(2, menu.getAlaCarteItems(), itemChoice -> {
@@ -209,6 +223,7 @@ public class MenuController {
     }
 
     
+    /** The flow to remove an ala carte item */
     public void removeAlaCarteFlow(){
         view.getAlaCarteItemChoice(3, menu.getAlaCarteItems(), itemChoice -> {
            
@@ -220,6 +235,7 @@ public class MenuController {
         });
     }
 
+    /** The flow to add a package */
     public void addPackageFlow(){
         boolean isPackage = true;
         view.resetUI();
@@ -250,6 +266,7 @@ public class MenuController {
         });
     }
 
+    /** The flow to update a package */
     public void updatePackageFlow(){
         view.getPackageChoice(5, menu.getPackages(), item -> {
             // use item as an int
@@ -318,6 +335,7 @@ public class MenuController {
         });
     }
 
+    /** The flow to remove a package */
     public void removePackageFlow(){
         view.getPackageChoice(6, menu.getPackages(), item -> {
             // use item as an int

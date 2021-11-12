@@ -13,15 +13,33 @@ import Entity.RestaurantEntity;
 import Entity.Table;
 import Helpers.*;
 
+
+/**
+ * 
+ * Is the controller that updates the boundary and entities for all Reservation related scenes.
+ * 
+ * @author      Wong Wei Bin
+ * @author      Ivan Teo
+ * @author      Grace Wong
+ * @author      Goh Xue Zhe
+ * @author      Matthew Chua
+ * @version     0.1.0
+ * @since       2021-11-11
+ * 
+ */
 public class ReservationController {
 
+    /** The Boundary responsible for displaying the Reservation UI */
     private ReservationBoundary view;
+    /** Reference to the currently selected reservation */
     private ReservationEntity reservation;
+
+    /** A reference to the shared instance of restaurant entity */
     private RestaurantEntity restaurant;
+    /** List of all existing reservations */
     private ArrayList<ReservationEntity> existingReservations;
 
     private boolean status = false;
-    private RestaurantDataType type = RestaurantDataType.RESERVATION;
 
     public ReservationController() {
         this.view = new ReservationBoundary();
@@ -30,6 +48,7 @@ public class ReservationController {
         this.start();
     }
 
+    /** Runs the sequenece of events for Reservation flows */
     private void start() {
         updateReservations();
         view.getUserReservationChoice(choice -> {
@@ -49,7 +68,7 @@ public class ReservationController {
         });
     }
 
-    /* Find then remove reservation */
+    /** Find then remove reservation */
     public void findReservation() {
         updateReservations();
 
@@ -74,27 +93,36 @@ public class ReservationController {
         });
     }
 
+    /** Filter the reservations by a given name */
     private ArrayList<ReservationEntity> filterReservationsByName(){
         ArrayList<ReservationEntity> tmpList = new ArrayList<ReservationEntity>(existingReservations.stream()
         .filter(res -> res.getName().equals(reservationName)).collect(Collectors.toList()));
         return tmpList
     }
 
-    /* Remove reservation using indexing */
+    /**
+     * Remove the reservation by index for a given name
+     * @param tmpList   List of reservations under a given name
+     * @param name      Name under which reservations are stored
+     */
     public void removeReservation(ArrayList<ReservationEntity> tmpList, String name) {
         // view.printReservations(tmpList, name);
         view.getUserReservationIndex(tmpList, name, index -> {
             try {
                 existingReservations.remove(tmpList.get(index - 1));
-                status = true;
+                // status = true;
             }
             catch (NoSuchFieldError e) {}
         });
-        view.reservationCancellationStatus(status);
+        view.reservationCancellationStatus();
         restaurant.setReservations(existingReservations);
     }
 
-    /* Check table availability */
+    /**
+     * Checks whether a given table is available for the date and time
+     * @param stringToPrint     the String to print as the instructions for the user
+     * @param create            a boolean flag to determine if the user wishes to create a table
+     */
     public void checkTableAvailability(String stringToPrint, boolean create) {
         updateReservations();
         Date date = view.getUserDate();
@@ -125,19 +153,11 @@ public class ReservationController {
         /* filter date */
         ArrayList<ReservationEntity> dateList = new ArrayList<ReservationEntity>(
                 existingReservations.stream().filter(res -> {
-                    // view.displayResults("saved date: " + res.getDate().toString() + "\ntwo hours before: " + twoHoursBefore.toString());
                     boolean isOccupied2HoursBefore = (res.getDate().compareTo(twoHoursBefore) > 0 && res.getDate().compareTo(calendarDate.getTime()) <= 0);
                     boolean isOccupied2HoursAfter = (res.getDate().compareTo(calendarDate.getTime()) > 0 && res.getDate().compareTo(twoHoursAfter) <= 0);
-                    // view.displayResults(String.valueOf(isOccupied2HoursBefore || isOccupied2HoursAfter));
-                    // JUST LEFT THIS PART
                     return (isOccupied2HoursAfter || isOccupied2HoursBefore);
                     }
                 ).collect(Collectors.toList()));
-        /* filter time */
-        // ArrayList<ReservationEntity> tmpList = new ArrayList<ReservationEntity>(
-                // dateList.stream().filter(res -> res.getTime().equals(time)).collect(Collectors.toList()));
-
-        // view.checkTableAvailabilityStatus(dateList.size());
 
         if (dateList.size() < restaurant.getTables().size()) {
             if (!create){
@@ -159,7 +179,11 @@ public class ReservationController {
         }
     }
 
-    /* Making reservation */
+    /**
+     * Creates a reservation for the given date and time
+     * @param date     Date object to create the reservation date
+     * @param time     Date object to create the reservation time
+     */
     public void createReservation(Date date, Date time) {
         
         int reservationPax = view.getUserReservationPax();
@@ -185,6 +209,7 @@ public class ReservationController {
         restaurant.setReservations(existingReservations);
     }
 
+    /** Determine if reservations are past the current time and delete them */
     public void updateReservations() {
         Calendar cal = Calendar.getInstance();
         Date dateNow = cal.getTime();

@@ -132,10 +132,14 @@ public class Boundary {
      */
     public double getPositiveDouble() {
         // check for error
-        if (sc.hasNextDouble()){
-            return sc.nextDouble();
-        }
-        return 0.0
+        double positiveDouble = 0.0;
+        sc.nextLine();
+        while (!sc.hasNextDouble()){
+            System.out.println("Oops, that's not a valid input. Please try again!");
+            sc.nextLine();
+        };
+        positiveDouble = sc.nextDouble();
+        return positiveDouble;
     }
 
     /**

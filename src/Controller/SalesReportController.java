@@ -6,14 +6,31 @@ import java.time.LocalDate;
 import java.util.*;
 import java.text.SimpleDateFormat;
 
+/**
+ * 
+ * Is the controller that updates the boundary and entities for all Sales related scenes.
+ * 
+ * @author      Wong Wei Bin
+ * @author      Ivan Teo
+ * @author      Grace Wong
+ * @author      Goh Xue Zhe
+ * @author      Matthew Chua
+ * @version     0.1.0
+ * @since       2021-11-11
+ * 
+ */
 public class SalesReportController {
     
-    // UI
+    /** The Boundary responsible for displaying the Sales Report UI */
     private SalesReportBoundary view;
+    /** A reference to the shared instance of restaurant entity */
     private RestaurantEntity res;
+    /** Reference to the existing invoices */
     private ArrayList<InvoiceEntity> invoiceList;
 
+    /** Reference to the alacarte menu items */
     private Map<AlaCarteEntity, Integer> menuItems;
+    /** Reference to the package menu items */
     private Map<PackageEntity, Integer> packageItems;
 
     // Constructor
@@ -31,32 +48,21 @@ public class SalesReportController {
         this.start();
     }
 
-    // setup menu
+    /** Instantiate menu items */
     private void setupMenuItems(){
         this.menuItems = new HashMap<AlaCarteEntity, Integer>();
-        // res.getMenu().getAlaCarteItems().forEach(item -> menuItems.put(item, 0));
     }
 
-    // setup package
+    /** Instantiate package items */
     private void setupPackageItems(){
         this.packageItems = new HashMap<PackageEntity, Integer>();
-        // res.getMenu().getPackages().forEach(item -> packageItems.put(item, 0));
     }
-
-    // public ArrayList<InvoiceEntity> getReportbyDay(Date date) {
-    //     // some function to get all invoices from selected date
-    //     return this.invoiceList;
-    // }
-
-    // public ArrayList<InvoiceEntity> getReportbyMonth(Date month) {
-    //     // some function to get all invoices from selected month
-    //     return this.invoiceList;
-    // }
     
     // String to print
     String title = Boundary.separators + " Print Sales Revenue Report by Period " + Boundary.separators + "\n";
     String printSalesString = title + "Showing sales for ";
 
+    /** Prints the sales report by day */
     public void printByDay(){
         resetLists();
         Date userDate = view.getUserDate();
@@ -106,6 +112,7 @@ public class SalesReportController {
         printSalesString = title + "Showing sales for ";
     }
 
+    /** prints the sales report by month */
     public void printByMonth() {
         resetLists();
         Date userDate = view.getUserMonth();
@@ -138,11 +145,13 @@ public class SalesReportController {
         printSalesString = title + "Showing sales for ";
     }
 
+    /** Reset lists to empty state */
     private void resetLists(){
         setupMenuItems();
         setupPackageItems();
     }
 
+    /** Transforms list of packages and menu items into a formatted string in printSalesString */
     private void currentListsToString(){
         this.menuItems.forEach((item, qty) -> {
             printSalesString += qty + " x " + item.getName() + ": $" + item.getPrice()*qty + "\n";
@@ -153,6 +162,11 @@ public class SalesReportController {
         });
     }
 
+
+    /**
+     * Updates the current list of invoice entities
+     * @param filteredList  a List of InvoiceEntity that is filtered by date
+     */
     private void updateCurrentLists(List<InvoiceEntity> filteredList){
         filteredList.forEach(invoice -> {
             invoice.getAlaCarteItems().forEach((item, qty) -> {
@@ -166,18 +180,14 @@ public class SalesReportController {
         });
     }
 
-    public int sumOfRevenue(InvoiceEntity[] invoice) {
-        return 1;
-    }
-
-    // Load up controller
+    /** Runs the sequenece of events for Sales Report flows */
     private void start(){
 
         // pass in the anonymous callback function
         view.getUserManagerChoice(choice -> {
             switch (choice){
                 case 0:
-                System.out.println("quitted");
+                // System.out.println("quitted");
                 return;
 
                 case 1:

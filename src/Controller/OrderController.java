@@ -17,26 +17,49 @@ import Entity.*;
 import Helpers.*;
 
 
+
+/**
+ * 
+ * Is the controller that updates the boundary and entities for all Menu related scenes.
+ * 
+ * @author      Wong Wei Bin
+ * @author      Ivan Teo
+ * @author      Grace Wong
+ * @author      Goh Xue Zhe
+ * @author      Matthew Chua
+ * @version     0.1.0
+ * @since       2021-11-11
+ * 
+ */
 public class OrderController {
 
-    //restaurant
+
+    /** A reference to the shared instance of restaurant entity */
     private RestaurantEntity restaurant;
 
-    // ui
+    /** The Boundary responsible for displaying the Order UI */
     private OrderBoundary view;
 
     // entities
-    // private ArrayList<OrderEntity> orders;
+
+    /** Reference to the tables available */
     private ArrayList<Table> tables;
+    /** Reference to the selected table */
     private Table table;
+    /** Index of the selected table */
     private int tableIndex;
+
+    /** Current order for the selected table */
     private OrderEntity order;
+    
     Scanner sc = new Scanner(System.in);
+    /** Reference to the current staff taking the order */
     StaffEntity servingStaffEntity;
 
+    /** Flag to determine if Order Controller should terminate */
     private boolean shouldExitManager = false;
 
-    // constructor
+    /** Constructor */ 
     public OrderController() {
         this.view = new OrderBoundary();
         this.restaurant = RestaurantEntity.getInstance();
@@ -48,6 +71,7 @@ public class OrderController {
     }
 
 
+    /** Runs the sequenece of events for Order flows */
     private void start() {
 
         view.getTableChoice(tableNumber -> {
@@ -58,6 +82,7 @@ public class OrderController {
         });
     }
 
+    /** Cbecks whether the table has an existing order and display the correct flow */
     public void getUserManagerChoice(){
         if (table.getOrder() == null){
             view.createOrderForTable(table.getNumber(), choice -> {
@@ -70,6 +95,8 @@ public class OrderController {
         }
         // after creation, carry on
     }
+
+    /** The flow to update the user's order */
     public void updateOrderFlow(){
         view.updateOrderForTable(table.getNumber(), table.getOrder(), c -> {
             switch (c){
@@ -99,7 +126,7 @@ public class OrderController {
         });
     }
 
-
+    /** The flow to select either a package or ala carte item to add */
     private void addItemFlow(){
         view.getMenuItemType(choice -> {
             switch(choice){
@@ -115,6 +142,7 @@ public class OrderController {
         });
     }
 
+    /** The flow to add an ala carte item */
     private void addAlaCarteFlow(){
         view.getAlaCarteItemIndex(this.restaurant.getMenu().getAlaCarteItems(), choice -> {
             
@@ -126,6 +154,7 @@ public class OrderController {
     }
 
 
+    /** The flow to add a package item */
     private void addPackageFlow(){
         view.getPackageIndex(this.restaurant.getMenu().getPackages(), choice -> {
             
@@ -135,9 +164,10 @@ public class OrderController {
                 view.displayResults("Item added");
             });
         });
-        // view.displayResults("Item added");
     }
 
+
+    /** Saves the ala carte item to restaurant and order entity */
     public void addAlaCarteItem(int index, int qty) {
         AlaCarteEntity item = this.restaurant.getMenu().getAlaCarteItems().get(index);
         this.order.addMenuItem(item, qty);
@@ -145,12 +175,14 @@ public class OrderController {
         // this.restaurant.set
     }
 
+    /** Saves the package item to restaurant and order entity */
     public void addPackageItem(int index, int qty){
         PackageEntity pkg = this.restaurant.getMenu().getPackages().get(index);
         this.order.addSpecial(pkg, qty);
         restaurant.setTables(tables);
     }
 
+    /** The flow to remove an ala carte item */
     public void removeAlaCarteFlow(){
 
         ArrayList<AlaCarteEntity> alaCarteItems = new ArrayList<AlaCarteEntity>(this.order.getMenuItems().keySet());
@@ -158,8 +190,6 @@ public class OrderController {
         view.getAlaCarteItemIndex(alaCarteItems , choice -> {
 
             view.getQty(100, qty -> {
-                // addPackageItem(choice-1, qty);
-                // view.displayResults("Item added");
 
                 // first, get the item
                 AlaCarteEntity item = alaCarteItems.get(choice-1);
@@ -169,12 +199,11 @@ public class OrderController {
                 view.displayResults("Item removed");
             });
             
-            // removeAlaCarteItem(choice-1);
-            // restaurant.setTables(tables);
-            // view.displayResults("Item removed");
         });
 
     }
+
+    /** The flow to remove a package item */
     private void removePackageFlow(){
         ArrayList<PackageEntity> pkgItems = new ArrayList<PackageEntity>(this.order.getSpecials().keySet());
         view.getPackageIndex(pkgItems, choice -> {
@@ -189,25 +218,31 @@ public class OrderController {
                 restaurant.setTables(tables);
                 view.displayResults("Item removed");
             });
-
-            // removePackageItem(choice-1);
-            // restaurant.setTables(tables);
-            // view.displayResults("Item removed");
         });
     }
 
+    /**
+     * Removes an ala carte item from the order
+     * @param item  the AlaCarteEntity to remove from the order
+     * @param qty   the quantity of selected items to remove from the order
+     */
     public void removeAlaCarteItem(AlaCarteEntity item, int qty) {
-        // AlaCarteEntity item = this.restaurant.getMenu().getAlaCarteItems().get(index);
+
         this.order.removeMenuItem(item, qty);
     }
 
+    /**
+     * Removes a package item from the order
+     * @param item  the PackageEntity to remove from the order
+     * @param qty   the quantity of selected items to remove from the order
+     */
     public void removePackageItem(PackageEntity item, int qty){
-        // PackageEntity pkg = this.restaurant.getMenu().getPackages().get(index);
         this.order.removeSpecial(item, qty);
     }
 
 
 
+    /** The flow to remove either an ala carte item or package item */
     public void removeItemFlow(){
         view.getMenuItemType(choice -> {
             switch(choice){
@@ -223,6 +258,7 @@ public class OrderController {
         });
     }
 
+    /** The flow to print an invoice at the end of the order, which updates UI and saves the invoice, and removes order from table */
     public void printInvoice(){
         
         view.getUserMembership(choice -> {
@@ -242,6 +278,7 @@ public class OrderController {
         });
     }
 
+    /** Creates an order pegged to the table */
     public void createOrder(StaffEntity servingStaffEntity) {
         OrderEntity newOrder = new OrderEntity(servingStaffEntity, table);
         // this.tables.get(tableIndex).setOrder(newOrder);
@@ -250,19 +287,4 @@ public class OrderController {
         restaurant.setTables(tables);
     }
 
-    // public void printInvoice(StaffEntity servingStaffEntity, int tableNo) {
-    //     System.out.println("Is customer a member? \n 1. Yes\n 2. No");
-    //     int member = sc.nextInt();
-    //     Boolean membership;
-    //     if (member == 1){
-    //         membership = true;
-    //     }else{
-    //         membership = false;
-    //     }
-    //     // init invoice instance
-    //     InvoiceEntity invoice = new InvoiceEntity(servingStaffEntity.getName(), tableNo, this.order.getMenuItems(), this.order.getSpecials(), membership);
-
-    //     // do whatever logic required
-    //     invoice.printInvoice();
-    // }
 }

@@ -32,14 +32,10 @@ public class PersistenceManager {
 			System.out.println("File not found");
 		} catch (IOException e) {
 			System.out.println("Loading complete");
-            // return dataList;
 		} 
         catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-        // return dataList;
     }
 
     public void saveData(String fileName, ArrayList dataList){

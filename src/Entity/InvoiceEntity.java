@@ -39,6 +39,8 @@ public class InvoiceEntity implements Serializable{
      * The membership status of the customer
      */
     private Boolean membership;
+
+    private String staffEntityName;
     
 
     /**
@@ -50,7 +52,7 @@ public class InvoiceEntity implements Serializable{
      * @param membership This Invoice's customer's membership status
      */
     public InvoiceEntity(String staffName, int tableNumber, Map<AlaCarteEntity, Integer> menuItems, Map<PackageEntity, Integer> packageItems, Boolean membership) {
-        this.StaffEntityName = staffName;
+        this.staffEntityName = staffName;
         long millis=System.currentTimeMillis(); 
         this.timestamp = new Date(millis);
         this.tableNumber = tableNumber;
