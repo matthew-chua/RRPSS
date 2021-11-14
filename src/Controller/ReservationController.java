@@ -74,7 +74,7 @@ public class ReservationController {
 
         view.getUserReservationName(reservationName -> {
             
-            filterReservationsByName()
+            ArrayList<ReservationEntity> tmpList = filterReservationsByName(reservationName);
             // view.printReservations(tmpList, reservationName);
             if (tmpList.size() != 0) {
                 view.getUserRemoveChoice(tmpList, reservationName, choice -> {
@@ -93,11 +93,14 @@ public class ReservationController {
         });
     }
 
-    /** Filter the reservations by a given name */
-    private ArrayList<ReservationEntity> filterReservationsByName(){
+    /**
+     * Filter reservations by a given name
+     * @param reservationName   Name to filter reservations for
+     */
+    private ArrayList<ReservationEntity> filterReservationsByName(String reservationName){
         ArrayList<ReservationEntity> tmpList = new ArrayList<ReservationEntity>(existingReservations.stream()
         .filter(res -> res.getName().equals(reservationName)).collect(Collectors.toList()));
-        return tmpList
+        return tmpList;
     }
 
     /**
